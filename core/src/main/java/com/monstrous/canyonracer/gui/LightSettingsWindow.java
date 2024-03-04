@@ -30,7 +30,7 @@ public class LightSettingsWindow extends Window {
             public void changed(ChangeEvent event, Actor actor) {
                 Settings.ambientLightLevel = ALslider.getValue();
                 Gdx.app.log("ambientLightLevel", ""+Settings.ambientLightLevel);
-                screen.buildEnvironment();
+                screen.gameView.buildEnvironment();
 
                 //label2.setText(String.valueOf(Settings.ambientLightLevel));
             }
@@ -44,7 +44,7 @@ public class LightSettingsWindow extends Window {
             public void changed(ChangeEvent event, Actor actor) {
                 Settings.shadowLightLevel = SLslider.getValue();
                 Gdx.app.log("shadowLightLevel", ""+Settings.shadowLightLevel);
-                screen.buildEnvironment();
+                screen.gameView.buildEnvironment();
             }
         });
         final Label SLlabel = new Label("shadow light", skin);
@@ -56,7 +56,7 @@ public class LightSettingsWindow extends Window {
             public void changed(ChangeEvent event, Actor actor) {
                 Settings.shadowBias = SBslider.getValue();
                 Gdx.app.log("bias", ""+Settings.shadowBias);
-                screen.buildEnvironment();
+                screen.gameView.buildEnvironment();
             }
         });
         final Label SBlabel = new Label("shadow bias", skin);

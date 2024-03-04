@@ -21,55 +21,19 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Feisar_Ship",
-			"rotation":[
-				0.7071068286895752,
-				0,
-				0,
-				0.7071068286895752
-			],
-			"scale":[
-				0.19999998807907104,
-				0.19999998807907104,
-				0.19999998807907104
-			]
+			"name":"Feisar_Ship"
 		},
 		{
 			"mesh":1,
-			"name":"Ground",
-			"scale":[
-				257.6099853515625,
-				1,
-				315.095703125
-			]
+			"name":"Ground"
 		},
 		{
 			"mesh":2,
-			"name":"TestCube",
-			"scale":[
-				9.253061294555664,
-				9.253061294555664,
-				9.253061294555664
-			],
-			"translation":[
-				-47.94511032104492,
-				20.57248878479004,
-				0
-			]
+			"name":"TestCube"
 		},
 		{
 			"mesh":3,
-			"name":"Cylinder",
-			"scale":[
-				6.116662979125977,
-				9.8772554397583,
-				9.8772554397583
-			],
-			"translation":[
-				156.8451385498047,
-				11.021262168884277,
-				0
-			]
+			"name":"Rock"
 		}
 	],
 	"materials":[
@@ -236,29 +200,29 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":3060,
+			"count":3058,
 			"max":[
-				107.85569763183594,
-				167.21490478515625,
-				0
+				21.571138381958008,
+				10.819417953491211,
+				33.44297790527344
 			],
 			"min":[
-				-107.85569763183594,
-				-167.21490478515625,
-				-54.09709930419922
+				-21.571138381958008,
+				2.222024022557889e-06,
+				-33.44297790527344
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":3060,
+			"count":3058,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":3060,
+			"count":3058,
 			"type":"VEC3"
 		},
 		{
@@ -272,14 +236,14 @@
 			"componentType":5126,
 			"count":24,
 			"max":[
-				1,
-				1,
-				1
+				256,
+				1.000000238418579,
+				256
 			],
 			"min":[
-				-1,
-				-1,
-				-1
+				-256,
+				-1.000000238418579,
+				-256
 			],
 			"type":"VEC3"
 		},
@@ -306,14 +270,14 @@
 			"componentType":5126,
 			"count":24,
 			"max":[
-				1,
-				1,
-				1
+				-38.692047119140625,
+				29.825550079345703,
+				9.253061294555664
 			],
 			"min":[
-				-1,
-				-1,
-				-1
+				-57.19817352294922,
+				11.319427490234375,
+				-9.253061294555664
 			],
 			"type":"VEC3"
 		},
@@ -340,14 +304,14 @@
 			"componentType":5126,
 			"count":218,
 			"max":[
-				11.774946212768555,
-				8.740331649780273,
-				11.235520362854004
+				228.86851501464844,
+				97.35175323486328,
+				110.97610473632812
 			],
 			"min":[
-				-11.774946212768555,
-				-1,
-				-11.956592559814453
+				84.82176208496094,
+				1.1440067291259766,
+				-118.09832000732422
 			],
 			"type":"VEC3"
 		},
@@ -373,98 +337,98 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":36720,
+			"byteLength":36696,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":24480,
-			"byteOffset":36720,
+			"byteLength":24464,
+			"byteOffset":36696,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":36720,
-			"byteOffset":61200,
+			"byteLength":36696,
+			"byteOffset":61160,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":10056,
-			"byteOffset":97920,
+			"byteOffset":97856,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":288,
-			"byteOffset":107976,
+			"byteOffset":107912,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":192,
-			"byteOffset":108264,
+			"byteOffset":108200,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":288,
-			"byteOffset":108456,
+			"byteOffset":108392,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":72,
-			"byteOffset":108744,
+			"byteOffset":108680,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":288,
-			"byteOffset":108816,
+			"byteOffset":108752,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":192,
-			"byteOffset":109104,
+			"byteOffset":109040,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":288,
-			"byteOffset":109296,
+			"byteOffset":109232,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":72,
-			"byteOffset":109584,
+			"byteOffset":109520,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":2616,
-			"byteOffset":109656,
+			"byteOffset":109592,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":1744,
-			"byteOffset":112272,
+			"byteOffset":112208,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":2616,
-			"byteOffset":114016,
+			"byteOffset":113952,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":732,
-			"byteOffset":116632,
+			"byteOffset":116568,
 			"target":34963
 		}
 	],
@@ -476,7 +440,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":117364,
+			"byteLength":117300,
 			"uri":"Feisar.bin"
 		}
 	]
