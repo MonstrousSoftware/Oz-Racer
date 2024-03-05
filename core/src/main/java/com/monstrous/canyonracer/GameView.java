@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.monstrous.canyonracer.input.CameraController;
 import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRFloatAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
@@ -30,7 +31,6 @@ public class GameView {
     private Cubemap environmentCubemap;
     private Cubemap specularCubemap;
     private Texture brdfLUT;
-    private float time;
     private SceneSkybox skybox;
     private DirectionalShadowLight light;
     private Model frustumModel;
@@ -39,6 +39,8 @@ public class GameView {
     private ModelBatch modelBatch;
     private Array<ModelInstance> instances;
     private Model arrowModel;
+    public CameraController cameraController;
+    private Vector3 playerPos = new Vector3();
 
     public GameView(World world) {
         this.world = world;
@@ -59,6 +61,8 @@ public class GameView {
         buildEnvironment();
 
         debugLight();
+
+        cameraController = new CameraController(camera);
     }
 
     public void resize(int width, int height) {
@@ -84,10 +88,11 @@ public class GameView {
     public void render(float deltaTime) {
 
         // animate camera
-        //Gdx.app.log("cam pos", ""+camera.position);
-        camera.up.set(Vector3.Y);
-        camera.lookAt(Vector3.Zero);
-        camera.update();
+        world.racer.getScene().modelInstance.transform.getTranslation(playerPos);
+        cameraController.update(playerPos, Vector3.Z);
+
+        light.setCenter(playerPos);
+
 
         refresh();
 

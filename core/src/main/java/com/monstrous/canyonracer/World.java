@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.monstrous.canyonracer.input.PlayerController;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
@@ -15,7 +16,8 @@ public class World implements Disposable {
 
     private final Array<GameObject> gameObjects;
     private SceneAsset sceneAsset;
-    private final GameObject racer;
+    public final GameObject racer;
+    public final PlayerController playerController;
 
     public World() {
         gameObjects = new Array<>();
@@ -26,11 +28,15 @@ public class World implements Disposable {
         }
 
         racer = spawnObject("Feisar_Ship", true, new Vector3(0,8,0));
+        playerController = new PlayerController();
+
         //spawnObject("Ground", true, new Vector3(0,0,0));
         spawnObject("TestCube", true, new Vector3(0,0,0));
         spawnObject("Rock", true, new Vector3(0,0,0));
 
         makeTerrain();
+
+
     }
 
     public int getNumGameObjects() {
@@ -42,7 +48,8 @@ public class World implements Disposable {
     }
 
     public void update( float deltaTime ){
-        racer.getScene().modelInstance.transform.translate(0,0,deltaTime*10);
+        playerController.update(racer, deltaTime);
+        //racer.getScene().modelInstance.transform.translate(0,0,deltaTime*10);
     }
 
 
