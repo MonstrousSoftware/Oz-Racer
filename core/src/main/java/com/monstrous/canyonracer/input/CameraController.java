@@ -8,15 +8,14 @@ import com.monstrous.canyonracer.Settings;
 public class CameraController extends InputAdapter {
 
     private final Camera camera;
-    private final Vector3 offset = new Vector3();
     private final Vector3 focalOffset = new Vector3();
-    private float distance = 75f;
+    private float distance = 15f;
     private final Vector3 cameraTargetPosition = new Vector3();
     public boolean skyCamMode = false;
 
     public CameraController(Camera camera ) {
         this.camera = camera;
-        focalOffset.set(0,0,50);
+        focalOffset.set(0,0,5);
     }
 
     // viewDirection is unit forward vector pointing for the racer
@@ -31,13 +30,13 @@ public class CameraController extends InputAdapter {
         camera.position.slerp(cameraTargetPosition, Settings.cameraSlerpFactor*deltaTime);
 
         // camera is looking at a point in front of the racer so that racer appears in the bottom half of the screen, not centre screen
-        focalOffset.set(viewDirection).scl(250).add(playerPosition);
+        focalOffset.set(viewDirection).scl(25).add(playerPosition);
         camera.lookAt(focalOffset);
         camera.up.set(Vector3.Y);
 
         // top view
         if(skyCamMode) {
-            camera.position.set(playerPosition.x, 1000, playerPosition.z);
+            camera.position.set(playerPosition.x, 100, playerPosition.z);
             camera.up.set(Vector3.Z);
             camera.lookAt(playerPosition);
         }
@@ -51,11 +50,11 @@ public class CameraController extends InputAdapter {
     }
 
     private boolean zoom (float amount) {
-        if(amount < 0 && distance < 75f)
+        if(amount < 0 && distance < 7.5f)
             return false;
-        if(amount > 0 && distance > 500f)
+        if(amount > 0 && distance > 50f)
             return false;
-        distance += 10f*amount;
+        distance += amount;
         return true;
     }
 }

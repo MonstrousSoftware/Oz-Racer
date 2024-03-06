@@ -49,7 +49,7 @@ public class GameView {
         sceneManager = new SceneManager();
 
         camera = new PerspectiveCamera(60f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        float d = 75f;
+        float d = 7.5f;
         camera.near = 1f;
         camera.far = 5000f;
         camera.position.set(0, d / 3f, -d);
@@ -139,9 +139,9 @@ public class GameView {
         // set the light parameters so that your area of interest is in the shadow light frustum
         // but keep it reasonably tight to keep sharper shadows
         lightPosition = new Vector3(0,135,0);    // even though this is a directional light and is "infinitely far away", use this to set the near plane
-        float farPlane = 300;
+        float farPlane = 30;
         float nearPlane = 0;
-        float VP_SIZE = 300f;
+        float VP_SIZE = 30f;
         light = new DirectionalShadowLight(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE).setViewport(VP_SIZE,VP_SIZE,nearPlane,farPlane);
 
 

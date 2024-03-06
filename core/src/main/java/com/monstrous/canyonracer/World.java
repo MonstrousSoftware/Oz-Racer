@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.canyonracer.input.PlayerController;
+import com.monstrous.canyonracer.terrain.Terrain;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
@@ -18,6 +19,7 @@ public class World implements Disposable {
     private SceneAsset sceneAsset;
     public final GameObject racer;
     public final PlayerController playerController;
+    public final Terrain terrain;
 
     public World() {
         gameObjects = new Array<>();
@@ -34,7 +36,9 @@ public class World implements Disposable {
         spawnObject("TestCube", true, new Vector3(0,0,0));
         spawnObject("Rock", true, new Vector3(0,0,0));
 
-        makeTerrain();
+        terrain = new Terrain();
+        spawnTerrain();
+       //makeTerrain();
 
 
     }
@@ -48,7 +52,7 @@ public class World implements Disposable {
     }
 
     public void update( float deltaTime ){
-        playerController.update(racer, deltaTime);
+        playerController.update(racer, terrain, deltaTime);
         //racer.getScene().modelInstance.transform.translate(0,0,deltaTime*10);
     }
 
@@ -80,18 +84,21 @@ public class World implements Disposable {
         modelInstance.calculateTransforms();
     }
 
+    private GameObject spawnTerrain() {
+        for(ModelInstance instance : terrain.instances) {
 
-    private void makeTerrain(){
-        for(int x = 0; x < 10; x++){
-            for(int z = 0; z < 10; z++){
-                //spawnObject("TestCube", true, new Vector3(20*x, 0,20*z));
-                spawnObject("Ground", true, new Vector3(612*x, 0,612*z));
-            }
+            Scene scene = new Scene(instance);
+            GameObject go = new GameObject(scene);
+            gameObjects.add(go);
         }
+        return null;
     }
+
 
     @Override
     public void dispose() {
+
         sceneAsset.dispose();
+
     }
 }

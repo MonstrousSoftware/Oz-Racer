@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.IntIntMap;
 import com.monstrous.canyonracer.GameObject;
+import com.monstrous.canyonracer.terrain.Terrain;
 
 public class PlayerController extends InputAdapter {
 
@@ -55,7 +56,7 @@ public class PlayerController extends InputAdapter {
         return true;
     }
 
-    public void update (GameObject racer, float deltaTime ) {
+    public void update (GameObject racer, Terrain terrain, float deltaTime ) {
 
         float acceleration = 0f;
         if (keys.containsKey(forwardKey) )
@@ -66,16 +67,15 @@ public class PlayerController extends InputAdapter {
         speed = velocity.len();
         if (keys.containsKey(turnLeftKey) && turnAngle < MAX_TURN)
             turnAngle += deltaTime * TURN_RATE;                            // turn rate depends on speed
-        if (keys.containsKey(turnRightKey) && turnAngle > -MAX_TURN)
+        else if (keys.containsKey(turnRightKey) && turnAngle > -MAX_TURN)
             turnAngle -= deltaTime * TURN_RATE; //speed / 6f;
 
         Matrix4 transform = racer.getScene().modelInstance.transform;
         transform.getTranslation(playerPos);
-        playerPos.y = 20f;
+        playerPos.y = 5f+terrain.getHeight(playerPos.x, playerPos.z);
         forwardDirection.set(Vector3.Z);
         forwardDirection.rot(transform);
 
-        //acceleration = ACCELERATION;
         // apply acceleration to velocity
         tmpV.set(forwardDirection).scl(deltaTime * acceleration);
         velocity.add(tmpV);
@@ -88,37 +88,14 @@ public class PlayerController extends InputAdapter {
 //            velocity.set(0,0,0);
 
         rotation += turnAngle*deltaTime;
-//        forwardDirection.set(0,0,1);
-//        forwardDirection.rotate(Vector3.Y, rotation);
-//        transform.getTranslation(tmpV);
-//        tmpV.y = 20f;
         transform.setToRotation(Vector3.Y, rotation);
         transform.rotate(Vector3.Z, -turnAngle);                // bank
-        //transform.setTranslation(tmpV);
 
-        //turn(racer, turnAngle*deltaTime);
 
         // apply velocity to position
         tmpV.set(velocity).scl(deltaTime);
         playerPos.add(tmpV);
         transform.setTranslation(playerPos);
-        //transform.translate(tmpV);
-
-    }
-
-
-
-    private void turn(GameObject racer, float degrees){
-        rotation += degrees;
-//        forwardDirection.set(0,0,1);
-//        forwardDirection.rotate(Vector3.Y, rotation);
-        Matrix4 transform = racer.getScene().modelInstance.transform;
-        transform.getTranslation(tmpV);
-        tmpV.y = 20f;
-        transform.setToRotation(Vector3.Y, rotation);
-        transform.rotate(Vector3.Z, -turnAngle);                // bank
-        transform.setTranslation(tmpV);
-        //Gdx.app.log("turn", "rot:"+rotation+" ta:"+turnAngle+" fwd:"+forwardDirection+" v:"+velocity);
     }
 
 
