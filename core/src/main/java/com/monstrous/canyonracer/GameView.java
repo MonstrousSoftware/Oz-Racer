@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.monstrous.canyonracer.input.CameraController;
@@ -85,11 +86,17 @@ public class GameView {
         }
     }
 
+    private Vector3 playerForward = new Vector3();
+
     public void render(float deltaTime) {
 
         // animate camera
-        world.racer.getScene().modelInstance.transform.getTranslation(playerPos);
-        cameraController.update(playerPos, Vector3.Z);
+        Matrix4 transform = world.racer.getScene().modelInstance.transform;
+        transform.getTranslation(playerPos);
+        playerForward.set(Vector3.Z);
+        playerForward.rot(transform);
+
+        cameraController.update(playerPos, playerForward, deltaTime);
 
         light.setCenter(playerPos);
 
