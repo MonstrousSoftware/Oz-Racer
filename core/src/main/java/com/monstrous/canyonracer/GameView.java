@@ -98,7 +98,7 @@ public class GameView {
 
         cameraController.update(playerPos, playerForward, deltaTime);
 
-        light.setCenter(playerPos);
+        light.setCenter(playerPos); // keep shadow light on player so that we have shadows
 
 
         refresh();
