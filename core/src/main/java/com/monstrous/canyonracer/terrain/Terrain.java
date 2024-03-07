@@ -1,6 +1,7 @@
 package com.monstrous.canyonracer.terrain;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.monstrous.canyonracer.GameObject;
 import com.monstrous.canyonracer.Settings;
 import net.mgsx.gltf.scene3d.scene.Scene;
 
@@ -30,6 +30,7 @@ public class Terrain implements Disposable {
     private TextureRegion textureRegionChunk;
     private TextureRegion textureRegionRacer;
     private TextureRegion textureRegionCam;
+    private TextureRegion textureRegionChunkVisible;
     private int timeCounter;
 
     public Terrain() {
@@ -41,11 +42,11 @@ public class Terrain implements Disposable {
 
 
 
-    public boolean update(Vector3 cameraPos){
+    public boolean update(Camera cam){
         timeCounter++;
 
-        int px = (int)Math.floor(cameraPos.x/Settings.chunkSize);
-        int pz = (int)Math.floor(cameraPos.z/Settings.chunkSize);
+        int px = (int)Math.floor(cam.position.x/Settings.chunkSize);
+        int pz = (int)Math.floor(cam.position.z/Settings.chunkSize);
 
         // Add a 5x5 square of chunks to the scenes array
         // Create chunks as needed (but not more than one at a time)
@@ -58,17 +59,16 @@ public class Terrain implements Disposable {
                 int key = makeKey(cx, cz);
 
                 TerrainChunk chunk = chunks.get(key);
-                if(chunk == null) {
-                    if (added == 0) {
+                if(chunk == null && added == 0) {
                         chunk = new TerrainChunk(cx, cz, timeCounter);
                         chunks.put(key, chunk);
-                        scenes.add(chunk.getScene());
                         Gdx.app.log("num chunks", "" + chunks.size());
                         added++;                             // avoid generating more than 1 chunk per frame to avoid stutter
-                    }
                 }
-                else
+                if(chunk != null && cam.frustum.boundsInFrustum(chunk.bbox)) {  // frustum culling
                     scenes.add(chunk.getScene());
+                    chunk.lastSeen = timeCounter;
+                }
             }
         }
 
@@ -128,18 +128,21 @@ public class Terrain implements Disposable {
         batch = new SpriteBatch();
 
         // use a pixmap to create different solid colour texture regions (1 pixel each)
-        Pixmap pixmap = new Pixmap(3, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(0, 1, 0, 0.5f);
+        Pixmap pixmap = new Pixmap(4, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(0, 1, 0, 0.2f);
         pixmap.drawPixel(0,0);
         pixmap.setColor(1, 0, 0, 1);
         pixmap.drawPixel(1,0);
         pixmap.setColor(0, 0, 1, 1);
         pixmap.drawPixel(2,0);
+        pixmap.setColor(0, 1, .5f, 0.5f);
+        pixmap.drawPixel(3,0);
 
         texture = new Texture(pixmap);
         textureRegionChunk = new TextureRegion(texture, 0,0,1,1);
         textureRegionRacer = new TextureRegion(texture, 1,0,1,1);
         textureRegionCam = new TextureRegion(texture, 2,0,1,1);
+        textureRegionChunkVisible = new TextureRegion(texture, 3,0,1,1);
     }
 
 
@@ -156,7 +159,10 @@ public class Terrain implements Disposable {
         for(TerrainChunk chunk : chunks.values() ) {
             int x = 400+size * chunk.coord.x;
             int y = 400+size * chunk.coord.y;
-            batch.draw(textureRegionChunk, x, y, size-2, size-2);
+            if(chunk.lastSeen == timeCounter)
+                batch.draw(textureRegionChunkVisible, x, y, size-2, size-2);
+            else
+                batch.draw(textureRegionChunk, x, y, size-2, size-2);
         }
 
         // racer

@@ -42,7 +42,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float deltaTime) {
 
-        world.terrain.update(gameView.getCamera().position);     // update terrain to camera position
+        world.terrain.update(gameView.getCamera());     // update terrain to camera position
         world.update(deltaTime);
 
         gameView.render( deltaTime);

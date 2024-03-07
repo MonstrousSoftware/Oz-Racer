@@ -2,7 +2,9 @@ package com.monstrous.canyonracer.gui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.monstrous.canyonracer.GameScreen;
@@ -13,6 +15,7 @@ public class GUI implements Disposable {
     public Skin skin;
     private GameScreen screen;
     private SettingsWindow lightSettings;
+    private Label fps;
 
     public GUI( GameScreen screen ) {
         this.screen = screen;
@@ -25,9 +28,18 @@ public class GUI implements Disposable {
     private void addActors(){
         lightSettings = new SettingsWindow("Light Settings", skin, screen);
         stage.addActor(lightSettings);
+
+        fps = new Label("0", skin);
+        Table table = new Table();
+        table.setFillParent(true);
+        table.add(fps).top().left().expand();
+        //table.row();
+        stage.addActor(table);
     }
 
     public void render( float deltaTime ){
+        fps.setText( Gdx.graphics.getFramesPerSecond() );
+
         stage.act(deltaTime);
         stage.draw();
     }

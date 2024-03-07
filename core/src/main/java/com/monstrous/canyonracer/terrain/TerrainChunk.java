@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g3d.utils.MeshBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.canyonracer.Settings;
@@ -28,8 +29,9 @@ public class TerrainChunk implements Disposable {
 
     public GridPoint2 coord;
     public int creationTime;            // when was chunk created? used to delete oldest chunks when needed
+    public int lastSeen;
     private Model model;
-    private Texture terrainTexture;         // todo shared between chunks
+    private static Texture terrainTexture;         //  shared between chunks
     private ModelInstance modelInstance;
     private Scene scene;
     private float heightMap[][];
@@ -38,6 +40,7 @@ public class TerrainChunk implements Disposable {
     private int numIndices;
     private Vector3 normalVectors[][] = new Vector3[MAP_SIZE+1][MAP_SIZE+1];
     private Vector3 position; // position of terrain in world coordinates
+    public BoundingBox bbox;
 
 
     public TerrainChunk(int xoffset, int yoffset, int creationTime) {
@@ -46,6 +49,7 @@ public class TerrainChunk implements Disposable {
         this.coord = new GridPoint2(xoffset, yoffset);
         this.creationTime = creationTime;
         position = new Vector3(xoffset * Settings.chunkSize, 0, yoffset * Settings.chunkSize);
+        bbox = new BoundingBox();
 
         Noise noise = new Noise();
 
@@ -59,9 +63,11 @@ public class TerrainChunk implements Disposable {
 
 
         // todo use asset manager
-        terrainTexture = new Texture(Gdx.files.internal("textures/ground/smooth+sand+dunes-512x512.jpg"), true); //ground-color.png"), true);
-        terrainTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-        terrainTexture.setFilter(Texture.TextureFilter.MipMap, Texture.TextureFilter.Nearest);
+        if(terrainTexture == null) {
+            terrainTexture = new Texture(Gdx.files.internal("textures/ground/smooth+sand+dunes-512x512.jpg"), true);
+            terrainTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+            terrainTexture.setFilter(Texture.TextureFilter.MipMap, Texture.TextureFilter.Nearest);
+        }
 
 //        Texture normalTexture = new Texture(Gdx.files.internal("textures/ground/ground-normal.png"), true);
 //        normalTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
@@ -75,6 +81,9 @@ public class TerrainChunk implements Disposable {
 
         model = makeGridModel(heightMap, SCALE, MAP_SIZE, GL20.GL_TRIANGLES, material);
         modelInstance =  new ModelInstance(model, position);
+
+        modelInstance.calculateBoundingBox(bbox);
+        bbox.mul(modelInstance.transform);
         scene = new Scene(modelInstance, false);
     }
 
@@ -87,7 +96,6 @@ public class TerrainChunk implements Disposable {
     @Override
     public void dispose() {
         model.dispose();
-        terrainTexture.dispose();
     }
 
 
