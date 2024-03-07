@@ -13,7 +13,7 @@ public class GameScreen implements Screen {
 
     //private CameraInputController camController;
     private GUI gui;
-    private World world;
+    public World world;
     public GameView gameView;
     private Vector3 target;
     private int changes = 0;

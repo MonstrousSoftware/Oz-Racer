@@ -12,20 +12,17 @@ import com.monstrous.canyonracer.terrain.Terrain;
 
 public class PlayerController extends InputAdapter {
 
-    public static float MAX_SPEED = 600f;
     public static float ACCELERATION = 260f;
-    public static float DECELERATION = 120f;
     public static float TURN_RATE = 90f;
     public static float MAX_TURN = 35f;
-    public static float DRAG_FACTOR = 0.01f;
+    public static float DRAG_FACTOR = 0.6f;
 
 
     public static int forwardKey = Input.Keys.W;
-    public static int backwardKey = Input.Keys.S;
     public static int turnLeftKey = Input.Keys.A;
     public static int turnRightKey = Input.Keys.D;
 
-    private float speed = 0f;
+    public float speed = 0f;
     private float turnAngle = 0f;
     private float rotation = 0f;
 
@@ -63,27 +60,25 @@ public class PlayerController extends InputAdapter {
         float acceleration = 0f;
         if (keys.containsKey(forwardKey) )
             acceleration = ACCELERATION;
-        if (keys.containsKey(backwardKey) ) {
-            acceleration = -DECELERATION;
-        }
+
         speed = velocity.len();
         if (keys.containsKey(turnLeftKey) && turnAngle < MAX_TURN)
-            turnAngle += deltaTime * TURN_RATE;                            // turn rate depends on speed
+            turnAngle += deltaTime * speed / 6f;                            // turn rate depends on speed
         else if (keys.containsKey(turnRightKey) && turnAngle > -MAX_TURN)
-            turnAngle -= deltaTime * TURN_RATE; //speed / 6f;
+            turnAngle -= deltaTime * speed / 6f;
 
         Matrix4 transform = racer.getScene().modelInstance.transform;
         transform.getTranslation(playerPos);
         targetHeight = 5f+terrain.getHeight(playerPos.x, playerPos.z);
         playerPos.y = MathUtils.lerp(playerPos.y, targetHeight, 20f*deltaTime);
-        forwardDirection.set(Vector3.Z);
-        forwardDirection.rot(transform);
+        forwardDirection.set(Vector3.Z).rot(transform);
 
-        // apply acceleration to velocity
+
+        // apply acceleration to velocity: v' = v + dt.a
         tmpV.set(forwardDirection).scl(deltaTime * acceleration);
         velocity.add(tmpV);
 
-        drag.set(velocity).scl(DRAG_FACTOR);
+        drag.set(velocity).scl(deltaTime*DRAG_FACTOR);
         velocity.sub(drag);
 
         // never go backwards

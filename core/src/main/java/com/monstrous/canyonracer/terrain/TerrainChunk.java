@@ -82,14 +82,11 @@ public class TerrainChunk implements Disposable {
         model = makeGridModel(heightMap, SCALE, MAP_SIZE, GL20.GL_TRIANGLES, material);
         modelInstance =  new ModelInstance(model, position);
 
-        modelInstance.calculateBoundingBox(bbox);
+        modelInstance.calculateBoundingBox(bbox);       // could be done faster
         bbox.mul(modelInstance.transform);
         scene = new Scene(modelInstance, false);
     }
 
-    public ModelInstance getModelInstance() {
-        return modelInstance;
-    }
 
     public Scene getScene() { return scene; }
 

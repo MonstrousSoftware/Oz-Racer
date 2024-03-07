@@ -16,6 +16,7 @@ public class GUI implements Disposable {
     private GameScreen screen;
     private SettingsWindow lightSettings;
     private Label fps;
+    private Label speed;
 
     public GUI( GameScreen screen ) {
         this.screen = screen;
@@ -30,15 +31,19 @@ public class GUI implements Disposable {
         stage.addActor(lightSettings);
 
         fps = new Label("0", skin);
+        speed = new Label("-", skin);
         Table table = new Table();
         table.setFillParent(true);
-        table.add(fps).top().left().expand();
+        table.add(fps).top().left();
+        table.row();
+        table.add(speed).top().left().expand();
         //table.row();
         stage.addActor(table);
     }
 
     public void render( float deltaTime ){
         fps.setText( Gdx.graphics.getFramesPerSecond() );
+        speed.setText((int) screen.world.playerController.speed);
 
         stage.act(deltaTime);
         stage.draw();
