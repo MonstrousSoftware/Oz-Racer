@@ -12,7 +12,7 @@ public class GUI implements Disposable {
     public Stage stage;
     public Skin skin;
     private GameScreen screen;
-    private LightSettingsWindow lightSettings;
+    private SettingsWindow lightSettings;
 
     public GUI( GameScreen screen ) {
         this.screen = screen;
@@ -23,7 +23,7 @@ public class GUI implements Disposable {
     }
 
     private void addActors(){
-        lightSettings = new LightSettingsWindow("Light Settings", skin, screen);
+        lightSettings = new SettingsWindow("Light Settings", skin, screen);
         stage.addActor(lightSettings);
     }
 

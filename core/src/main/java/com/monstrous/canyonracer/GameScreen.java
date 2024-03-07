@@ -16,6 +16,7 @@ public class GameScreen implements Screen {
     private World world;
     public GameView gameView;
     private Vector3 target;
+    private int changes = 0;
 
     @Override
     public void show() {
@@ -40,9 +41,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float deltaTime) {
+
+        world.terrain.update(gameView.getCamera().position);     // update terrain to camera position
         world.update(deltaTime);
 
         gameView.render( deltaTime);
+
+        world.terrain.debugRender(world.playerPosition, gameView.getCamera().position);
         gui.render(deltaTime);
     }
 

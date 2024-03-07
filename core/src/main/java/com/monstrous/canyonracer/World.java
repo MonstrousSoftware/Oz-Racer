@@ -3,6 +3,7 @@ package com.monstrous.canyonracer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.model.Node;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
@@ -19,6 +20,7 @@ public class World implements Disposable {
     private SceneAsset sceneAsset;
     public final GameObject racer;
     public final PlayerController playerController;
+    public final Vector3 playerPosition;
     public final Terrain terrain;
 
     public World() {
@@ -29,7 +31,8 @@ public class World implements Disposable {
             Gdx.app.log("Node ", node.id);
         }
 
-        racer = spawnObject("Feisar_Ship", true, new Vector3(0,8,0));
+        playerPosition = new Vector3(0,8,0);
+        racer = spawnObject("Feisar_Ship", true, playerPosition);
         playerController = new PlayerController();
 
         //spawnObject("Ground", true, new Vector3(0,0,0));
@@ -37,10 +40,6 @@ public class World implements Disposable {
         spawnObject("Rock", true, new Vector3(0,0,0));
 
         terrain = new Terrain();
-        spawnTerrain();
-       //makeTerrain();
-
-
     }
 
     public int getNumGameObjects() {
@@ -53,7 +52,9 @@ public class World implements Disposable {
 
     public void update( float deltaTime ){
         playerController.update(racer, terrain, deltaTime);
-        //racer.getScene().modelInstance.transform.translate(0,0,deltaTime*10);
+
+        // update player position variable
+        racer.getScene().modelInstance.transform.getTranslation(playerPosition);
     }
 
 
@@ -84,15 +85,15 @@ public class World implements Disposable {
         modelInstance.calculateTransforms();
     }
 
-    private GameObject spawnTerrain() {
-        for(ModelInstance instance : terrain.instances) {
-
-            Scene scene = new Scene(instance);
-            GameObject go = new GameObject(scene);
-            gameObjects.add(go);
-        }
-        return null;
-    }
+//    private GameObject spawnTerrain() {
+//        for(ModelInstance instance : terrain.instances) {
+//
+//            Scene scene = new Scene(instance);
+//            GameObject go = new GameObject(scene);
+//            gameObjects.add(go);
+//        }
+//        return null;
+//    }
 
 
     @Override

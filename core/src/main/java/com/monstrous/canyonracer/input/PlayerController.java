@@ -3,6 +3,7 @@ package com.monstrous.canyonracer.input;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.IntIntMap;
@@ -35,6 +36,7 @@ public class PlayerController extends InputAdapter {
     private Vector3 tmpV = new Vector3();
     private Vector3 playerPos = new Vector3();
     private Vector3 drag = new Vector3();
+    private float targetHeight;
 
 
 
@@ -72,7 +74,8 @@ public class PlayerController extends InputAdapter {
 
         Matrix4 transform = racer.getScene().modelInstance.transform;
         transform.getTranslation(playerPos);
-        playerPos.y = 5f+terrain.getHeight(playerPos.x, playerPos.z);
+        targetHeight = 5f+terrain.getHeight(playerPos.x, playerPos.z);
+        playerPos.y = MathUtils.lerp(playerPos.y, targetHeight, 20f*deltaTime);
         forwardDirection.set(Vector3.Z);
         forwardDirection.rot(transform);
 

@@ -12,5 +12,7 @@ public class Settings {
 
     // Terrain
     static public float     chunkSize = 4096;
-    static public float     worldSize = 5*chunkSize;
+    static public int       chunkCacheSize = 50;
+    static public boolean   debugChunkAllocation = false;
+
 }

@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.canyonracer.Settings;
 import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
+import net.mgsx.gltf.scene3d.scene.Scene;
 
 
 public class TerrainChunk implements Disposable {
@@ -26,8 +27,11 @@ public class TerrainChunk implements Disposable {
 
 
     public GridPoint2 coord;
+    public int creationTime;            // when was chunk created? used to delete oldest chunks when needed
     private Model model;
+    private Texture terrainTexture;         // todo shared between chunks
     private ModelInstance modelInstance;
+    private Scene scene;
     private float heightMap[][];
     private float vertPositions[];  // for collision detection, 3 floats per vertex
     private short indices[];    // 3 indices per triangle
@@ -36,20 +40,26 @@ public class TerrainChunk implements Disposable {
     private Vector3 position; // position of terrain in world coordinates
 
 
-    public TerrainChunk(int xoffset, int yoffset) {
+    public TerrainChunk(int xoffset, int yoffset, int creationTime) {
+        Gdx.app.log("TerrainChunk create:", ""+xoffset+" , "+yoffset);
+
         this.coord = new GridPoint2(xoffset, yoffset);
+        this.creationTime = creationTime;
+        position = new Vector3(xoffset * Settings.chunkSize, 0, yoffset * Settings.chunkSize);
+
         Noise noise = new Noise();
 
-
-        heightMap = noise.generatePerlinMap( MAP_SIZE+1, MAP_SIZE+1, xoffset*((float)(MAP_SIZE))/GRID_SCALE,
-            yoffset*((float)(MAP_SIZE))/GRID_SCALE, (int)GRID_SCALE);
+        // note: add 1000 to x and to y to avoid negative offsets for Perlin map, as these cause discontinuities
+        heightMap = noise.generatePerlinMap( MAP_SIZE+1, MAP_SIZE+1, (1000f+xoffset)*((float)(MAP_SIZE))/GRID_SCALE,
+            (1000f+yoffset)*((float)(MAP_SIZE))/GRID_SCALE, (int)GRID_SCALE);
 
         for (int y = 0; y <= MAP_SIZE; y++)
             for (int x = 0; x <= MAP_SIZE; x++)
                 heightMap[y][x] *= AMPLITUDE;
 
 
-        Texture terrainTexture = new Texture(Gdx.files.internal("textures/ground/smooth+sand+dunes-512x512.jpg"), true); //ground-color.png"), true);
+        // todo use asset manager
+        terrainTexture = new Texture(Gdx.files.internal("textures/ground/smooth+sand+dunes-512x512.jpg"), true); //ground-color.png"), true);
         terrainTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
         terrainTexture.setFilter(Texture.TextureFilter.MipMap, Texture.TextureFilter.Nearest);
 
@@ -58,22 +68,26 @@ public class TerrainChunk implements Disposable {
 //        normalTexture.setFilter(Texture.TextureFilter.MipMap, Texture.TextureFilter.Nearest);
 
 
-        position = new Vector3(xoffset * Settings.chunkSize, 0, yoffset * Settings.chunkSize);
+
         Material material =  new Material();
         material.set(PBRTextureAttribute.createBaseColorTexture(terrainTexture));
 //        material.set(PBRTextureAttribute.createNormalTexture(normalTexture));
 
         model = makeGridModel(heightMap, SCALE, MAP_SIZE, GL20.GL_TRIANGLES, material);
         modelInstance =  new ModelInstance(model, position);
+        scene = new Scene(modelInstance, false);
     }
 
     public ModelInstance getModelInstance() {
         return modelInstance;
     }
 
+    public Scene getScene() { return scene; }
+
     @Override
     public void dispose() {
         model.dispose();
+        terrainTexture.dispose();
     }
 
 
@@ -143,7 +157,7 @@ public class TerrainChunk implements Disposable {
 
             normalVectors[y][x] = new Vector3(normal);
 
-            float reps=32; //16
+            float reps=64; //16
             float u = (x*reps)/(float)(N+1);
             float v = (y*reps)/(float)(N+1);
             vert.position.set(positions[i]);

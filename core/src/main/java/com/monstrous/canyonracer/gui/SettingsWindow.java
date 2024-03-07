@@ -7,12 +7,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.monstrous.canyonracer.GameScreen;
 import com.monstrous.canyonracer.Settings;
 
-public class LightSettingsWindow extends Window {
+public class SettingsWindow extends Window {
 
     private Skin skin;
     private GameScreen screen;
 
-    public LightSettingsWindow(String title, Skin skin, GameScreen screen) {
+    public SettingsWindow(String title, Skin skin, GameScreen screen) {
         super(title, skin);
         this.skin = skin;
         this.screen = screen;
@@ -70,10 +70,20 @@ public class LightSettingsWindow extends Window {
             }
         });
 
+        final CheckBox TCcheckbox = new CheckBox("terrain chunks allocation", skin);
+        TCcheckbox.setChecked(Settings.debugChunkAllocation);
+        TCcheckbox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Settings.debugChunkAllocation = TCcheckbox.isChecked();
+            }
+        });
+
         add(ALslider); add(ALlabel);        row();
         add(SLslider); add(SLlabel);        row();
         add(SBslider); add(SBlabel);        row();
         add(LBcheckbox);        row();
+        add(TCcheckbox);        row();
         pack();
 
     }

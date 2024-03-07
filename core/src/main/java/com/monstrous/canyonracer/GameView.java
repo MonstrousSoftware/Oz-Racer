@@ -48,7 +48,7 @@ public class GameView {
 
         sceneManager = new SceneManager();
 
-        camera = new PerspectiveCamera(60f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera = new PerspectiveCamera(40f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         float d = 7.5f;
         camera.near = 1f;
         camera.far = 5000f;
@@ -78,12 +78,18 @@ public class GameView {
     public void refresh() {
         sceneManager.getRenderableProviders().clear();        // remove all scenes
 
+        // terrain chunks are taken directly from the Terrain class, these are not game objects
+        for(Scene scene : world.terrain.scenes)
+            sceneManager.addScene(scene, false);
+
         // add scene for each game object
         int num = world.getNumGameObjects();
         for(int i = 0; i < num; i++){
             Scene scene = world.getGameObject(i).getScene();
             sceneManager.addScene(scene, false);
         }
+
+
     }
 
     private Vector3 playerForward = new Vector3();
