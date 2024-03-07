@@ -25,7 +25,12 @@
 		},
 		{
 			"mesh":1,
-			"name":"Ground"
+			"name":"Ground",
+			"translation":[
+				0,
+				-7.003667831420898,
+				0
+			]
 		},
 		{
 			"mesh":2,
@@ -38,7 +43,6 @@
 	],
 	"materials":[
 		{
-			"doubleSided":true,
 			"extensions":{
 				"KHR_materials_specular":{
 					"specularColorTexture":{
@@ -56,7 +60,6 @@
 			}
 		},
 		{
-			"doubleSided":true,
 			"name":"Material.002",
 			"normalTexture":{
 				"index":2
@@ -70,7 +73,6 @@
 			}
 		},
 		{
-			"doubleSided":true,
 			"name":"Material",
 			"pbrMetallicRoughness":{
 				"baseColorFactor":[
@@ -84,7 +86,6 @@
 			}
 		},
 		{
-			"doubleSided":true,
 			"name":"Material.001",
 			"pbrMetallicRoughness":{
 				"baseColorFactor":[

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Matrix4;
@@ -42,6 +43,8 @@ public class GameView {
     private Model arrowModel;
     public CameraController cameraController;
     private Vector3 playerPos = new Vector3();
+    private ParticleEffects particleEffects;
+    private ParticleEffect exhaust;
 
     public GameView(World world) {
         this.world = world;
@@ -64,6 +67,13 @@ public class GameView {
         debugLight();
 
         cameraController = new CameraController(camera);
+
+        particleEffects = new ParticleEffects(camera);
+        float x = 0;
+        float z = 100;
+        float y = world.terrain.getHeight(x, z);
+        particleEffects.addFire(new Vector3(x, y, z));
+        exhaust = particleEffects.addExhaustFumes(world.racer.getScene().modelInstance.transform);
     }
 
     public void resize(int width, int height) {
@@ -93,6 +103,7 @@ public class GameView {
     }
 
     private Vector3 playerForward = new Vector3();
+    private Matrix4 exhaustTransform = new Matrix4();
 
     public void render(float deltaTime) {
 
@@ -102,7 +113,13 @@ public class GameView {
         playerForward.set(Vector3.Z);
         playerForward.rot(transform);
 
+        exhaustTransform.set(transform);
+        exhaustTransform.translate(0.0f, -0.5f, -5f);           // offset for tail pipe
+        exhaust.setTransform(exhaustTransform);
+
         cameraController.update(playerPos, playerForward, deltaTime);
+
+
 
         light.setCenter(playerPos); // keep shadow light on player so that we have shadows
 
@@ -114,6 +131,9 @@ public class GameView {
         sceneManager.update(deltaTime);
         sceneManager.render();
 
+        particleEffects.update(deltaTime);
+        particleEffects.render(camera);
+
         if(Settings.showLightBox) {
             modelBatch.begin(sceneManager.camera);
             modelBatch.render(instances);
@@ -123,7 +143,7 @@ public class GameView {
     }
 
     public void dispose() {
-        // Destroy screen's assets here.
+        // Destroy assets here.
         sceneManager.dispose();
         environmentCubemap.dispose();
         diffuseCubemap.dispose();
@@ -131,6 +151,7 @@ public class GameView {
         brdfLUT.dispose();
         skybox.dispose();
         modelBatch.dispose();
+        particleEffects.dispose();
     }
 
     public void buildEnvironment() {

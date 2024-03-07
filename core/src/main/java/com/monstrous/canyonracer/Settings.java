@@ -15,4 +15,6 @@ public class Settings {
     static public int       chunkCacheSize = 50;
     static public boolean   debugChunkAllocation = false;
 
+
+    static public boolean   particleFX = true;
 }
