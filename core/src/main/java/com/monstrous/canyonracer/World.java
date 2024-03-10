@@ -85,17 +85,6 @@ public class World implements Disposable {
         modelInstance.calculateTransforms();
     }
 
-//    private GameObject spawnTerrain() {
-//        for(ModelInstance instance : terrain.instances) {
-//
-//            Scene scene = new Scene(instance);
-//            GameObject go = new GameObject(scene);
-//            gameObjects.add(go);
-//        }
-//        return null;
-//    }
-
-
     @Override
     public void dispose() {
 

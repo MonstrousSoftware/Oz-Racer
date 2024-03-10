@@ -6,7 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
 import com.monstrous.canyonracer.gui.GUI;
-
+import com.monstrous.canyonracer.terrain.TerrainDebug;
 
 
 public class GameScreen implements Screen {
@@ -17,6 +17,7 @@ public class GameScreen implements Screen {
     public GameView gameView;
     private Vector3 target;
     private int changes = 0;
+    private TerrainDebug terrainDebug;
 
     @Override
     public void show() {
@@ -24,6 +25,7 @@ public class GameScreen implements Screen {
         gui = new GUI(this);
 
         world = new World();
+        terrainDebug = new TerrainDebug(world.terrain);
 
         gameView = new GameView(world);
 
@@ -47,7 +49,7 @@ public class GameScreen implements Screen {
 
         gameView.render( deltaTime);
 
-        world.terrain.debugRender(world.playerPosition, gameView.getCamera().position);
+        terrainDebug.debugRender(world.playerPosition, gameView.getCamera().position);
         gui.render(deltaTime);
     }
 
@@ -77,6 +79,7 @@ public class GameScreen implements Screen {
         gui.dispose();
         world.dispose();
         gameView.dispose();
+        terrainDebug.dispose();
     }
 
 }
