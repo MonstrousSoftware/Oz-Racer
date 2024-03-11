@@ -8,14 +8,15 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.IntIntMap;
 import com.monstrous.canyonracer.GameObject;
+import com.monstrous.canyonracer.Settings;
 import com.monstrous.canyonracer.terrain.Terrain;
 
 public class PlayerController extends InputAdapter {
 
-    public static float ACCELERATION = 260f;
-    public static float TURN_RATE = 90f;
-    public static float MAX_TURN = 35f;
-    public static float DRAG_FACTOR = 0.6f;
+//    public static float ACCELERATION = 260f;
+//    public static float TURN_RATE = 390f;
+//    public static float MAX_TURN = 95f;
+//    public static float DRAG_FACTOR = 0.6f;
 
 
     public static int forwardKey = Input.Keys.W;
@@ -59,18 +60,34 @@ public class PlayerController extends InputAdapter {
 
         float acceleration = 0f;
         if (keys.containsKey(forwardKey) )
-            acceleration = ACCELERATION;
+            acceleration = Settings.acceleration;
 
         speed = velocity.len();
-        if (keys.containsKey(turnLeftKey) && turnAngle < MAX_TURN)
-            turnAngle += deltaTime * speed / 6f;                            // turn rate depends on speed
-        else if (keys.containsKey(turnRightKey) && turnAngle > -MAX_TURN)
-            turnAngle -= deltaTime * speed / 6f;
+        // potential idea: turn rate depends on speed
+        if (keys.containsKey(turnLeftKey)) {
+            if (turnAngle < Settings.maxTurn)
+                turnAngle += deltaTime * Settings.turnRate;
+        }
+        else if (keys.containsKey(turnRightKey)) {
+            if( turnAngle > -Settings.maxTurn)
+                turnAngle -= deltaTime *  Settings.turnRate;
+        }
+        else
+            turnAngle -= turnAngle * 2f * deltaTime;      // auto-level
 
         Matrix4 transform = racer.getScene().modelInstance.transform;
         transform.getTranslation(playerPos);
+
+        // place racer fixed distance above the terrain, i.e. it follows the terrain
         targetHeight = 5f+terrain.getHeight(playerPos.x, playerPos.z);
-        playerPos.y = MathUtils.lerp(playerPos.y, targetHeight, 20f*deltaTime);
+        playerPos.y = MathUtils.lerp(playerPos.y, targetHeight, Settings.heightLag*deltaTime);     // with a bit of lag
+
+        // apply rotation to player transform (yaw)
+        rotation += turnAngle*deltaTime;
+        transform.setToRotation(Vector3.Y, rotation);
+        transform.rotate(Vector3.Z, -turnAngle * Settings.bankFactor);                // bank for visual effect
+
+        // determine forward vector of the racer from its transform
         forwardDirection.set(Vector3.Z).rot(transform);
 
 
@@ -78,16 +95,15 @@ public class PlayerController extends InputAdapter {
         tmpV.set(forwardDirection).scl(deltaTime * acceleration);
         velocity.add(tmpV);
 
-        drag.set(velocity).scl(deltaTime*DRAG_FACTOR);
+        // drag scales with speed and slows down the racer (deceleration). This limits the top speed.
+        drag.set(velocity).scl(deltaTime*Settings.dragFactor);
         velocity.sub(drag);
 
         // never go backwards
 //        if(velocity.dot(forwardDirection)< 0)
 //            velocity.set(0,0,0);
 
-        rotation += turnAngle*deltaTime;
-        transform.setToRotation(Vector3.Y, rotation);
-        transform.rotate(Vector3.Z, -turnAngle);                // bank
+
 
 
         // apply velocity to position

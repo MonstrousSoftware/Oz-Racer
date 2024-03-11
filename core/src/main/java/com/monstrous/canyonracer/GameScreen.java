@@ -47,10 +47,21 @@ public class GameScreen implements Screen {
         world.terrain.update(gameView.getCamera());     // update terrain to camera position
         world.update(deltaTime);
 
+        //adjustCameraFOV();
+
         gameView.render( deltaTime);
 
         terrainDebug.debugRender(world.playerPosition, gameView.getCamera().position);
         gui.render(deltaTime);
+    }
+
+
+    // nauseating...
+    private void adjustCameraFOV(){
+        float speed = world.playerController.speed;
+        float fov = 80f;
+        fov -= 40*(speed/300f);
+        gameView.cameraController.setFOV( fov );
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -45,13 +46,15 @@ public class GameView {
     private Vector3 playerPos = new Vector3();
     private ParticleEffects particleEffects;
     private ParticleEffect exhaust;
+    private PostFilter postFilter;
+    private FrameBuffer fbo = null;
 
     public GameView(World world) {
         this.world = world;
 
         sceneManager = new SceneManager();
 
-        camera = new PerspectiveCamera(40f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera = new PerspectiveCamera(80f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         float d = 7.5f;
         camera.near = 1f;
         camera.far = 5000f;
@@ -68,6 +71,8 @@ public class GameView {
 
         cameraController = new CameraController(camera);
 
+        postFilter = new PostFilter();
+
         particleEffects = new ParticleEffects(camera);
         float x = 0;
         float z = 100;
@@ -79,6 +84,11 @@ public class GameView {
     public void resize(int width, int height) {
         // Resize your screen here. The parameters represent the new window size.
         sceneManager.updateViewport(width, height);
+        if(fbo != null)
+            fbo.dispose();
+        fbo = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, true);
+        postFilter.resize(width, height);
+        postFilter.resize(width, height);
     }
 
     public Camera getCamera() {
@@ -126,13 +136,22 @@ public class GameView {
 
         refresh();
 
-        // render
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         sceneManager.update(deltaTime);
-        sceneManager.render();
+        sceneManager.renderShadows();
+
+        // render
+//        fbo.begin();
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
+        sceneManager.renderColors();
 
         particleEffects.update(deltaTime);
         particleEffects.render(camera);
+//        fbo.end();
+
+//        postFilter.render(fbo);
+
+
 
         if(Settings.showLightBox) {
             modelBatch.begin(sceneManager.camera);
@@ -152,6 +171,7 @@ public class GameView {
         skybox.dispose();
         modelBatch.dispose();
         particleEffects.dispose();
+        postFilter.dispose();
     }
 
     public void buildEnvironment() {

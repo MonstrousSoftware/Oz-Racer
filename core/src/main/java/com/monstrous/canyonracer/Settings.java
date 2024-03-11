@@ -7,7 +7,16 @@ public class Settings {
     static public boolean   showLightBox = false;
 
 
-    static public float      cameraSlerpFactor = 2f;
+    static public float      cameraSlerpFactor = 80f;
+
+
+    // Racer control
+    static public float     dragFactor = 2.6f;
+    static public float     acceleration = 360f;
+    static public float     turnRate = 490f;
+    static public float     bankFactor = 0.25f;
+    static public float     maxTurn = 95f;
+    static public float     heightLag = 25f;
 
 
     // Terrain

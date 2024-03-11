@@ -2,20 +2,23 @@ package com.monstrous.canyonracer.input;
 
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.monstrous.canyonracer.Settings;
 
 public class CameraController extends InputAdapter {
 
-    private final Camera camera;
+    private final PerspectiveCamera camera;
     private final Vector3 focalOffset = new Vector3();
     private float distance = 15f;
     private final Vector3 cameraTargetPosition = new Vector3();
     public boolean skyCamMode = false;
 
-    public CameraController(Camera camera ) {
+    public CameraController(PerspectiveCamera camera ) {
         this.camera = camera;
         focalOffset.set(0,0,5);
+        if(skyCamMode)
+            distance = 200;
     }
 
     // viewDirection is unit forward vector pointing for the racer
@@ -36,12 +39,17 @@ public class CameraController extends InputAdapter {
 
         // top view
         if(skyCamMode) {
-            camera.position.set(playerPosition.x, 100, playerPosition.z);
+            camera.position.set(playerPosition.x, distance, playerPosition.z);
             camera.up.set(Vector3.Z);
             camera.lookAt(playerPosition);
         }
 
         camera.update(true);
+    }
+
+
+    public void setFOV(float fov){
+        camera.fieldOfView = fov;
     }
 
     @Override
@@ -52,9 +60,9 @@ public class CameraController extends InputAdapter {
     private boolean zoom (float amount) {
         if(amount < 0 && distance < 7.5f)
             return false;
-        if(amount > 0 && distance > 50f)
+        if(amount > 0 && distance > 50f && !skyCamMode )
             return false;
-        distance += amount;
+        distance += 10f*amount;
         return true;
     }
 }

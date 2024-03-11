@@ -15,6 +15,7 @@ import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
 public class World implements Disposable {
     private static final String GLTF_FILE = "models/Feisar.gltf";
+    private static final String GLTF_FILE2 = "models/rocks.gltf";
 
     private final Array<GameObject> gameObjects;
     private SceneAsset sceneAsset;
@@ -27,19 +28,28 @@ public class World implements Disposable {
         gameObjects = new Array<>();
 
         sceneAsset = new GLTFLoader().load(Gdx.files.internal(GLTF_FILE));
-        for(Node node : sceneAsset.scene.model.nodes){  // print some debug info
-            Gdx.app.log("Node ", node.id);
-        }
+//        for(Node node : sceneAsset.scene.model.nodes){  // print some debug info
+//            Gdx.app.log("Node ", node.id);
+//        }
 
         playerPosition = new Vector3(0,8,0);
         racer = spawnObject("Feisar_Ship", true, playerPosition);
         playerController = new PlayerController();
 
-        //spawnObject("Ground", true, new Vector3(0,0,0));
         spawnObject("TestCube", true, new Vector3(0,0,0));
-        spawnObject("Rock", true, new Vector3(0,0,0));
+
+        importRocks();
+
 
         terrain = new Terrain();
+    }
+
+    private void importRocks() {
+        sceneAsset = new GLTFLoader().load(Gdx.files.internal(GLTF_FILE2));
+        for(Node node : sceneAsset.scene.model.nodes){  // print some debug info
+//            Gdx.app.log("Node ", node.id);
+            spawnObject(node.id, false, new Vector3(0,0,0));
+        }
     }
 
     public int getNumGameObjects() {
