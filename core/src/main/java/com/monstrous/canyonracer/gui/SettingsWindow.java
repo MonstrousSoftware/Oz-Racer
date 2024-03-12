@@ -36,6 +36,7 @@ public class SettingsWindow extends Window {
             }
         });
         final Label ALlabel = new Label("ambient light", skin);
+        add(ALslider); add(ALlabel);        row();
 
         final Slider SLslider = new Slider(0.0f, 1.0f, 0.05f, false, skin);
         SLslider.setValue(Settings.shadowLightLevel);
@@ -48,6 +49,7 @@ public class SettingsWindow extends Window {
             }
         });
         final Label SLlabel = new Label("shadow light", skin);
+        add(SLslider); add(SLlabel);        row();
 
         final Slider SBslider = new Slider(0.0f, 0.1f, 0.0005f, false, skin);
         SBslider.setValue(Settings.shadowBias);
@@ -60,6 +62,7 @@ public class SettingsWindow extends Window {
             }
         });
         final Label SBlabel = new Label("shadow bias", skin);
+        add(SBslider); add(SBlabel);        row();
 
         final CheckBox LBcheckbox = new CheckBox("show light box", skin);
         LBcheckbox.setChecked(Settings.showLightBox);
@@ -69,6 +72,7 @@ public class SettingsWindow extends Window {
                 Settings.showLightBox = LBcheckbox.isChecked();
             }
         });
+        add(LBcheckbox);        row();
 
         final CheckBox TCcheckbox = new CheckBox("terrain chunks allocation", skin);
         TCcheckbox.setChecked(Settings.debugChunkAllocation);
@@ -78,12 +82,28 @@ public class SettingsWindow extends Window {
                 Settings.debugChunkAllocation = TCcheckbox.isChecked();
             }
         });
+        add(TCcheckbox).left();        row();
 
-        add(ALslider); add(ALlabel);        row();
-        add(SLslider); add(SLlabel);        row();
-        add(SBslider); add(SBlabel);        row();
-        add(LBcheckbox);        row();
-        add(TCcheckbox);        row();
+        final CheckBox AAcheckbox = new CheckBox("multi-sample frame buffer", skin);
+        AAcheckbox.setChecked(Settings.useMultiSamplingFrameBuffer);
+        AAcheckbox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Settings.useMultiSamplingFrameBuffer = AAcheckbox.isChecked();
+            }
+        });
+        add(AAcheckbox).left();        row();
+
+        final CheckBox PostCheckbox = new CheckBox("post-processing shader", skin);
+        PostCheckbox.setChecked(Settings.usePostShader);
+        PostCheckbox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Settings.usePostShader = PostCheckbox.isChecked();
+            }
+        });
+        add(PostCheckbox).left();        row();
+
         pack();
 
     }

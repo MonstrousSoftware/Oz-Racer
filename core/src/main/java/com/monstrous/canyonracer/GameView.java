@@ -1,5 +1,6 @@
 package com.monstrous.canyonracer;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.Material;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.GLFrameBuffer.FrameBufferBuilder;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -48,6 +50,7 @@ public class GameView {
     private ParticleEffect exhaust;
     private PostFilter postFilter;
     private FrameBuffer fbo = null;
+    private FrameBuffer fboMS = null;
 
     public GameView(World world) {
         this.world = world;
@@ -79,16 +82,37 @@ public class GameView {
         float y = world.terrain.getHeight(x, z);
         particleEffects.addFire(new Vector3(x, y, z));
         exhaust = particleEffects.addExhaustFumes(world.racer.getScene().modelInstance.transform);
+
+        if( Gdx.app.getType() != Application.ApplicationType.Desktop) {
+            Settings.multiSamplingFrameBufferAvailable = false;
+            Settings.useMultiSamplingFrameBuffer = false;       // only supported on desktop\
+            Settings.usePostShader = false;
+        }
     }
 
     public void resize(int width, int height) {
         // Resize your screen here. The parameters represent the new window size.
         sceneManager.updateViewport(width, height);
+        postFilter.resize(width, height);
+
+
         if(fbo != null)
             fbo.dispose();
-        fbo = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, true);
-        postFilter.resize(width, height);
-        postFilter.resize(width, height);
+        if(fboMS != null)
+            fboMS.dispose();
+
+
+        if(Settings.multiSamplingFrameBufferAvailable) {
+            int nbSamples = 4;
+            fboMS = new FrameBufferBuilder(width, height, nbSamples).addColorRenderBuffer(GL30.GL_RGBA8).addColorRenderBuffer(GL30.GL_RGBA8)
+                .addDepthRenderBuffer(GL30.GL_DEPTH_COMPONENT24).build();
+
+            fbo = new FrameBufferBuilder(width, height).addColorTextureAttachment(GL30.GL_RGBA8, GL20.GL_RGBA, GL30.GL_UNSIGNED_BYTE)
+                .addColorTextureAttachment(GL30.GL_RGBA8, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE)
+                .addDepthTextureAttachment(GL30.GL_DEPTH_COMPONENT24, GL30.GL_UNSIGNED_INT).build();
+        }
+        else
+            fbo = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, true);
     }
 
     public Camera getCamera() {
@@ -129,8 +153,6 @@ public class GameView {
 
         cameraController.update(playerPos, playerForward, deltaTime);
 
-
-
         light.setCenter(playerPos); // keep shadow light on player so that we have shadows
 
 
@@ -140,17 +162,28 @@ public class GameView {
         sceneManager.renderShadows();
 
         // render
-//        fbo.begin();
+        if(Settings.usePostShader) {
+            if (Settings.useMultiSamplingFrameBuffer)
+                fboMS.begin();
+            else
+                fbo.begin();
+        }
+
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         sceneManager.renderColors();
-
         particleEffects.update(deltaTime);
         particleEffects.render(camera);
-//        fbo.end();
 
-//        postFilter.render(fbo);
+        if(Settings.usePostShader) {
+            if (Settings.useMultiSamplingFrameBuffer) {
+                fboMS.end();
+                fboMS.transfer(fbo);
+            } else
+                fbo.end();
 
+            postFilter.render(fbo);
+        }
 
 
         if(Settings.showLightBox) {
@@ -172,6 +205,9 @@ public class GameView {
         modelBatch.dispose();
         particleEffects.dispose();
         postFilter.dispose();
+        if(Settings.multiSamplingFrameBufferAvailable)
+            fboMS.dispose();
+        fbo.dispose();
     }
 
     public void buildEnvironment() {
