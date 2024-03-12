@@ -17,7 +17,7 @@ This project was generated with a template including simple application launcher
 
 12/03/2024:
 - Last week a pull request was merged into LibGDX 1.12.2-SNAPSHOT to support anti-aliased frame buffers. This allows to use antialiasing in combination
- with post-processing shaders (e.g. vignette effect).
+ with post-processing shaders (e.g. vignette effect). This is only possible on desktop. The teavm version, uses FBO without AA.
 
 
 

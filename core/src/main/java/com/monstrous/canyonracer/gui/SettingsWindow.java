@@ -84,6 +84,16 @@ public class SettingsWindow extends Window {
         });
         add(TCcheckbox).left();        row();
 
+        final CheckBox PostCheckbox = new CheckBox("post-processing shader", skin);
+        PostCheckbox.setChecked(Settings.usePostShader);
+        PostCheckbox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Settings.usePostShader = PostCheckbox.isChecked();
+            }
+        });
+        add(PostCheckbox).left();        row();
+
         final CheckBox AAcheckbox = new CheckBox("multi-sample frame buffer", skin);
         AAcheckbox.setChecked(Settings.useMultiSamplingFrameBuffer);
         AAcheckbox.addListener(new ChangeListener() {
@@ -94,15 +104,7 @@ public class SettingsWindow extends Window {
         });
         add(AAcheckbox).left();        row();
 
-        final CheckBox PostCheckbox = new CheckBox("post-processing shader", skin);
-        PostCheckbox.setChecked(Settings.usePostShader);
-        PostCheckbox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Settings.usePostShader = PostCheckbox.isChecked();
-            }
-        });
-        add(PostCheckbox).left();        row();
+
 
         pack();
 

@@ -155,43 +155,50 @@ public class GameView {
 
         light.setCenter(playerPos); // keep shadow light on player so that we have shadows
 
-
         refresh();
 
         sceneManager.update(deltaTime);
-        sceneManager.renderShadows();
-
-        // render
-        if(Settings.usePostShader) {
-            if (Settings.useMultiSamplingFrameBuffer)
-                fboMS.begin();
-            else
-                fbo.begin();
-        }
-
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-
-        sceneManager.renderColors();
         particleEffects.update(deltaTime);
-        particleEffects.render(camera);
 
-        if(Settings.usePostShader) {
-            if (Settings.useMultiSamplingFrameBuffer) {
-                fboMS.end();
-                fboMS.transfer(fbo);
-            } else
-                fbo.end();
-
-            postFilter.render(fbo);
-        }
-
+        if(!Settings.usePostShader)
+            renderWorldBasic();
+        else if(!Settings.multiSamplingFrameBufferAvailable || !Settings.useMultiSamplingFrameBuffer)
+            renderWorldFBO();
+        else
+            renderWorldFBOAA();
 
         if(Settings.showLightBox) {
             modelBatch.begin(sceneManager.camera);
             modelBatch.render(instances);
             modelBatch.end();
         }
+    }
 
+    private void renderWorldBasic(){
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        sceneManager.render();
+        particleEffects.render(camera);
+    }
+
+    private void renderWorldFBO(){
+        sceneManager.renderShadows();
+        fbo.begin();
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        sceneManager.renderColors();
+        particleEffects.render(camera);
+        fbo.end();
+        postFilter.render(fbo);
+    }
+
+    private void renderWorldFBOAA(){
+        sceneManager.renderShadows();
+        fboMS.begin();
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        sceneManager.renderColors();
+        particleEffects.render(camera);
+        fboMS.end();
+        fboMS.transfer(fbo);
+        postFilter.render(fbo);
     }
 
     public void dispose() {

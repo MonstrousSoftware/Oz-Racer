@@ -3,6 +3,7 @@ package com.monstrous.canyonracer.input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.monstrous.canyonracer.Settings;
 
@@ -30,7 +31,8 @@ public class CameraController extends InputAdapter {
         cameraTargetPosition.add(playerPosition);
 
         // smoothly slerp the camera towards the desired position
-        camera.position.slerp(cameraTargetPosition, Settings.cameraSlerpFactor*deltaTime);
+        float alpha = MathUtils.clamp(Settings.cameraSlerpFactor*deltaTime, 0.0f, 1.0f);    // make sure alpha <= 1 even at low frame rates
+        camera.position.slerp(cameraTargetPosition, alpha);
 
         // camera is looking at a point in front of the racer so that racer appears in the bottom half of the screen, not centre screen
         focalOffset.set(viewDirection).scl(25).add(playerPosition);
