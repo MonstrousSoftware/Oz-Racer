@@ -14,5 +14,6 @@ public class Main extends Game {
         Gdx.app.log("Platform", ""+Gdx.app.getType());
 
         setScreen(new GameScreen());
+        //setScreen(new SkyBoxConverter());
     }
 }
