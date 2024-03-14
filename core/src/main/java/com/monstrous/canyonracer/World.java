@@ -37,6 +37,7 @@ public class World implements Disposable {
         playerController = new PlayerController();
 
         spawnObject("TestCube", true, new Vector3(0,0,0));
+        spawnObject("Marker", true, new Vector3(10,5,80));
 
         importRocks();
 
