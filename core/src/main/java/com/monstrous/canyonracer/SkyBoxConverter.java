@@ -28,13 +28,13 @@ import net.mgsx.gltf.scene3d.utils.IBLBuilder;
 
 import java.util.zip.Deflater;
 
-// Experimental: convert skybox texture into 6 textures in format used by gdx-gltf
-// note: not quite working, the side textures need to be rotated somehow
+// Help class: convert skybox texture into 6 textures in format used by gdx-gltf
+//
 
 
 public class SkyBoxConverter extends ScreenAdapter {
 
-    private static String fileName = "kisspng-skybox.png";
+    private static String fileName = "skybox/kisspng-skybox.png";
     private SpriteBatch batch;
     private Texture texture;
     private TextureRegion[] regions;
@@ -77,7 +77,7 @@ public class SkyBoxConverter extends ScreenAdapter {
         sceneManager.environment.add(light);
 
         environmentCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(),
-            "side-", ".png", EnvironmentUtil.FACE_NAMES_NEG_POS);
+            "skybox/side-", ".png", EnvironmentUtil.FACE_NAMES_NEG_POS);
         IBLBuilder iblBuilder = IBLBuilder.createOutdoor(light);
         diffuseCubemap = iblBuilder.buildIrradianceMap(256);
         specularCubemap = iblBuilder.buildRadianceMap(10);
@@ -108,44 +108,28 @@ public class SkyBoxConverter extends ScreenAdapter {
 
 
         // Split into 6 texture regions assuming the following layout
+        // The order is +x -x +y -y +z -z in line with the standard face name order
         //
-        //     [4]
-        //  [0][1][2][3]
-        //     [5]
+        //     [2]
+        //  [0][4][1][5]
+        //     [3]
         //
+
         int wr = w / 4;
         int hr = h / 3;
         Gdx.app.log("TextureRegions", "w=" + wr + " h=" + hr);
 
         regions[0] = new TextureRegion(texture, 0, hr, wr, hr);
-        regions[1] = new TextureRegion(texture, wr, hr, wr, hr);
-        regions[2] = new TextureRegion(texture, wr * 2, hr, wr, hr);
-        regions[3] = new TextureRegion(texture, wr * 3, hr, wr, hr);
-        regions[4] = new TextureRegion(texture, wr, 0, wr, hr);
-        regions[5] = new TextureRegion(texture, wr, hr * 2, wr, hr);
+        regions[1] = new TextureRegion(texture, wr * 2, hr, wr, hr);
+        regions[2] = new TextureRegion(texture, wr, 0, wr, hr);
+        regions[3] = new TextureRegion(texture, wr, hr * 2, wr, hr);
+        regions[4] = new TextureRegion(texture, wr, hr, wr, hr);
+        regions[5] = new TextureRegion(texture, wr * 3, hr, wr, hr);
 
-
-        //FrameBuffer fbo = new FrameBuffer(Pixmap.Format.RGBA8888, wr, hr, false);
         Pixmap pixmap = new Pixmap(wr, hr, Pixmap.Format.RGBA8888);
-
 
         for (int i = 0; i < 6; i++) {
             TextureRegion region = regions[i];
-
-
-//            fbo.begin();
-//            batch.begin();
-//            //  public void draw(Texture texture, float x, float y, float originX, float originY, float width, float height, float scaleX, float scaleY, float rotation, int srcX, int srcY, int srcWidth, int srcHeight, boolean flipX, boolean flipY) {
-//            //
-//            batch.draw(texture,0,0, 0, 0, wr, hr, 1f, 1f, 0f, wr,hr,wr,hr,false, false);
-//            batch.end();
-//            pixmap = ScreenUtils.getFrameBufferPixmap(0, 0, wr, hr);
-//            FileHandle fh = new FileHandle("side-" + EnvironmentUtil.FACE_NAMES_NEG_POS[i] + ".png");
-//            PixmapIO.writePNG(fh, pixmap, Deflater.DEFAULT_COMPRESSION, false);
-//
-//            fbo.end();
-
-
 
             TextureData textureData = region.getTexture().getTextureData();
             if (!textureData.isPrepared()) {
@@ -162,15 +146,31 @@ public class SkyBoxConverter extends ScreenAdapter {
                 region.getRegionHeight() // The height of the area from the other Pixmap in pixels
             );
 
+            Pixmap flippedPixmap = flipPixmap(pixmap);
 
-            FileHandle fh = new FileHandle("side-" + EnvironmentUtil.FACE_NAMES_NEG_POS[i] + ".png");
-            PixmapIO.writePNG(fh, pixmap, Deflater.DEFAULT_COMPRESSION, false);
+            FileHandle fh = new FileHandle("skybox/side-" + EnvironmentUtil.FACE_NAMES_NEG_POS[i] + ".png");
+            PixmapIO.writePNG(fh, flippedPixmap, Deflater.DEFAULT_COMPRESSION, false);
         }
+    }
+
+    // mirror horizontally
+    public static Pixmap flipPixmap (Pixmap src){
+        final int width = src.getWidth();
+        final int height = src.getHeight();
+        Pixmap flipped = new Pixmap(width, height, src.getFormat());
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                    flipped.drawPixel(x, y, src.getPixel((width-1)-x, y));
+            }
+        }
+        return flipped;
     }
 
     @Override
     public void render(float delta) {
         camController.update();
+        camera.up.set(Vector3.Y);
         camera.update();
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
@@ -179,8 +179,7 @@ public class SkyBoxConverter extends ScreenAdapter {
         sceneManager.render();
 
 //        batch.begin();
-////        batch.draw(texture,0,0);
-//        batch.draw(regions[1],0,0);
+//        batch.draw(texture,0,0);
 //        batch.end();
     }
 
