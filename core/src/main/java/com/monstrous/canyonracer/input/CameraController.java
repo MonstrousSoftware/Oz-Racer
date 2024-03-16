@@ -11,7 +11,7 @@ public class CameraController extends InputAdapter {
 
     private final PerspectiveCamera camera;
     private final Vector3 focalOffset = new Vector3();
-    private float distance = 10f;
+    private float distance = Settings.cameraDistance;
     private final Vector3 cameraTargetPosition = new Vector3();
     public boolean skyCamMode = false;
     private float angle = 0f;
@@ -23,10 +23,12 @@ public class CameraController extends InputAdapter {
             distance = 200;
     }
 
+    public void setDistance( float d ){
+        distance = d;
+    }
+
     // viewDirection is unit forward vector pointing for the racer
     public void update ( Vector3 playerPosition, Vector3 viewDirection, float deltaTime ) {
-
-
 
         // camera is at some position behind and above the player
         cameraTargetPosition.set(viewDirection).scl(-distance);       // distance behind player
@@ -38,8 +40,10 @@ public class CameraController extends InputAdapter {
         float alpha = MathUtils.clamp(Settings.cameraSlerpFactor*deltaTime, 0.0f, 1.0f);    // make sure alpha <= 1 even at low frame rates
         camera.position.slerp(cameraTargetPosition, alpha);
 
+       //camera.position.set(cameraTargetPosition);
+
         angle += deltaTime*50f;
-        camera.position.y += 0.001f*Math.sin(angle);    // camera vibration
+       // camera.position.y += 0.01f*Math.sin(angle);    // camera vibration
 
         // camera is looking at a point in front of the racer so that racer appears in the bottom half of the screen, not centre screen
         focalOffset.set(viewDirection).scl(65).add(playerPosition);

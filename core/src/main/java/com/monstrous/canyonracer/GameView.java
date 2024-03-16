@@ -59,7 +59,7 @@ public class GameView {
 
         sceneManager = new SceneManager();
 
-        camera = new PerspectiveCamera(100f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera = new PerspectiveCamera(Settings.cameraFieldOfView, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         float d = 4.5f;
         camera.near = 1f;
         camera.far = 5000f;
@@ -117,8 +117,8 @@ public class GameView {
             fbo = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, true);
     }
 
-    public Camera getCamera() {
-        return sceneManager.camera;
+    public PerspectiveCamera getCamera() {
+        return (PerspectiveCamera)sceneManager.camera;
     }
 
     public void refresh() {

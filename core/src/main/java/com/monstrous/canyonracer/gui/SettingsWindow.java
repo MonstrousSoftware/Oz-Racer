@@ -104,7 +104,45 @@ public class SettingsWindow extends Window {
         });
         add(AAcheckbox).left();        row();
 
+        final Slider FOVslider = new Slider(20.0f, 140f, 5f, false, skin);
+        FOVslider.setValue(Settings.cameraFieldOfView);
+        FOVslider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Settings.cameraFieldOfView = FOVslider.getValue();
+                Gdx.app.log("camera FOV", ""+Settings.cameraFieldOfView);
+                screen.gameView.getCamera().fieldOfView = Settings.cameraFieldOfView;
+            }
+        });
+        final Label FOVlabel = new Label("cam field of view", skin);
+        add(FOVslider); add(FOVlabel);        row();
 
+        final Slider CDslider = new Slider(5.0f, 200f, 2f, false, skin);
+        CDslider.setValue(Settings.cameraDistance);
+        CDslider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Settings.cameraDistance = CDslider.getValue();
+                Gdx.app.log("camera distance", ""+Settings.cameraDistance);
+                screen.gameView.cameraController.setDistance(Settings.cameraDistance);
+            }
+        });
+        final Label CDlabel = new Label("cam distance", skin);
+        add(CDslider); add(CDlabel);        row();
+
+
+
+        final Slider CSslider = new Slider(0.0f, 100f, 5f, false, skin);
+        CSslider.setValue(Settings.cameraSlerpFactor);
+        CSslider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Settings.cameraSlerpFactor = CSslider.getValue();
+                Gdx.app.log("camera slerp factor", ""+Settings.cameraSlerpFactor);
+            }
+        });
+        final Label CSlabel = new Label("cam slerp", skin);
+        add(CSslider); add(CSlabel);        row();
 
         pack();
 
