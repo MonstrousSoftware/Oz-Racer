@@ -3,7 +3,7 @@ package com.monstrous.canyonracer;
 public class Settings {
     static public float     ambientLightLevel = 0.75f;
     static public float     shadowLightLevel = 2.0f;
-    static public float     shadowBias = 0.003f;
+    static public float     shadowBias = 0.0003f;
     static public boolean   showLightBox = true;
 
     static public boolean    cameraInverted = false;

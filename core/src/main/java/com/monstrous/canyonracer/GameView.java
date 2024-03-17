@@ -169,7 +169,7 @@ public class GameView {
 
         refresh();
         DirectionalShadowLight shadowLight = sceneManager.getFirstDirectionalShadowLight();
-        csm.setCascades(sceneManager.camera, shadowLight, 0, 4f);
+        csm.setCascades(sceneManager.camera, shadowLight, 500f, 10f);
 
         sceneManager.update(deltaTime);
         particleEffects.update(deltaTime);
