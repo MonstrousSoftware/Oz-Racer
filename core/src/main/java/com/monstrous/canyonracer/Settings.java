@@ -6,6 +6,7 @@ public class Settings {
     static public float     shadowBias = 0.003f;
     static public boolean   showLightBox = false;
 
+    static public boolean    cameraInverted = false;
     static public float      cameraDistance = 10f;
     static public float      cameraFieldOfView = 100f;
     static public float      cameraSlerpFactor = 10f; //80f;

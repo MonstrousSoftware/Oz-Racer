@@ -104,6 +104,18 @@ public class SettingsWindow extends Window {
         });
         add(AAcheckbox).left();        row();
 
+        final CheckBox CIcheckbox = new CheckBox("camera inverted", skin);
+        CIcheckbox.setChecked(Settings.cameraInverted);
+        CIcheckbox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Settings.cameraInverted = CIcheckbox.isChecked();
+                screen.gameView.cameraController.setCameraUpSideDown(Settings.cameraInverted);
+
+            }
+        });
+        add(CIcheckbox).left();        row();
+
         final Slider FOVslider = new Slider(20.0f, 140f, 5f, false, skin);
         FOVslider.setValue(Settings.cameraFieldOfView);
         FOVslider.addListener(new ChangeListener() {
