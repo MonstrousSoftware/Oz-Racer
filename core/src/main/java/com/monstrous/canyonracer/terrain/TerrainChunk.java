@@ -44,7 +44,7 @@ public class TerrainChunk implements Disposable {
 
 
     public TerrainChunk(int xoffset, int yoffset, int creationTime) {
-        Gdx.app.log("TerrainChunk create:", ""+xoffset+" , "+yoffset);
+        //Gdx.app.log("TerrainChunk create:", ""+xoffset+" , "+yoffset);
 
         this.coord = new GridPoint2(xoffset, yoffset);
         this.creationTime = creationTime;

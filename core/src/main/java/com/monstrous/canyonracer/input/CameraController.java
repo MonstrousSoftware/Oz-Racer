@@ -1,5 +1,6 @@
 package com.monstrous.canyonracer.input;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -59,6 +60,7 @@ public class CameraController extends InputAdapter {
         focalOffset.set(viewDirection).scl(65).add(playerPosition);
         camera.lookAt(focalOffset);
         camera.up.set(up);
+        //Gdx.app.log("lookat", focalOffset.toString());
 
         // top view
         if(skyCamMode) {

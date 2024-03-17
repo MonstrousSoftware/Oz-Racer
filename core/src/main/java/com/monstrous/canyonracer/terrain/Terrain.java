@@ -47,7 +47,7 @@ public class Terrain implements Disposable {
                 if(chunk == null && added == 0) {
                         chunk = new TerrainChunk(cx, cz, timeCounter);
                         chunks.put(key, chunk);
-                        Gdx.app.log("num chunks", "" + chunks.size());
+                        //Gdx.app.log("num chunks", "" + chunks.size());
                         added++;                             // avoid generating more than 1 chunk per frame to avoid stutter
                 }
                 if(chunk != null && cam.frustum.boundsInFrustum(chunk.bbox)) {  // frustum culling
@@ -73,7 +73,7 @@ public class Terrain implements Disposable {
             chunks.remove(key);
             scenes.removeValue(oldest.getScene(), true);
             oldest.dispose();
-            Gdx.app.log("deleting "+oldest.coord.toString(), "num chunks"+chunks.size());
+            //Gdx.app.log("deleting "+oldest.coord.toString(), "num chunks"+chunks.size());
             return true;
         }
         return added > 0;

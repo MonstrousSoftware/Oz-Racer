@@ -42,6 +42,7 @@ public class GameView {
     private DirectionalShadowLight light;
     private Model frustumModel;
     private Vector3 lightPosition = new Vector3();
+    private Vector3 sunPosition = new Vector3();
     private Vector3 lightCentre = new Vector3();
     private ModelBatch modelBatch;
     private Array<ModelInstance> instances;
@@ -53,6 +54,7 @@ public class GameView {
     private PostFilter postFilter;
     private FrameBuffer fbo = null;
     private FrameBuffer fboMS = null;
+    private LensFlare lensFlare;
 
     public GameView(World world) {
         this.world = world;
@@ -70,9 +72,11 @@ public class GameView {
         modelBatch = new ModelBatch();
         instances = new Array<>();
 
-        buildEnvironment();
+        sunPosition = new Vector3(10,15, -15); // aligned with skybox texture
+        lensFlare = new LensFlare();
 
-        debugLight();
+        buildEnvironment();
+        buildDebugInstances();
 
         cameraController = new CameraController(camera);
 
@@ -90,6 +94,8 @@ public class GameView {
             Settings.useMultiSamplingFrameBuffer = false;       // only supported on desktop\
             Settings.usePostShader = false;
         }
+
+
     }
 
     public void resize(int width, int height) {
@@ -141,6 +147,8 @@ public class GameView {
     private Vector3 playerForward = new Vector3();
     private Matrix4 exhaustTransform = new Matrix4();
 
+
+
     public void render(float deltaTime) {
 
         // animate camera
@@ -169,11 +177,17 @@ public class GameView {
         else
             renderWorldFBOAA();
 
+
+        lensFlare.render(sceneManager.camera, sunPosition);
+
+        //lensFlare.showLightPosition();
+
         if(Settings.showLightBox) {
             modelBatch.begin(sceneManager.camera);
             modelBatch.render(instances);
             modelBatch.end();
         }
+
     }
 
     private void renderWorldBasic(){
@@ -236,8 +250,7 @@ public class GameView {
         float VP_SIZE = 30f;
         light = new DirectionalShadowLight(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE).setViewport(VP_SIZE,VP_SIZE,nearPlane,farPlane);
 
-
-        light.direction.set(1, -3, -1).nor();
+        light.direction.set(sunPosition).scl(-1).nor();
 
         // for the directional shadow light we can set the light centre which is the center of the frustum of the orthogonal camera
         // that is used to create the depth buffer.
@@ -276,7 +289,7 @@ public class GameView {
 
 
 
-    private void debugLight() {
+    private void buildDebugInstances() {
 
         // force the light.camera to be set to the correct position and direction
         light.begin();

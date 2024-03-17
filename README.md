@@ -19,7 +19,24 @@ This project was generated with a template including simple application launcher
 - Last week a pull request was merged into LibGDX 1.12.2-SNAPSHOT to support anti-aliased frame buffers. This allows to use antialiasing in combination
  with post-processing shaders (e.g. vignette effect). This is only possible on desktop. The teavm version, uses FBO without AA.
 
+17/03/2024:
+ - Error messages on Intel GPU
+        [LWJGL] GLFW_PLATFORM_ERROR error
+        Description : WGL: Failed to make context current: The handle is invalid.
+        Stacktrace  :
+        org.lwjgl.glfw.GLFW.glfwMakeContextCurrent(GLFW.java:4894)
+        com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window.makeCurrent(Lwjgl3Window.java:431)
+        com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.loop(Lwjgl3Application.java:189)
 
+    - is related to enabling GL31 even when we are not using it (required for multi sample fbo: Framebuffer multisample requires GLES 3.1+)
+    -         configuration.setOpenGLEmulation(Lwjgl3ApplicationConfiguration.GLEmulation.GL31, 4,3);
+    - also occurs for GL30 but not for GL20
+    - Internet: "If you google the error a bit, everything points to an intel driver bug that hasn't been fixed since forever"
+    - Intel UHD 630
+    - Provider:       Intel Corporation
+      Version:      27.20.100.8729
+      Date:      11/9/2020
+    - Assumed to be intel driver bug, annoying but doesn't break anything.
 
 
 Textures
