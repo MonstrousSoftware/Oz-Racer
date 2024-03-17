@@ -24,6 +24,7 @@ import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
 import net.mgsx.gltf.scene3d.lights.DirectionalShadowLight;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneManager;
+import net.mgsx.gltf.scene3d.scene.CascadeShadowMap;
 import net.mgsx.gltf.scene3d.scene.SceneSkybox;
 import net.mgsx.gltf.scene3d.utils.EnvironmentUtil;
 import net.mgsx.gltf.scene3d.utils.IBLBuilder;
@@ -55,6 +56,7 @@ public class GameView {
     private FrameBuffer fbo = null;
     private FrameBuffer fboMS = null;
     private LensFlare lensFlare;
+    private CascadeShadowMap csm;
 
     public GameView(World world) {
         this.world = world;
@@ -166,6 +168,8 @@ public class GameView {
         light.setCenter(playerPos); // keep shadow light on player so that we have shadows
 
         refresh();
+        DirectionalShadowLight shadowLight = sceneManager.getFirstDirectionalShadowLight();
+        csm.setCascades(sceneManager.camera, shadowLight, 0, 4f);
 
         sceneManager.update(deltaTime);
         particleEffects.update(deltaTime);
@@ -237,6 +241,9 @@ public class GameView {
 
         sceneManager.environment.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, Settings.shadowBias));
 
+        csm = new CascadeShadowMap(2);
+        sceneManager.setCascadeShadowMap(csm);
+
         // setup light
 
 
@@ -245,9 +252,9 @@ public class GameView {
         // set the light parameters so that your area of interest is in the shadow light frustum
         // but keep it reasonably tight to keep sharper shadows
         lightPosition = new Vector3(0,135,0);    // even though this is a directional light and is "infinitely far away", use this to set the near plane
-        float farPlane = 30;
+        float farPlane = 300;
         float nearPlane = 0;
-        float VP_SIZE = 30f;
+        float VP_SIZE = 300f;
         light = new DirectionalShadowLight(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE).setViewport(VP_SIZE,VP_SIZE,nearPlane,farPlane);
 
         light.direction.set(sunPosition).scl(-1).nor();
