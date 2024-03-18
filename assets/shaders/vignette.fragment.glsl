@@ -22,10 +22,6 @@ varying vec4 v_color;
 varying vec2 v_texCoord0;
 
 
-
-
-
-
 void main()
 {
 	vec4 color = texture2D(u_texture, v_texCoord0);
@@ -38,7 +34,7 @@ void main()
     color.rgb = mix(color.rgb, color.rgb*vig, 0.9);
 
     // increase contrast
-    color.rgb = (color.rgb - 0.5) * 1.1 + 0.5;
+    color.rgb = (color.rgb - 0.5) * 1.2 + 0.5;
 
     gl_FragColor = color;
 }

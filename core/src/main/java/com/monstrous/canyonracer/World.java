@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.monstrous.canyonracer.input.EnemyController;
 import com.monstrous.canyonracer.input.PlayerController;
 import com.monstrous.canyonracer.terrain.Terrain;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
@@ -20,9 +21,13 @@ public class World implements Disposable {
     private final Array<GameObject> gameObjects;
     private SceneAsset sceneAsset;
     public final GameObject racer;
+    public final GameObject enemy1;
     public final PlayerController playerController;
     public final Vector3 playerPosition;
+    public final Vector3 enemyPosition;
     public final Terrain terrain;
+    private final EnemyController enemyController;
+    public final Path path;
 
     public World() {
         gameObjects = new Array<>();
@@ -36,6 +41,10 @@ public class World implements Disposable {
         racer = spawnObject("Feisar_Ship", true, playerPosition);
         playerController = new PlayerController();
 
+        enemyPosition = new Vector3(4,8,6);
+        enemy1 = spawnObject("Feisar_Ship", true, enemyPosition);
+        enemyController = new EnemyController();
+
         spawnObject("TestCube", true, new Vector3(0,0,0));
         spawnObject("Marker", true, new Vector3(10,5,80));
 
@@ -43,6 +52,7 @@ public class World implements Disposable {
 
 
         terrain = new Terrain();
+        path = new Path(terrain);
     }
 
     private void importRocks() {
@@ -63,6 +73,7 @@ public class World implements Disposable {
 
     public void update( float deltaTime ){
         playerController.update(racer, terrain, deltaTime);
+        enemyController.update(enemy1, terrain, deltaTime);
 
         // update player position variable
         racer.getScene().modelInstance.transform.getTranslation(playerPosition);

@@ -1,78 +1,61 @@
 package com.monstrous.canyonracer.input;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.IntIntMap;
 import com.monstrous.canyonracer.GameObject;
 import com.monstrous.canyonracer.Settings;
 import com.monstrous.canyonracer.terrain.Terrain;
 
-public class PlayerController extends InputAdapter {
-
-    public static int forwardKey = Input.Keys.W;
-    public static int turnLeftKey = Input.Keys.A;
-    public static int turnRightKey = Input.Keys.D;
+public class EnemyController {
 
     public float speed = 0f;
     private float turnAngle = 0f;
     private float rotation = 0f;
 
-    private final IntIntMap keys = new IntIntMap();
     private Vector3 forwardDirection;       // unit vector in forward direction
     private Vector3 velocity;               // velocity vector
 
     private Vector3 tmpV = new Vector3();
-    private Vector3 playerPos = new Vector3();
+    private Vector3 racerPos = new Vector3();
     private Vector3 drag = new Vector3();
     private float targetHeight;
 
 
-    public PlayerController() {
+    public EnemyController() {
         forwardDirection = new Vector3(0,0,1);
         velocity = new Vector3(0,0,0);
     }
 
-    @Override
-    public boolean keyDown (int keycode) {
-        keys.put(keycode, keycode);
-        return true;
-    }
-
-    @Override
-    public boolean keyUp (int keycode) {
-        keys.remove(keycode, 0);
-        return true;
-    }
 
     public void update (GameObject racer, Terrain terrain, float deltaTime ) {
 
         float acceleration = 0f;
-        if (keys.containsKey(forwardKey) )
+//        if (keys.containsKey(forwardKey) )
             acceleration = Settings.acceleration;
 
         speed = velocity.len();
+
         // potential idea: turn rate depends on speed
-        if (keys.containsKey(turnLeftKey)) {
-            if (turnAngle < Settings.maxTurn)
-                turnAngle += deltaTime * Settings.turnRate;
-        }
-        else if (keys.containsKey(turnRightKey)) {
-            if( turnAngle > -Settings.maxTurn)
-                turnAngle -= deltaTime *  Settings.turnRate;
-        }
-        else
-            turnAngle -= turnAngle * 2f * deltaTime;      // auto-level
+//        if (keys.containsKey(turnLeftKey)) {
+//            if (turnAngle < Settings.maxTurn)
+//                turnAngle += deltaTime * Settings.turnRate;
+//        }
+//        else if (keys.containsKey(turnRightKey)) {
+//            if( turnAngle > -Settings.maxTurn)
+//                turnAngle -= deltaTime *  Settings.turnRate;
+//        }
+//        else
+//            turnAngle -= turnAngle * 2f * deltaTime;      // auto-level
+        turnAngle = 10f;
+
 
         Matrix4 transform = racer.getScene().modelInstance.transform;
-        transform.getTranslation(playerPos);
+        transform.getTranslation(racerPos);
 
         // place racer fixed distance above the terrain, i.e. it follows the terrain
-        targetHeight = 5f+terrain.getHeight(playerPos.x, playerPos.z);
-        playerPos.y = MathUtils.lerp(playerPos.y, targetHeight, Settings.heightLag*deltaTime);     // with a bit of lag
+        targetHeight = 5f+terrain.getHeight(racerPos.x, racerPos.z);
+        racerPos.y = MathUtils.lerp(racerPos.y, targetHeight, Settings.heightLag*deltaTime);     // with a bit of lag
 
         // apply rotation to player transform (yaw)
         rotation += turnAngle*deltaTime;
@@ -97,8 +80,8 @@ public class PlayerController extends InputAdapter {
 
         // apply velocity to position
         tmpV.set(velocity).scl(deltaTime);
-        playerPos.add(tmpV);
-        transform.setTranslation(playerPos);
+        racerPos.add(tmpV);
+        transform.setTranslation(racerPos);
     }
 
 

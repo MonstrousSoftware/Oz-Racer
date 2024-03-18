@@ -18,6 +18,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.monstrous.canyonracer.input.CameraController;
+import net.mgsx.gltf.scene3d.attributes.FogAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRFloatAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
@@ -169,7 +170,7 @@ public class GameView {
 
         refresh();
         DirectionalShadowLight shadowLight = sceneManager.getFirstDirectionalShadowLight();
-        csm.setCascades(sceneManager.camera, shadowLight, 500f, 10f);
+        csm.setCascades(sceneManager.camera, shadowLight, 0f, 20f);
 
         sceneManager.update(deltaTime);
         particleEffects.update(deltaTime);
@@ -185,6 +186,8 @@ public class GameView {
         lensFlare.render(sceneManager.camera, sunPosition);
 
         //lensFlare.showLightPosition();
+
+        world.path.render(sceneManager.camera);
 
         if(Settings.showLightBox) {
             modelBatch.begin(sceneManager.camera);
@@ -239,7 +242,7 @@ public class GameView {
 
     public void buildEnvironment() {
 
-        sceneManager.environment.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, Settings.shadowBias));
+        //sceneManager.environment.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, Settings.shadowBias));
 
         csm = new CascadeShadowMap(2);
         sceneManager.setCascadeShadowMap(csm);
@@ -288,6 +291,10 @@ public class GameView {
         sceneManager.environment.set(new PBRTextureAttribute(PBRTextureAttribute.BRDFLUTTexture, brdfLUT));
         sceneManager.environment.set(PBRCubemapAttribute.createSpecularEnv(specularCubemap));
         sceneManager.environment.set(PBRCubemapAttribute.createDiffuseEnv(diffuseCubemap));
+
+        /// fog doesn't make sense
+//        sceneManager.environment.set(new ColorAttribute(ColorAttribute.Fog, Color.WHITE));
+//        sceneManager.environment.set(new FogAttribute(FogAttribute.FogEquation).set(5, 1500, 1.0f));
 
         // setup skybox
         skybox = new SceneSkybox(environmentCubemap);

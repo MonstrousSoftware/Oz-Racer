@@ -31,12 +31,16 @@ This project was generated with a template including simple application launcher
     - is related to enabling GL31 even when we are not using it (required for multi sample fbo: Framebuffer multisample requires GLES 3.1+)
     -         configuration.setOpenGLEmulation(Lwjgl3ApplicationConfiguration.GLEmulation.GL31, 4,3);
     - also occurs for GL30 but not for GL20
-    - Internet: "If you google the error a bit, everything points to an intel driver bug that hasn't been fixed since forever"
-    - Intel UHD 630
-    - Provider:       Intel Corporation
-      Version:      27.20.100.8729
-      Date:      11/9/2020
     - Assumed to be intel driver bug, annoying but doesn't break anything.
+
+
+to do:
+- collision with rocks
+- camera avoidance of obstacles
+- camera orbit control
+- way points
+- race time
+- ai racers
 
 
 Textures
