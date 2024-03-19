@@ -127,7 +127,7 @@ public class GameView {
     }
 
     public PerspectiveCamera getCamera() {
-        return (PerspectiveCamera)sceneManager.camera;
+        return camera;
     }
 
     public void refresh() {
@@ -182,12 +182,13 @@ public class GameView {
         else
             renderWorldFBOAA();
 
+        world.path.render(camera);
 
         lensFlare.render(sceneManager.camera, sunPosition);
 
         //lensFlare.showLightPosition();
 
-        world.path.render(sceneManager.camera);
+
 
         if(Settings.showLightBox) {
             modelBatch.begin(sceneManager.camera);

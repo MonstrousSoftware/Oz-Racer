@@ -41,7 +41,7 @@ public class Terrain implements Disposable {
         for (int cx = px-2; cx <= px+2; cx++) {
             for (int cz = pz-2; cz <= pz+2; cz++) {
 
-                Integer key = (Integer) makeKey(cx, cz);
+                Integer key = makeKey(cx, cz);
 
                 TerrainChunk chunk = chunks.get(key);
                 if(chunk == null && added == 0) {

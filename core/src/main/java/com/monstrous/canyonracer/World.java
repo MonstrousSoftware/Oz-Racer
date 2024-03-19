@@ -19,6 +19,7 @@ public class World implements Disposable {
     private static final String GLTF_FILE2 = "models/rocks.gltf";
 
     private final Array<GameObject> gameObjects;
+    private GameObject blades;
     private SceneAsset sceneAsset;
     public final GameObject racer;
     public final GameObject enemy1;
@@ -28,6 +29,7 @@ public class World implements Disposable {
     public final Terrain terrain;
     private final EnemyController enemyController;
     public final Path path;
+    public final Turbines turbines;
 
     public World() {
         gameObjects = new Array<>();
@@ -48,12 +50,37 @@ public class World implements Disposable {
         spawnObject("TestCube", true, new Vector3(0,0,0));
         spawnObject("Marker", true, new Vector3(10,5,80));
 
-        importRocks();
+
+
+        //spawnWindTurbines();
+
+
 
 
         terrain = new Terrain();
         path = new Path(terrain);
+
+        turbines = new Turbines(this, terrain);
+
+        importRocks();
     }
+
+//    private void spawnWindTurbines() {
+//        spawnObject("Turbine", true, new Vector3(100,0,100));
+//        blades = spawnObject("Blades", false, new Vector3(100,52,100));
+//    }
+//
+//    private float angle;
+//
+//    private void turnBlades( float deltaTime ) {
+//        angle += deltaTime * 25f;
+//
+//        Matrix4 transform = blades.getScene().modelInstance.transform;
+//
+//        transform.setToRotation(Vector3.Z, angle);
+//        transform.setTranslation(100,52,100);
+//    }
+
 
     private void importRocks() {
         sceneAsset = new GLTFLoader().load(Gdx.files.internal(GLTF_FILE2));
@@ -74,6 +101,7 @@ public class World implements Disposable {
     public void update( float deltaTime ){
         playerController.update(racer, terrain, deltaTime);
         enemyController.update(enemy1, terrain, deltaTime);
+        turbines.update( deltaTime );
 
         // update player position variable
         racer.getScene().modelInstance.transform.getTranslation(playerPosition);

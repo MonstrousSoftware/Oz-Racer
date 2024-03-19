@@ -39,11 +39,13 @@ public class GameScreen implements Screen {
         im.addProcessor(world.playerController);
 
         target = new Vector3();
+
+
+
     }
 
     @Override
     public void render(float deltaTime) {
-
         world.terrain.update(gameView.getCamera());     // update terrain to camera position
         world.update(deltaTime);
 

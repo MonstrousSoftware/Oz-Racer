@@ -41,13 +41,13 @@ public class DemoScreen implements Screen {
     public void show() {
         // create scene
         sceneAsset = new GLTFLoader().load(Gdx.files.internal(FILE_NAME ));
-        scene = new Scene(sceneAsset.scene);
+        scene = new Scene(sceneAsset.scene,"Feisar_Ship");
         sceneManager = new SceneManager();
         sceneManager.addScene(scene);
 
         // setup camera (The BoomBox model is very small so you may need to adapt camera settings for your scene)
         camera = new PerspectiveCamera(60f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        float d = 250f;
+        float d = 250.0f;
         camera.near = 0.01f;
         camera.far = 1000f;
         sceneManager.setCamera(camera);
@@ -95,9 +95,10 @@ public class DemoScreen implements Screen {
         time += deltaTime;
 
         float t = MathUtils.PI * Math.abs(MathUtils.sin(time/5f));
+        float t2 = MathUtils.PI * Math.abs(MathUtils.cos(time/12f));
 
         // animate camera
-        camera.position.setFromSpherical(t*MathUtils.PI/4, .3f).scl(307f);
+        camera.position.setFromSpherical(t*MathUtils.PI/4, t2*MathUtils.PI/4).scl(10f);
         camera.up.set(Vector3.Y);
         camera.lookAt(Vector3.Zero);
         camera.update();
