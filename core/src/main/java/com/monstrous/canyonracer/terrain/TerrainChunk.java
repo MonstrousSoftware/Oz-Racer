@@ -54,8 +54,8 @@ public class TerrainChunk implements Disposable {
         Noise noise = new Noise();
 
         // note: add 1000 to x and to y to avoid negative offsets for Perlin map, as these cause discontinuities
-        heightMap = noise.generatePerlinMap( MAP_SIZE+1, MAP_SIZE+1, (1000f+xoffset)*((float)(MAP_SIZE))/GRID_SCALE,
-            (1000f+yoffset)*((float)(MAP_SIZE))/GRID_SCALE, (int)GRID_SCALE);
+        heightMap = noise.generatePerlinMap( MAP_SIZE+1, MAP_SIZE+1, (1000+xoffset)*((float)(MAP_SIZE))/GRID_SCALE,
+            (1000+yoffset)*((float)(MAP_SIZE))/GRID_SCALE, (int)GRID_SCALE);
 
         for (int y = 0; y <= MAP_SIZE; y++)
             for (int x = 0; x <= MAP_SIZE; x++)

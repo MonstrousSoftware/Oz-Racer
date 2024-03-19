@@ -2,6 +2,7 @@ package com.monstrous.canyonracer.terrain;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.canyonracer.Settings;
@@ -15,14 +16,35 @@ import java.util.HashMap;
 
 
 public class Terrain implements Disposable {
+    private static int RANGE = 2;
 
     HashMap<Integer, TerrainChunk> chunks;      // map of terrain chunk per grid point
     public Array<Scene> scenes;                 // scenes to be rendered
     int timeCounter;
+    private Noise noise = new Noise();
 
-    public Terrain() {
+    public Terrain( Vector3 startPosition) {
         chunks = new HashMap<>();
         scenes = new Array<>();
+
+        int px = (int)Math.floor(startPosition.x/Settings.chunkSize);
+        int pz = (int)Math.floor(startPosition.z/Settings.chunkSize);
+
+        // Add a NxN square of chunks to the scenes array (is RANGE is 2, this is 5x5)
+        // Create chunks as needed (but not more than one at a time)
+
+        for (int cx = px-RANGE; cx <= px+RANGE; cx++) {
+            for (int cz = pz-RANGE; cz <= pz+RANGE; cz++) {
+
+                Integer key = makeKey(cx, cz);
+
+                TerrainChunk chunk = chunks.get(key);
+                if(chunk == null) {
+                    chunk = new TerrainChunk(cx, cz, timeCounter);
+                    chunks.put(key, chunk);
+                }
+            }
+        }
     }
 
 
@@ -33,13 +55,13 @@ public class Terrain implements Disposable {
         int px = (int)Math.floor(cam.position.x/Settings.chunkSize);
         int pz = (int)Math.floor(cam.position.z/Settings.chunkSize);
 
-        // Add a 5x5 square of chunks to the scenes array
+        // Add a NxN square of chunks to the scenes array (is RANGE is 2, this is 5x5)
         // Create chunks as needed (but not more than one at a time)
 
         int added = 0;
         scenes.clear();
-        for (int cx = px-2; cx <= px+2; cx++) {
-            for (int cz = pz-2; cz <= pz+2; cz++) {
+        for (int cx = px-RANGE; cx <= px+RANGE; cx++) {
+            for (int cz = pz-RANGE; cz <= pz+RANGE; cz++) {
 
                 Integer key = makeKey(cx, cz);
 
@@ -87,6 +109,20 @@ public class Terrain implements Disposable {
 
     // get terrain height at (x,z)
     public float getHeight(float x, float z) {
+
+
+//        x /= Settings.chunkSize;
+//        z /= Settings.chunkSize;
+//        //z += 1000* TerrainChunk.MAP_SIZE;
+//        float px = x / (float)TerrainChunk.GRID_SCALE;
+//        float pz = z / (float)TerrainChunk.GRID_SCALE;
+//
+//        float y = noise.PerlinNoise(px, pz);
+//        y *= TerrainChunk.AMPLITUDE;
+//        return y;
+
+
+
         // work out what chunk we're in
         // and the relative position for that chunk
         //

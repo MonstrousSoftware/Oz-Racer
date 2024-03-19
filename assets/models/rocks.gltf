@@ -18,68 +18,26 @@
 				3,
 				4,
 				5,
-				6,
-				7,
-				8,
-				9,
-				10
+				6
 			]
 		}
 	],
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Rock",
-			"translation":[
-				-61.839935302734375,
-				-13.322611808776855,
-				7.438087463378906
-			]
+			"name":"Rock"
 		},
 		{
 			"mesh":1,
-			"name":"Rock.001",
-			"rotation":[
-				0,
-				-0.6496097445487976,
-				0,
-				0.7602679133415222
-			],
-			"translation":[
-				-338.97576904296875,
-				4.047449111938477,
-				-493.7586364746094
-			]
+			"name":"Rock.001"
 		},
 		{
 			"mesh":2,
-			"name":"Rock.002",
-			"rotation":[
-				0,
-				0.21226848661899567,
-				0,
-				0.9772114157676697
-			],
-			"translation":[
-				17.90185546875,
-				-13.322611808776855,
-				7.438087463378906
-			]
+			"name":"Rock.002"
 		},
 		{
 			"mesh":3,
-			"name":"Rock.003",
-			"rotation":[
-				0,
-				0.685360848903656,
-				0,
-				0.7282036542892456
-			],
-			"translation":[
-				190.0455322265625,
-				-6.088269233703613,
-				-116.60224151611328
-			]
+			"name":"Rock.003"
 		},
 		{
 			"name":"Rock.004",
@@ -91,81 +49,11 @@
 		},
 		{
 			"mesh":4,
-			"name":"Rock.005",
-			"translation":[
-				-61.839935302734375,
-				-13.322611808776855,
-				7.438087463378906
-			]
+			"name":"Rock.005"
 		},
 		{
-			"mesh":1,
-			"name":"Rock.006",
-			"rotation":[
-				0,
-				-0.6496097445487976,
-				0,
-				0.7602679133415222
-			],
-			"translation":[
-				-338.97576904296875,
-				4.047449111938477,
-				-493.7586364746094
-			]
-		},
-		{
-			"mesh":3,
-			"name":"Rock.007",
-			"rotation":[
-				0,
-				-0.1915159672498703,
-				0,
-				0.9814894795417786
-			],
-			"translation":[
-				-572.590576171875,
-				-6.088269233703613,
-				-439.8932800292969
-			]
-		},
-		{
-			"mesh":0,
-			"name":"Rock.008",
-			"translation":[
-				401.15301513671875,
-				-13.322611808776855,
-				-912.25390625
-			]
-		},
-		{
-			"mesh":2,
-			"name":"Rock.009",
-			"rotation":[
-				0,
-				0.21226848661899567,
-				0,
-				0.9772114157676697
-			],
-			"translation":[
-				817.3717651367188,
-				-13.322611808776855,
-				464.1123352050781
-			]
-		},
-		{
-			"mesh":1,
-			"name":"Rock.010",
-			"rotation":[
-				0,
-				-0.6496097445487976,
-				0,
-				0.7602679133415222
-			],
-			"translation":[
-				-838.8109741210938,
-				4.047449111938477,
-				440.9040832519531
-			]
+			"mesh":5,
+			"name":"Rock.006"
 		}
 	],
 	"materials":[
@@ -193,6 +81,33 @@
 				},
 				"metallicRoughnessTexture":{
 					"index":2
+				}
+			}
+		},
+		{
+			"doubleSided":true,
+			"extensions":{
+				"KHR_materials_specular":{
+					"specularColorFactor":[
+						0.03233669482269175,
+						0.03233669482269175,
+						0.03233669482269175
+					]
+				},
+				"KHR_materials_ior":{
+					"ior":1.4500000476837158
+				}
+			},
+			"name":"ErodedSmoothRock.008",
+			"normalTexture":{
+				"index":3
+			},
+			"pbrMetallicRoughness":{
+				"baseColorTexture":{
+					"index":4
+				},
+				"metallicRoughnessTexture":{
+					"index":5
 				}
 			}
 		}
@@ -267,6 +182,20 @@
 					"material":0
 				}
 			]
+		},
+		{
+			"name":"Cylinder.041",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":20,
+						"TEXCOORD_0":21,
+						"NORMAL":22
+					},
+					"indices":3,
+					"material":1
+				}
+			]
 		}
 	],
 	"textures":[
@@ -281,6 +210,18 @@
 		{
 			"sampler":0,
 			"source":2
+		},
+		{
+			"sampler":0,
+			"source":0
+		},
+		{
+			"sampler":0,
+			"source":1
+		},
+		{
+			"sampler":0,
+			"source":3
 		}
 	],
 	"images":[
@@ -298,6 +239,11 @@
 			"mimeType":"image/png",
 			"name":"eroded-smoothed-rockface_metallic-eroded-smoothed-rockface_roughness",
 			"uri":"textures/eroded-smoothed-rockface_metallic-eroded-smoothed-rockface_roughness.png"
+		},
+		{
+			"mimeType":"image/png",
+			"name":"eroded-smoothed-rockface_metallic.png-eroded-smoothed-rockface_roughness.png",
+			"uri":"textures/eroded-smoothed-rockface_metallic_png-eroded-smoothed-rockface_roughness_png.png"
 		}
 	],
 	"accessors":[
@@ -306,14 +252,14 @@
 			"componentType":5126,
 			"count":215,
 			"max":[
-				13.890762329101562,
-				25.59807586669922,
-				45.97804641723633
+				14.518585205078125,
+				32.54783248901367,
+				53.416133880615234
 			],
 			"min":[
-				-18.10309600830078,
-				-10.528776168823242,
-				-46.969146728515625
+				-17.47527313232422,
+				-3.5790185928344727,
+				-39.53105926513672
 			],
 			"type":"VEC3"
 		},
@@ -340,14 +286,14 @@
 			"componentType":5126,
 			"count":227,
 			"max":[
-				18.968019485473633,
-				80.05339813232422,
-				20.74031639099121
+				25.037643432617188,
+				104.37321472167969,
+				-5.429935455322266
 			],
 			"min":[
-				-24.72001838684082,
-				-32.92686462402344,
-				-21.187393188476562
+				-17.322416305541992,
+				-8.607046127319336,
+				-50.40144348144531
 			],
 			"type":"VEC3"
 		},
@@ -374,14 +320,14 @@
 			"componentType":5126,
 			"count":578,
 			"max":[
-				9.76852035522461,
-				35.0490608215332,
-				9.447430610656738
+				11.52965259552002,
+				38.62009048461914,
+				17.68566131591797
 			],
 			"min":[
-				-12.730795860290527,
-				-7.200929641723633,
-				-9.651078224182129
+				-11.650465965270996,
+				-3.6299009323120117,
+				-2.53216552734375
 			],
 			"type":"VEC3"
 		},
@@ -406,29 +352,29 @@
 		{
 			"bufferView":12,
 			"componentType":5126,
-			"count":263,
+			"count":227,
 			"max":[
-				25.117889404296875,
-				46.28757095336914,
-				77.66715240478516
+				78.27062225341797,
+				59.34542465209961,
+				40.39848327636719
 			],
 			"min":[
-				-34.54737091064453,
-				-19.038599014282227,
-				-80.7122802734375
+				-79.61933898925781,
+				-5.980744361877441,
+				-20.96633529663086
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":13,
 			"componentType":5126,
-			"count":263,
+			"count":227,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":14,
 			"componentType":5126,
-			"count":263,
+			"count":227,
 			"type":"VEC3"
 		},
 		{
@@ -440,29 +386,29 @@
 		{
 			"bufferView":16,
 			"componentType":5126,
-			"count":1422,
+			"count":1420,
 			"max":[
-				13.845868110656738,
-				42.05503463745117,
-				-312.9196472167969
+				15.502331733703613,
+				45.62606430053711,
+				-2.014923095703125
 			],
 			"min":[
-				-13.845868110656738,
-				-10.08369255065918,
-				-352.13818359375
+				-12.189404487609863,
+				-6.512663841247559,
+				-41.23345947265625
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":17,
 			"componentType":5126,
-			"count":1422,
+			"count":1420,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":18,
 			"componentType":5126,
-			"count":1422,
+			"count":1420,
 			"type":"VEC3"
 		},
 		{
@@ -470,6 +416,34 @@
 			"componentType":5123,
 			"count":2232,
 			"type":"SCALAR"
+		},
+		{
+			"bufferView":20,
+			"componentType":5126,
+			"count":215,
+			"max":[
+				74.92752838134766,
+				65.40816497802734,
+				74.0561752319336
+			],
+			"min":[
+				-70.1328125,
+				-3.0637340545654297,
+				-48.74244689941406
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":21,
+			"componentType":5126,
+			"count":215,
+			"type":"VEC2"
+		},
+		{
+			"bufferView":22,
+			"componentType":5126,
+			"count":215,
+			"type":"VEC3"
 		}
 	],
 	"bufferViews":[
@@ -547,51 +521,69 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":3156,
+			"byteLength":2724,
 			"byteOffset":38904,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2104,
-			"byteOffset":42060,
+			"byteLength":1816,
+			"byteOffset":41628,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":3156,
-			"byteOffset":44164,
+			"byteLength":2724,
+			"byteOffset":43444,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":1644,
-			"byteOffset":47320,
+			"byteOffset":46168,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":17064,
-			"byteOffset":48964,
+			"byteLength":17040,
+			"byteOffset":47812,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":11376,
-			"byteOffset":66028,
+			"byteLength":11360,
+			"byteOffset":64852,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":17064,
-			"byteOffset":77404,
+			"byteLength":17040,
+			"byteOffset":76212,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":4464,
-			"byteOffset":94468,
+			"byteOffset":93252,
 			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":2580,
+			"byteOffset":97716,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1720,
+			"byteOffset":100296,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":2580,
+			"byteOffset":102016,
+			"target":34962
 		}
 	],
 	"samplers":[
@@ -602,7 +594,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":98932,
+			"byteLength":104596,
 			"uri":"rocks.bin"
 		}
 	]

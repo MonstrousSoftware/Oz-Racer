@@ -34,7 +34,7 @@ public class GameView {
     private static final int SHADOW_MAP_SIZE = 2048;
 
     private World world;
-    private SceneManager sceneManager;
+    public SceneManager sceneManager;
     private PerspectiveCamera camera;
     private Cubemap diffuseCubemap;
     private Cubemap environmentCubemap;
@@ -140,8 +140,10 @@ public class GameView {
         // add scene for each game object
         int num = world.getNumGameObjects();
         for(int i = 0; i < num; i++){
-            Scene scene = world.getGameObject(i).getScene();
-            sceneManager.addScene(scene, false);
+            GameObject go =  world.getGameObject(i);
+            if(go.isVisible(camera)) {
+                    sceneManager.addScene(go.getScene(), false);
+            }
         }
 
 

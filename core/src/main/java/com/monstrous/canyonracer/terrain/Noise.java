@@ -69,10 +69,13 @@ public class Noise {
         return res;
     }
 
+
+
+
     public float[][] generatePerlinMap (int width, int height, float xoffset, float yoffset, int gridscale) {
         float[][] noise = new float[height][width];
 
-        float min = 9999f, max = -9999f;
+//        float min = 9999f, max = -9999f;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
 
@@ -80,10 +83,10 @@ public class Noise {
                 float yf = yoffset+(float)y/(float)gridscale;
                 float value = PerlinNoise(xf, yf);
                 noise[y][x] = value;
-                if(value < min)
-                    min = value;
-                if(value > max)
-                    max = value;
+//                if(value < min)
+//                    min = value;
+//                if(value > max)
+//                    max = value;
             }
         }
 
