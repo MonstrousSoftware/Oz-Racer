@@ -14,6 +14,7 @@ public class Assets implements Disposable {
 
     public Music    gameMusic;
     public Skin     skin;
+    public Skin     debugSkin;
     public Sound    MENU_CLICK;
     public Texture  title;
 
@@ -26,6 +27,7 @@ public class Assets implements Disposable {
         Gdx.app.log("Assets constructor", "");
         assets = new AssetManager();
         assets.load("skin/uiskin.json", Skin.class);
+        assets.load("gameSkin/canyon.json", Skin.class);
 
         assets.load("textures/title.png", Texture.class);
 
@@ -43,7 +45,8 @@ public class Assets implements Disposable {
     public void finishLoading() {
         assets.finishLoading();
 
-        skin = assets.get("skin/uiskin.json");
+        skin = assets.get("gameSkin/canyon.json");
+        debugSkin = assets.get("skin/uiskin.json");
         title = assets.get("textures/title.png");
         gameMusic = assets.get("music/fight.ogg");
         MENU_CLICK = assets.get("sound/click_002.ogg");

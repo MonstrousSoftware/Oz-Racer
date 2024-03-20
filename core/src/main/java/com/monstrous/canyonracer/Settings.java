@@ -1,10 +1,14 @@
 package com.monstrous.canyonracer;
 
+import com.badlogic.gdx.Gdx;
+
+import static com.badlogic.gdx.Application.ApplicationType.Desktop;
+
 public class Settings {
     static public float     ambientLightLevel = 0.75f;
     static public float     shadowLightLevel = 5.0f;
     static public float     shadowBias = 0.0008f;
-    static public boolean   showLightBox = true;
+    static public boolean   showLightBox = false;
 
     static public boolean    cameraInverted = false;
     static public float      cameraDistance = 10f;
@@ -13,7 +17,7 @@ public class Settings {
 
 
     // Racer control
-    static public float     dragFactor = 2.6f;
+    static public float     dragFactor = 1.6f;
     static public float     acceleration = 360f;
     static public float     turnRate = 490f;
     static public float     bankFactor = 0.25f;
@@ -34,5 +38,10 @@ public class Settings {
     static public boolean   particleFX = true;
 
 
-    static public boolean   supportControllers = false;
+    static public boolean   supportControllers = (Gdx.app.getType() == Desktop);
+
+    static public boolean   fullScreen = false;
+    static public boolean   showFPS = false;
+    static public boolean   musicOn = false;
+    static public boolean   settingsMenu = false;
 }

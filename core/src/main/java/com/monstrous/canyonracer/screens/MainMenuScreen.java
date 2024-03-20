@@ -2,13 +2,10 @@ package com.monstrous.canyonracer.screens;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -146,16 +143,18 @@ public class MainMenuScreen extends MenuScreen {
         Image title = new Image( game.assets.title );
 
         TextButton play = new TextButton("Play Game", skin);
+        TextButton region = new TextButton("Region", skin);
         TextButton keys = new TextButton("Keys", skin);
         TextButton options = new TextButton("Options", skin);
         TextButton scores = new TextButton("High Scores", skin);
         TextButton quit = new TextButton("Quit", skin);
 
         float pad = 7f;
+        //screenTable.debug();
         screenTable.top();
-        screenTable.add(title).pad(250).row();
+        screenTable.add(title).pad(50).row();
         screenTable.add(play).pad(pad).row();
-        screenTable.add(keys).pad(pad).row();
+        screenTable.add(region).pad(pad).row();
         screenTable.add(scores).pad(pad).row();
         screenTable.add(options).pad(pad).row();
         // hide quit on web unless we have an outro screen
@@ -184,16 +183,16 @@ public class MainMenuScreen extends MenuScreen {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 playSelectNoise();
-                //game.setScreen(new OptionsScreen( game, null ));
+                game.setScreen(new OptionsScreen( game ));
             }
         });
 
-        keys.addListener(new ClickListener() {
+        region.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 playSelectNoise();
-                //game.setScreen(new KeysScreen( game, null ));
+                game.setScreen(new RegionScreen( game ));
             }
         });
 
@@ -213,7 +212,7 @@ public class MainMenuScreen extends MenuScreen {
         if(Settings.supportControllers) {
             stage.clearFocusableActors();
             stage.addFocusableActor(play);
-            stage.addFocusableActor(keys);
+            stage.addFocusableActor(region);
             stage.addFocusableActor(scores);
             stage.addFocusableActor(options);
             stage.addFocusableActor(quit);

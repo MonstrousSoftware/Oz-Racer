@@ -5,11 +5,15 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
 import com.monstrous.canyonracer.GameView;
+import com.monstrous.canyonracer.Settings;
 import com.monstrous.canyonracer.World;
 import com.monstrous.canyonracer.gui.GUI;
+import com.monstrous.canyonracer.input.MyControllerAdapter;
 import com.monstrous.canyonracer.terrain.TerrainDebug;
 
 
@@ -23,6 +27,8 @@ public class GameScreen implements Screen {
     private Vector3 target;
     private int changes = 0;
     private TerrainDebug terrainDebug;
+    private MyControllerAdapter controllerAdapter;
+    private Controller currentController;
 
 
     public GameScreen(Main game) {
@@ -32,9 +38,11 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
 
+
         music = Main.assets.gameMusic;
         music.setLooping(true);
-        music.play();
+        if(Settings.musicOn)
+            music.play();
 
         gui = new GUI(this);
 
@@ -42,6 +50,19 @@ public class GameScreen implements Screen {
         terrainDebug = new TerrainDebug(world.terrain);
 
         gameView = new GameView(world);
+
+        // controller
+        if (Settings.supportControllers) {
+            currentController = Controllers.getCurrent();
+            if (currentController != null) {
+                Gdx.app.log("current controller", currentController.getName());
+                controllerAdapter = new MyControllerAdapter(world.playerController);
+                // we define a listener that listens to all controllers, in case the current controller gets disconnected and reconnected
+                Controllers.removeListener(game.controllerToInputAdapter);          // remove adapter for menu navigation with controller
+                Controllers.addListener(controllerAdapter);                         // add adapter for game play with controller
+            } else
+                Gdx.app.log("current controller", "none");
+        }
 
         // input multiplexer to input to GUI and to cam controller
         InputMultiplexer im = new InputMultiplexer();
@@ -60,7 +81,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float deltaTime) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+        // exit with Escape or controller X button
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) ||
+                    (currentController != null && currentController.getButton(currentController.getMapping().buttonX))) {
             game.setScreen( new MainMenuScreen(game ));
             return;
         }
@@ -68,7 +91,7 @@ public class GameScreen implements Screen {
         world.terrain.update(gameView.getCamera());     // update terrain to camera position
         world.update(deltaTime);
 
-        //adjustCameraFOV();
+        adjustCameraFOV( world.playerController.boostFactor );
 
         gameView.render( deltaTime);
 
@@ -78,10 +101,9 @@ public class GameScreen implements Screen {
 
 
     // nauseating...
-    private void adjustCameraFOV(){
-        float speed = world.playerController.speed;
-        float fov = 80f;
-        fov -= 40*(speed/300f);
+    private void adjustCameraFOV( float factor ){
+        float fov = Settings.cameraFieldOfView;
+        fov += .4f*factor*fov;
         gameView.cameraController.setFOV( fov );
     }
 
@@ -105,6 +127,10 @@ public class GameScreen implements Screen {
     public void hide() {
         // This method is called when another screen replaces this one.
         music.stop();
+        if(currentController != null) {
+            Controllers.removeListener(controllerAdapter);          // remove adapter for game play with controller
+            Controllers.addListener(game.controllerToInputAdapter); // adapter for menu navigation with controller
+        }
     }
 
     @Override

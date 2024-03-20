@@ -245,7 +245,7 @@ public class GameView {
 
     public void buildEnvironment() {
 
-        //sceneManager.environment.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, Settings.shadowBias));
+        sceneManager.environment.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, Settings.shadowBias));
 
         csm = new CascadeShadowMap(2);
         sceneManager.setCascadeShadowMap(csm);

@@ -1,0 +1,27 @@
+
+canyon.png
+size: 512, 512
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+checkbox_off
+  rotate: false
+  xy: 1, 129
+  size: 50, 26
+  orig: 50, 26
+  offset: 0, 0
+  index: -1
+checkbox_on
+  rotate: false
+  xy: 1, 157
+  size: 50, 26
+  orig: 50, 26
+  offset: 0, 0
+  index: -1
+StalinistOne-Regular(1)
+  rotate: false
+  xy: 1, 185
+  size: 502, 316
+  orig: 502, 316
+  offset: 0, 0
+  index: -1

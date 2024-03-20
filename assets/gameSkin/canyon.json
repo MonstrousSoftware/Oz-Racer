@@ -1,0 +1,65 @@
+{
+BitmapFont: {
+	StalinistOne-Regular1-48: {
+		file: StalinistOne-Regular(1).fnt
+		scaledSize: -1
+		markupEnabled: false
+		flip: false
+	}
+}
+Color: {
+	blue: {
+		r: 0
+		g: 0.56078434
+		b: 1
+		a: 1
+	}
+	bright-blue: {
+		r: 0.14117648
+		g: 0.72156864
+		b: 0.972549
+		a: 1
+	}
+	shadow: {
+		r: 0.3529412
+		g: 0.32156864
+		b: 0.32156864
+		a: 1
+	}
+	white: {
+		r: 1
+		g: 1
+		b: 1
+		a: 1
+	}
+}
+CheckBoxStyle: {
+	default: {
+		checkboxOn: checkbox_on
+		checkboxOff: checkbox_off
+		font: StalinistOne-Regular1-48
+		fontColor: blue
+		overFontColor: bright-blue
+	}
+}
+LabelStyle: {
+	default: {
+		font: StalinistOne-Regular1-48
+		fontColor: blue
+	}
+}
+TextButtonStyle: {
+	default: {
+		font: StalinistOne-Regular1-48
+		fontColor: blue
+		overFontColor: bright-blue
+		pressedOffsetX: 1
+		pressedOffsetY: -3
+	}
+}
+TextTooltipStyle: {
+	default: {
+		label: default
+	}
+}
+}

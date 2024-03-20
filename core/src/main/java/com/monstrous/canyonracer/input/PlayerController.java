@@ -16,6 +16,7 @@ public class PlayerController extends InputAdapter {
     public static int forwardKey = Input.Keys.W;
     public static int turnLeftKey = Input.Keys.A;
     public static int turnRightKey = Input.Keys.D;
+    public static int boostKey = Input.Keys.SPACE;
 
     public float speed = 0f;
     private float turnAngle = 0f;
@@ -29,6 +30,13 @@ public class PlayerController extends InputAdapter {
     private Vector3 playerPos = new Vector3();
     private Vector3 drag = new Vector3();
     private float targetHeight;
+
+    private float stickHorizontal;
+    private float stickVertical;
+    private float stickBoost;
+    private boolean stickSteering = false;
+
+    public float boostFactor;
 
 
     public PlayerController() {
@@ -53,6 +61,17 @@ public class PlayerController extends InputAdapter {
         float acceleration = 0f;
         if (keys.containsKey(forwardKey) )
             acceleration = Settings.acceleration;
+        if(stickVertical > 0)
+            acceleration = Settings.acceleration * stickVertical;
+
+
+        if(keys.containsKey(boostKey) && boostFactor < 1f)
+            boostFactor += deltaTime;
+        else if(boostFactor > 0)
+            boostFactor -= deltaTime;
+        boostFactor = MathUtils.lerp(boostFactor, stickBoost, 1.0f*deltaTime);          // todo fix combination
+
+        acceleration += 2f*boostFactor*acceleration;
 
         speed = velocity.len();
         // potential idea: turn rate depends on speed
@@ -64,8 +83,13 @@ public class PlayerController extends InputAdapter {
             if( turnAngle > -Settings.maxTurn)
                 turnAngle -= deltaTime *  Settings.turnRate;
         }
+        else if (stickSteering) { // do we have controller stick input?
+            float targetAngle = stickHorizontal * Settings.maxTurn;
+            turnAngle = MathUtils.lerp(turnAngle, targetAngle, 5.0f*deltaTime);
+        }
         else
             turnAngle -= turnAngle * 2f * deltaTime;      // auto-level
+        // todo smoother reaction to stick movement
 
         Matrix4 transform = racer.getScene().modelInstance.transform;
         transform.getTranslation(playerPos);
@@ -101,5 +125,25 @@ public class PlayerController extends InputAdapter {
         transform.setTranslation(playerPos);
     }
 
+
+    // Game controller interface
+    //
+    //
+
+    // rotate view left/right
+    // we only get events when the stick angle changes so once it is fully left or fully right we don't get events anymore until the stick is released.
+    public void horizontalAxisMoved(float value) {       // -1 to 1
+
+        stickHorizontal = value;
+        stickSteering = true;
+    }
+
+    public void verticalAxisMoved(float value) {       // -1 to 1
+        stickVertical = value;
+    }
+
+    public void boostAxisMoved(float value) {       // -1 to 1
+        stickBoost = value;
+    }
 
 }
