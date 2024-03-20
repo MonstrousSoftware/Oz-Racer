@@ -142,7 +142,7 @@ public class GameView {
         for(int i = 0; i < num; i++){
             GameObject go =  world.getGameObject(i);
             if(go.isVisible(camera)) {
-                    sceneManager.addScene(go.getScene(), false);
+                sceneManager.addScene(go.getScene(), false);
             }
         }
 

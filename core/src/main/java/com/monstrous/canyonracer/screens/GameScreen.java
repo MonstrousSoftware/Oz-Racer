@@ -1,17 +1,22 @@
-package com.monstrous.canyonracer;
+package com.monstrous.canyonracer.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
+import com.monstrous.canyonracer.GameView;
+import com.monstrous.canyonracer.World;
 import com.monstrous.canyonracer.gui.GUI;
 import com.monstrous.canyonracer.terrain.TerrainDebug;
 
 
 public class GameScreen implements Screen {
 
-    //private CameraInputController camController;
+    private Main game;
+    private Music music;
     private GUI gui;
     public World world;
     public GameView gameView;
@@ -19,8 +24,17 @@ public class GameScreen implements Screen {
     private int changes = 0;
     private TerrainDebug terrainDebug;
 
+
+    public GameScreen(Main game) {
+        this.game = game;
+    }
+
     @Override
     public void show() {
+
+        music = Main.assets.gameMusic;
+        music.setLooping(true);
+        music.play();
 
         gui = new GUI(this);
 
@@ -46,6 +60,11 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float deltaTime) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            game.setScreen( new MainMenuScreen(game ));
+            return;
+        }
+
         world.terrain.update(gameView.getCamera());     // update terrain to camera position
         world.update(deltaTime);
 
@@ -85,6 +104,7 @@ public class GameScreen implements Screen {
     @Override
     public void hide() {
         // This method is called when another screen replaces this one.
+        music.stop();
     }
 
     @Override

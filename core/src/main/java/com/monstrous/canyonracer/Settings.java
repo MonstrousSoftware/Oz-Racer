@@ -32,4 +32,7 @@ public class Settings {
     static public boolean   usePostShader = true;
 
     static public boolean   particleFX = true;
+
+
+    static public boolean   supportControllers = false;
 }

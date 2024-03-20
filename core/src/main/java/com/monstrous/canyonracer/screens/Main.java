@@ -1,19 +1,35 @@
-package com.monstrous.canyonracer;
+package com.monstrous.canyonracer.screens;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.monstrous.canyonracer.Assets;
+import com.monstrous.canyonracer.screens.GameScreen;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
+
 public class Main extends Game {
+
+    public static Assets assets;
+
+
     @Override
     public void create() {
+
+        assets = new Assets();
 
         Gdx.app.log("Gdx version", com.badlogic.gdx.Version.VERSION);
         Gdx.app.log("OpenGL version", Gdx.gl.glGetString(Gdx.gl.GL_VERSION));
         Gdx.app.log("Platform", ""+Gdx.app.getType());
 
-        setScreen(new GameScreen());
+        assets.finishLoading();
+        setScreen(new MainMenuScreen( this ));
         //setScreen(new SkyBoxConverter());
+    }
+
+
+
+    @Override
+    public void dispose() {
+        assets.dispose();
+        super.dispose();
     }
 }

@@ -10,11 +10,8 @@ public class Rocks {
     private static int SEPARATION_DISTANCE = 200;
     private static String names[] = { "Rock", "Rock.001", "Rock.002", "Rock.003", "Rock.004", "Rock.005", "Rock.006" };
 
-    private float angle;
     private Array<GameObject> rocks;
     private Vector3 pos = new Vector3();
-
-
 
     // note: perhaps we should generate along with chunks to have an infinite amount
 

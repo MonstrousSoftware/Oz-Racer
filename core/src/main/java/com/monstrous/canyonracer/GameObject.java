@@ -10,6 +10,7 @@ public class GameObject {
     private Scene scene;
     public final Vector3 center = new Vector3();
     public final Vector3 dimensions = new Vector3();
+    public float radius;
     private static BoundingBox bbox = new BoundingBox();
     private Vector3 pos = new Vector3();
 
@@ -27,6 +28,7 @@ public class GameObject {
         dimensions.x *= transform.getScaleX();
         dimensions.y *= transform.getScaleY();
         dimensions.z *= transform.getScaleZ();
+        radius = dimensions.len() / 2f;
     }
 
     public Scene getScene() {
@@ -36,6 +38,6 @@ public class GameObject {
     public boolean isVisible(final Camera cam ) {
         scene.modelInstance.transform.getTranslation(pos);
         pos.add(center);
-        return cam.frustum.boundsInFrustum(pos, dimensions);
+        return cam.frustum.sphereInFrustum(pos, radius);
     }
 }

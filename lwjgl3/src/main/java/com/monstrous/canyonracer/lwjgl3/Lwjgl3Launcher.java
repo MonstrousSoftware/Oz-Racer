@@ -2,7 +2,7 @@ package com.monstrous.canyonracer.lwjgl3;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.monstrous.canyonracer.Main;
+import com.monstrous.canyonracer.screens.Main;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {

@@ -2,7 +2,7 @@ package com.monstrous.canyonracer.teavm;
 
 import com.github.xpenatan.gdx.backends.teavm.TeaApplicationConfiguration;
 import com.github.xpenatan.gdx.backends.teavm.TeaApplication;
-import com.monstrous.canyonracer.Main;
+import com.monstrous.canyonracer.screens.Main;
 
 /**
  * Launches the TeaVM/HTML application.

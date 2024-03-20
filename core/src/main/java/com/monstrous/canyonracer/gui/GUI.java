@@ -7,7 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.monstrous.canyonracer.GameScreen;
+import com.monstrous.canyonracer.screens.GameScreen;
+import com.monstrous.canyonracer.screens.Main;
 
 public class GUI implements Disposable {
 
@@ -23,7 +24,7 @@ public class GUI implements Disposable {
     public GUI( GameScreen screen ) {
         this.screen = screen;
 
-        skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        skin = Main.assets.skin; //new Skin(Gdx.files.internal("skin/uiskin.json"));
         stage = new Stage(new ScreenViewport());
         addActors();
     }
@@ -62,7 +63,7 @@ public class GUI implements Disposable {
     @Override
     public void dispose() {
         stage.dispose();
-        skin.dispose();
+        //skin.dispose();
 
     }
 }

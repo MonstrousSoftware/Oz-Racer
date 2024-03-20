@@ -14,6 +14,8 @@ import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
+import java.util.Comparator;
+
 public class World implements Disposable {
     private static final String GLTF_FILE = "models/Feisar.gltf";
     private static final String GLTF_FILE2 = "models/rocks.gltf";
@@ -31,6 +33,7 @@ public class World implements Disposable {
     private final Turbines turbines;
     private final Rocks rocks;
 
+
     public World() {
         gameObjects = new Array<>();
 
@@ -39,7 +42,7 @@ public class World implements Disposable {
 //            Gdx.app.log("Node ", node.id);
 //        }
 
-        playerPosition = new Vector3(0,8,0);
+        playerPosition = new Vector3(0, 8,0);
         racer = spawnObject("Feisar_Ship", true, playerPosition);
         playerController = new PlayerController();
 

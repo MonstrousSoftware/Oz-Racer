@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.monstrous.canyonracer.GameScreen;
+import com.monstrous.canyonracer.screens.GameScreen;
 import com.monstrous.canyonracer.Settings;
 
 public class SettingsWindow extends Window {
