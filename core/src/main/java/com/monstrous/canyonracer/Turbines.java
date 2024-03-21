@@ -45,7 +45,7 @@ public class Turbines {
         pos.set(x,y,z);
         world.spawnObject("Turbine", true, pos);
 
-        pos.y += 52;
+        //pos.y += 52;
         blades.add( world.spawnObject("Blades", false, pos) );
     }
 

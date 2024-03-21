@@ -16,6 +16,7 @@ public class Assets implements Disposable {
     public Skin     skin;
     public Skin     debugSkin;
     public Sound    MENU_CLICK;
+    public Sound    COLLISION;
     public Texture  title;
     public Texture  character;
 
@@ -34,6 +35,7 @@ public class Assets implements Disposable {
         assets.load("textures/crazy-cat.png", Texture.class);
 
         assets.load("sound/click_002.ogg", Sound.class);
+        assets.load("sound/explosionCrunch_000.ogg", Sound.class);
 
         assets.load("music/fight.ogg", Music.class);
     }
@@ -53,6 +55,7 @@ public class Assets implements Disposable {
         character = assets.get("textures/crazy-cat.png");
         gameMusic = assets.get("music/fight.ogg");
         MENU_CLICK = assets.get("sound/click_002.ogg");
+        COLLISION = assets.get("sound/explosionCrunch_000.ogg");
     }
 
     public float getProgress() {

@@ -21,6 +21,7 @@ public class GUI implements Disposable {
     private Label fps;
     private Label speed;
     private Label gameObjects;
+    private Label message;
 
 
     public GUI( GameScreen screen ) {
@@ -40,11 +41,14 @@ public class GUI implements Disposable {
         fps = new Label("0", debugSkin);
         speed = new Label("-", skin);
         gameObjects = new Label("0", debugSkin);
+        message = new Label("", debugSkin);
         Table table = new Table();
         table.setFillParent(true);
         table.add(fps).top().left().row();
         //table.add(new Label("game objects:", skin)).top().left();
         table.add(gameObjects).top().left();
+        table.row();
+        table.add(message).top().left();
         table.row();
         table.add(speed).width(500).bottom().right().expand();
         //table.row();
@@ -58,6 +62,10 @@ public class GUI implements Disposable {
             fps.setText("");
         speed.setText( "speed: " +(int) screen.world.playerController.speed);
         gameObjects.setText( "game objects: " + screen.gameView.sceneManager.getRenderableProviders().size+"  "+screen.world.getNumGameObjects() );
+        if(screen.world.collided)
+            message.setText("COLLISION!");
+        else
+            message.setText("");
 
         stage.act(deltaTime);
         stage.draw();

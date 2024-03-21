@@ -125,6 +125,16 @@ public class PlayerController extends InputAdapter {
         transform.setTranslation(playerPos);
     }
 
+    // act on collision impact
+    public void collisionImpact( Vector3 normal ) {
+        boostFactor = 0;                    // remove any boost
+
+        // reflect the velocity vector across the normal vector of the collider surface: r = d - 2(d.n)n
+        float dot = velocity.dot(normal);
+        velocity.sub(normal.scl(2f*dot));
+        turnAngle = dot;
+    }
+
 
     // Game controller interface
     //

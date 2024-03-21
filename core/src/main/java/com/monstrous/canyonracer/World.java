@@ -4,11 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.canyonracer.input.EnemyController;
 import com.monstrous.canyonracer.input.PlayerController;
+import com.monstrous.canyonracer.screens.Main;
 import com.monstrous.canyonracer.terrain.Terrain;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import net.mgsx.gltf.scene3d.scene.Scene;
@@ -31,7 +33,8 @@ public class World implements Disposable {
     private final EnemyController enemyController;
    // public final Path path;
     private final Turbines turbines;
-    private final Rocks rocks;
+    public final Rocks rocks;
+    public boolean collided;
 
 
     public World() {
@@ -72,6 +75,8 @@ public class World implements Disposable {
         return gameObjects.get(index);
     }
 
+    private Vector3 colliderPosition = new Vector3();
+
     public void update( float deltaTime ){
         playerController.update(racer, terrain, deltaTime);
         enemyController.update(enemy1, terrain, deltaTime);
@@ -79,6 +84,19 @@ public class World implements Disposable {
 
         // update player position variable
         racer.getScene().modelInstance.transform.getTranslation(playerPosition);
+
+        boolean wasCollided = collided;
+        collided = rocks.inCollision(playerPosition, colliderPosition);
+        if(collided && !wasCollided) {
+            Main.assets.COLLISION.play();
+            // throw player away from the collider
+            Vector3 normal = colliderPosition.sub(playerPosition);
+            normal.y = 0;  // horizontal impulse only
+            normal.nor();
+            //racer.getScene().modelInstance.transform.translate(impulse);
+            playerController.collisionImpact(normal);
+            // perhaps add some camera shake?
+        }
     }
 
 

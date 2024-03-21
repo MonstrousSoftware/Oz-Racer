@@ -84,6 +84,16 @@ public class SettingsWindow extends Window {
         });
         add(TCcheckbox).left();        row();
 
+        final CheckBox RCcheckbox = new CheckBox("show rock colliders", skin);
+        RCcheckbox.setChecked(Settings.debugRockCollision);
+        RCcheckbox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Settings.debugRockCollision = RCcheckbox.isChecked();
+            }
+        });
+        add(RCcheckbox);        row();
+
         final CheckBox PostCheckbox = new CheckBox("post-processing shader", skin);
         PostCheckbox.setChecked(Settings.usePostShader);
         PostCheckbox.addListener(new ChangeListener() {

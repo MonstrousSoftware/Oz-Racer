@@ -101,8 +101,11 @@ public class GameScreen implements Screen {
 
         terrainDebug.debugRender(world.playerPosition, gameView.getCamera().position);
 
-        overlay.render(deltaTime);
+        if(Settings.showNarrator)
+            overlay.render(deltaTime);
         gui.render(deltaTime);
+        if(Settings.debugRockCollision)
+            world.rocks.debugRender(world.playerPosition);
     }
 
 

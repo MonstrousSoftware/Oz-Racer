@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import static com.badlogic.gdx.Application.ApplicationType.Desktop;
 
 public class Settings {
+    static public boolean   release = false;
+
     static public float     ambientLightLevel = 0.75f;
     static public float     shadowLightLevel = 5.0f;
     static public float     shadowBias = 0.0008f;
@@ -30,6 +32,8 @@ public class Settings {
     static public int       chunkCacheSize = 50;
     static public boolean   debugChunkAllocation = false;
 
+    static public boolean   debugRockCollision = false;
+
     // Graphics settings - aimed at desktop
     static public boolean   multiSamplingFrameBufferAvailable = true;
     static public boolean   useMultiSamplingFrameBuffer = true;
@@ -41,7 +45,9 @@ public class Settings {
     static public boolean   supportControllers = (Gdx.app.getType() == Desktop);
 
     static public boolean   fullScreen = false;
-    static public boolean   showFPS = false;
-    static public boolean   musicOn = false;
+    static public boolean   showFPS = !release;
+    static public boolean   musicOn = release;
     static public boolean   settingsMenu = false;
+
+    static public boolean   showNarrator = release;
 }

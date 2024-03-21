@@ -16,44 +16,55 @@
 				1,
 				2,
 				3,
-				4,
-				5,
-				6
+				4
 			]
 		}
 	],
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Rock"
+			"name":"Rock",
+			"translation":[
+				-450.6101379394531,
+				0,
+				0
+			]
 		},
 		{
 			"mesh":1,
-			"name":"Rock.001"
+			"name":"Rock.001",
+			"translation":[
+				-338.34234619140625,
+				0,
+				0
+			]
 		},
 		{
 			"mesh":2,
-			"name":"Rock.002"
+			"name":"Rock.002",
+			"translation":[
+				-239.62144470214844,
+				0,
+				0
+			]
 		},
 		{
 			"mesh":3,
-			"name":"Rock.003"
-		},
-		{
-			"name":"Rock.004",
+			"name":"Rock.003",
 			"translation":[
-				-61.839935302734375,
-				-13.322611808776855,
-				7.438087463378906
+				-108.13485717773438,
+				0,
+				0
 			]
 		},
 		{
 			"mesh":4,
-			"name":"Rock.005"
-		},
-		{
-			"mesh":5,
-			"name":"Rock.006"
+			"name":"Rock.004",
+			"translation":[
+				148.9813232421875,
+				0,
+				0
+			]
 		}
 	],
 	"materials":[
@@ -80,32 +91,6 @@
 				},
 				"metallicRoughnessTexture":{
 					"index":2
-				}
-			}
-		},
-		{
-			"extensions":{
-				"KHR_materials_specular":{
-					"specularColorFactor":[
-						0.03233669482269175,
-						0.03233669482269175,
-						0.03233669482269175
-					]
-				},
-				"KHR_materials_ior":{
-					"ior":1.4500000476837158
-				}
-			},
-			"name":"ErodedSmoothRock.008",
-			"normalTexture":{
-				"index":3
-			},
-			"pbrMetallicRoughness":{
-				"baseColorTexture":{
-					"index":4
-				},
-				"metallicRoughnessTexture":{
-					"index":5
 				}
 			}
 		}
@@ -180,20 +165,6 @@
 					"material":0
 				}
 			]
-		},
-		{
-			"name":"Cylinder.041",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":20,
-						"TEXCOORD_0":21,
-						"NORMAL":22
-					},
-					"indices":3,
-					"material":1
-				}
-			]
 		}
 	],
 	"textures":[
@@ -208,18 +179,6 @@
 		{
 			"sampler":0,
 			"source":2
-		},
-		{
-			"sampler":0,
-			"source":0
-		},
-		{
-			"sampler":0,
-			"source":1
-		},
-		{
-			"sampler":0,
-			"source":3
 		}
 	],
 	"images":[
@@ -237,11 +196,6 @@
 			"mimeType":"image/png",
 			"name":"eroded-smoothed-rockface_metallic-eroded-smoothed-rockface_roughness",
 			"uri":"textures/eroded-smoothed-rockface_metallic-eroded-smoothed-rockface_roughness.png"
-		},
-		{
-			"mimeType":"image/png",
-			"name":"eroded-smoothed-rockface_metallic.png-eroded-smoothed-rockface_roughness.png",
-			"uri":"textures/eroded-smoothed-rockface_metallic_png-eroded-smoothed-rockface_roughness_png.png"
 		}
 	],
 	"accessors":[
@@ -250,14 +204,14 @@
 			"componentType":5126,
 			"count":215,
 			"max":[
-				14.518585205078125,
-				32.54783248901367,
-				53.416133880615234
+				23.306377410888672,
+				49.259559631347656,
+				75.30012512207031
 			],
 			"min":[
-				-17.47527313232422,
-				-3.5790185928344727,
-				-39.53105926513672
+				-26.644023895263672,
+				-7.143477439880371,
+				-69.81365966796875
 			],
 			"type":"VEC3"
 		},
@@ -284,14 +238,14 @@
 			"componentType":5126,
 			"count":227,
 			"max":[
-				25.037643432617188,
+				23.629838943481445,
 				104.37321472167969,
-				-5.429935455322266
+				21.80564308166504
 			],
 			"min":[
-				-17.322416305541992,
+				-18.730220794677734,
 				-8.607046127319336,
-				-50.40144348144531
+				-23.165864944458008
 			],
 			"type":"VEC3"
 		},
@@ -318,14 +272,14 @@
 			"componentType":5126,
 			"count":578,
 			"max":[
-				11.52965259552002,
+				11.617222785949707,
 				38.62009048461914,
-				17.68566131591797
+				10.177371978759766
 			],
 			"min":[
-				-11.650465965270996,
+				-11.562895774841309,
 				-3.6299009323120117,
-				-2.53216552734375
+				-10.040454864501953
 			],
 			"type":"VEC3"
 		},
@@ -352,14 +306,14 @@
 			"componentType":5126,
 			"count":227,
 			"max":[
-				78.27062225341797,
+				34.268592834472656,
 				59.34542465209961,
-				40.39848327636719
+				79.56549835205078
 			],
 			"min":[
-				-79.61933898925781,
+				-25.40045928955078,
 				-5.980744361877441,
-				-20.96633529663086
+				-78.8142318725586
 			],
 			"type":"VEC3"
 		},
@@ -386,14 +340,14 @@
 			"componentType":5126,
 			"count":1420,
 			"max":[
-				15.502331733703613,
+				13.024495124816895,
 				45.62606430053711,
-				-2.014923095703125
+				18.163604736328125
 			],
 			"min":[
-				-12.189404487609863,
+				-14.667241096496582,
 				-6.512663841247559,
-				-41.23345947265625
+				-21.054931640625
 			],
 			"type":"VEC3"
 		},
@@ -414,34 +368,6 @@
 			"componentType":5123,
 			"count":2232,
 			"type":"SCALAR"
-		},
-		{
-			"bufferView":20,
-			"componentType":5126,
-			"count":215,
-			"max":[
-				74.92752838134766,
-				65.40816497802734,
-				74.0561752319336
-			],
-			"min":[
-				-70.1328125,
-				-3.0637340545654297,
-				-48.74244689941406
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":21,
-			"componentType":5126,
-			"count":215,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":22,
-			"componentType":5126,
-			"count":215,
-			"type":"VEC3"
 		}
 	],
 	"bufferViews":[
@@ -564,24 +490,6 @@
 			"byteLength":4464,
 			"byteOffset":93252,
 			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":2580,
-			"byteOffset":97716,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":1720,
-			"byteOffset":100296,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":2580,
-			"byteOffset":102016,
-			"target":34962
 		}
 	],
 	"samplers":[
@@ -592,7 +500,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":104596,
+			"byteLength":97716,
 			"uri":"rocks.bin"
 		}
 	]

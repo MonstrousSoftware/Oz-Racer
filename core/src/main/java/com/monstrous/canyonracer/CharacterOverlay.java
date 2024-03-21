@@ -30,7 +30,7 @@ public class CharacterOverlay {
 
         TextButton dialog = new TextButton("G'day! Welcome to the outback! My name is Krazy Kat.\n\nAre you ready for some high speed racing?\nUse W for throttle and A and D for steering.\n"+
             "Press SPACE for nitro boost.\nStay clear of the rocks, mate!\n\n[CLICK TO CONTINUE]", Main.assets.debugSkin);
-        dialog.getStyle().fontColor.set(Color.BLACK);
+        //dialog.getStyle().fontColor.set(Color.BLACK);
 
         Table screenTable = new Table();
         screenTable.setFillParent(true);
