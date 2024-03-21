@@ -164,7 +164,7 @@ public class MainMenuScreen extends MenuScreen {
         screenTable.pack();
 
         screenTable.setColor(1,1,1,0);                   // set alpha to zero
-        screenTable.addAction(Actions.fadeIn(1f));           // fade in
+        screenTable.addAction(Actions.fadeIn(2f));           // fade in
         stage.addActor(screenTable);
 
 

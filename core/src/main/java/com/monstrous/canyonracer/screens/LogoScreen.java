@@ -8,6 +8,12 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRFloatAttribute;
@@ -38,6 +44,8 @@ public class LogoScreen implements Screen {
     private SceneSkybox skybox;
     private DirectionalLightEx light;
     private CameraInputController camController;
+    private Stage stage;
+    private Label prompt;
 
     public LogoScreen(Main game) {
         this.game = game;
@@ -93,6 +101,34 @@ public class LogoScreen implements Screen {
         // setup skybox
         skybox = new SceneSkybox(environmentCubemap);
         sceneManager.setSkyBox(skybox);
+
+        stage = new Stage(new ScreenViewport());
+
+        Table screenTable = new Table();
+        screenTable.setFillParent(true);
+
+        Image logo = new Image(new Texture(Gdx.files.internal("textures/monstrous.png")));
+
+        Table table = new Table();
+        table.add(logo).row();
+        table.add(new Label("Monstrous Software", Main.assets.skin)).pad(0,0,100,0).row();
+
+        screenTable.add(table).bottom().expand();
+
+        // fade in
+        screenTable.setColor(1,1,1,0);                   // set alpha to zero
+        screenTable.addAction(Actions.fadeIn(3f));           // fade in
+        stage.addActor(screenTable);
+
+        Table promptTable = new Table();
+        promptTable.setFillParent(true);
+        prompt = new Label("Press Any Key...", Main.assets.skin);
+        promptTable.add(prompt).bottom().expand();
+
+        // fade in
+        promptTable.setColor(1,1,1,0);                   // set alpha to zero
+        promptTable.addAction(Actions.sequence(Actions.delay(3), Actions.fadeIn(3f)));           // fade in
+        stage.addActor(promptTable);
     }
 
     @Override
@@ -119,12 +155,16 @@ public class LogoScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         sceneManager.update(deltaTime);
         sceneManager.render();
+
+        stage.act(deltaTime);
+        stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
         // Resize your screen here. The parameters represent the new window size.
         sceneManager.updateViewport(width, height);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
@@ -152,5 +192,6 @@ public class LogoScreen implements Screen {
         specularCubemap.dispose();
         brdfLUT.dispose();
         skybox.dispose();
+        stage.dispose();
     }
 }

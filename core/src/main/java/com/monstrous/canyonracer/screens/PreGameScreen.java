@@ -15,11 +15,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class PreGameScreen extends StdScreenAdapter {
 
     private Main game;
-
-//    private SpriteBatch batch;
-//    private BitmapFont font;
-//    private OrthographicCamera cam;
-//    private int width, height;
     private float timer = 0.5f;
 
     private Stage stage;
@@ -46,11 +41,6 @@ public class PreGameScreen extends StdScreenAdapter {
         screenTable.setColor(1,1,1,0);                   // set alpha to zero
         screenTable.addAction(Actions.fadeIn(1f));           // fade in
         stage.addActor(screenTable);
-
-
-//        batch = new SpriteBatch();
-//        font = new BitmapFont();
-//        cam = new OrthographicCamera();
     }
 
 
@@ -67,16 +57,6 @@ public class PreGameScreen extends StdScreenAdapter {
 
         stage.act(deltaTime);
         stage.draw();
-//
-//        cam.update();
-//
-//        ScreenUtils.clear(Color.BLACK);
-//
-//        batch.setProjectionMatrix(cam.combined);
-//        batch.begin();
-//        font.draw(batch, "Loading...", width/2f, height/8f);
-//        batch.end();
-
     }
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
@@ -85,26 +65,5 @@ public class PreGameScreen extends StdScreenAdapter {
     public void dispose() {
         stage.dispose();
     }
-
-//    @Override
-//    public void resize(int w, int h) {
-//        this.width = w;
-//        this.height = h;
-//        Gdx.app.log("PreGameScreen resize()", "");
-//        cam.setToOrtho(false, width, height);
-//    }
-//
-//    @Override
-//    public void hide() {
-//        Gdx.app.log("PreGameScreen hide()", "");
-//        dispose();
-//    }
-//
-//    @Override
-//    public void dispose() {
-//        Gdx.app.log("PreGameScreen dispose()", "");
-//        batch.dispose();
-//        font.dispose();
-//    }
 
 }
