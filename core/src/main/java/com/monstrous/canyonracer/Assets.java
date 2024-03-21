@@ -17,6 +17,7 @@ public class Assets implements Disposable {
     public Skin     debugSkin;
     public Sound    MENU_CLICK;
     public Texture  title;
+    public Texture  character;
 
     private AssetManager assets;
 
@@ -30,6 +31,7 @@ public class Assets implements Disposable {
         assets.load("gameSkin/canyon.json", Skin.class);
 
         assets.load("textures/title.png", Texture.class);
+        assets.load("textures/crazy-cat.png", Texture.class);
 
         assets.load("sound/click_002.ogg", Sound.class);
 
@@ -48,6 +50,7 @@ public class Assets implements Disposable {
         skin = assets.get("gameSkin/canyon.json");
         debugSkin = assets.get("skin/uiskin.json");
         title = assets.get("textures/title.png");
+        character = assets.get("textures/crazy-cat.png");
         gameMusic = assets.get("music/fight.ogg");
         MENU_CLICK = assets.get("sound/click_002.ogg");
     }

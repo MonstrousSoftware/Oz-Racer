@@ -184,7 +184,7 @@ public class GameView {
         else
             renderWorldFBOAA();
 
-        world.path.render(camera);
+        //world.path.render(camera);
 
         lensFlare.render(sceneManager.camera, sunPosition);
 

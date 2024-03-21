@@ -29,7 +29,7 @@ public class World implements Disposable {
     public final Vector3 enemyPosition;
     public final Terrain terrain;
     private final EnemyController enemyController;
-    public final Path path;
+   // public final Path path;
     private final Turbines turbines;
     private final Rocks rocks;
 
@@ -54,7 +54,7 @@ public class World implements Disposable {
         spawnObject("Marker", true, new Vector3(10,5,80));
 
         terrain = new Terrain(playerPosition);
-        path = new Path(terrain);
+        //path = new Path(terrain);
 
         turbines = new Turbines(this );
 

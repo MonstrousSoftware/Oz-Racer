@@ -9,6 +9,7 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
+import com.monstrous.canyonracer.CharacterOverlay;
 import com.monstrous.canyonracer.GameView;
 import com.monstrous.canyonracer.Settings;
 import com.monstrous.canyonracer.World;
@@ -29,6 +30,7 @@ public class GameScreen implements Screen {
     private TerrainDebug terrainDebug;
     private MyControllerAdapter controllerAdapter;
     private Controller currentController;
+    private CharacterOverlay overlay;
 
 
     public GameScreen(Main game) {
@@ -50,6 +52,7 @@ public class GameScreen implements Screen {
         terrainDebug = new TerrainDebug(world.terrain);
 
         gameView = new GameView(world);
+        overlay = new CharacterOverlay();
 
         // controller
         if (Settings.supportControllers) {
@@ -70,6 +73,7 @@ public class GameScreen implements Screen {
         //camController = new CameraInputController(gameView.getCamera());
 
         im.addProcessor(gui.stage);
+        im.addProcessor(overlay.stage);
         im.addProcessor(gameView.cameraController);
         im.addProcessor(world.playerController);
 
@@ -96,6 +100,8 @@ public class GameScreen implements Screen {
         gameView.render( deltaTime);
 
         terrainDebug.debugRender(world.playerPosition, gameView.getCamera().position);
+
+        overlay.render(deltaTime);
         gui.render(deltaTime);
     }
 
@@ -111,6 +117,7 @@ public class GameScreen implements Screen {
     public void resize(int width, int height) {
         gameView.resize(width, height);
         gui.resize(width, height);
+        overlay.resize(width, height);
     }
 
     @Override
@@ -139,6 +146,7 @@ public class GameScreen implements Screen {
         world.dispose();
         gameView.dispose();
         terrainDebug.dispose();
+        overlay.dispose();
     }
 
 }
