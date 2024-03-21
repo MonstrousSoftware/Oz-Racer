@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.MathUtils;
@@ -14,6 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.monstrous.canyonracer.Settings;
+import com.monstrous.canyonracer.input.MyControllerAdapter;
+import com.monstrous.canyonracer.input.MyControllerMenuStage;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRFloatAttribute;
@@ -44,8 +49,9 @@ public class LogoScreen implements Screen {
     private SceneSkybox skybox;
     private DirectionalLightEx light;
     private CameraInputController camController;
-    private Stage stage;
+    private MyControllerMenuStage stage;
     private Label prompt;
+    private Controller currentController;
 
     public LogoScreen(Main game) {
         this.game = game;
@@ -102,7 +108,11 @@ public class LogoScreen implements Screen {
         skybox = new SceneSkybox(environmentCubemap);
         sceneManager.setSkyBox(skybox);
 
-        stage = new Stage(new ScreenViewport());
+        stage = new MyControllerMenuStage(new ScreenViewport());
+        if(Settings.supportControllers) {
+            currentController = Controllers.getCurrent();
+            game.controllerToInputAdapter.setInputProcessor(stage); // forward controller input to stage
+        }
 
         Table screenTable = new Table();
         screenTable.setFillParent(true);
@@ -135,8 +145,8 @@ public class LogoScreen implements Screen {
     public void render(float deltaTime) {
         time += deltaTime;
 
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY) ) {
-            //(currentController != null && currentController.getButton(currentController.getMapping().buttonX))) {
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY) ||
+            (currentController != null && currentController.getButton(currentController.getMapping().buttonA))) {
             game.setScreen( new MainMenuScreen(game ));
             return;
         }

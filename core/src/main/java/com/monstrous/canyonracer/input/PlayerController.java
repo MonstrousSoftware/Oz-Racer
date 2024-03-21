@@ -61,17 +61,19 @@ public class PlayerController extends InputAdapter {
         float acceleration = 0f;
         if (keys.containsKey(forwardKey) )
             acceleration = Settings.acceleration;
-        if(stickVertical > 0)
+        else if(stickVertical > 0)
             acceleration = Settings.acceleration * stickVertical;
 
 
         if(keys.containsKey(boostKey) && boostFactor < 1f)
             boostFactor += deltaTime;
+        else if(stickBoost > 0)
+            boostFactor = MathUtils.lerp(boostFactor, stickBoost, 1.0f*deltaTime);          // todo fix combination
         else if(boostFactor > 0)
             boostFactor -= deltaTime;
-        boostFactor = MathUtils.lerp(boostFactor, stickBoost, 1.0f*deltaTime);          // todo fix combination
 
-        acceleration += 2f*boostFactor*acceleration;
+
+        acceleration += boostFactor*acceleration;
 
         speed = velocity.len();
         // potential idea: turn rate depends on speed

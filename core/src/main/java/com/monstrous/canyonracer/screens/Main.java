@@ -37,7 +37,10 @@ public class Main extends Game {
         }
 
         assets.finishLoading();
-        setScreen(new LogoScreen( this ));
+        if(Settings.release)
+            setScreen(new LogoScreen( this ));
+        else
+            setScreen( new MainMenuScreen( this ));
         //setScreen(new SkyBoxConverter());
     }
 

@@ -5,15 +5,15 @@ import com.badlogic.gdx.Gdx;
 import static com.badlogic.gdx.Application.ApplicationType.Desktop;
 
 public class Settings {
-    static public boolean   release = true;
-    static public String    version = "0.1 (March 2024)";
+    static public boolean   release = false;
+    static public String    version = "v0.1 (March 2024)";
 
     static public float     ambientLightLevel = 0.75f;
     static public float     shadowLightLevel = 5.0f;
     static public float     shadowBias = 0.0008f;
     static public boolean   showLightBox = false;
 
-    static public boolean    cameraInverted = false;
+    static public boolean    cameraInverted = release;
     static public float      cameraDistance = 10f;
     static public float      cameraFieldOfView = 100f;
     static public float      cameraSlerpFactor = 10f; //80f;

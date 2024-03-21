@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -168,6 +169,11 @@ public class MainMenuScreen extends MenuScreen {
         stage.addActor(screenTable);
 
 
+        Table versionTable = new Table();
+        versionTable.setFillParent(true);
+        versionTable.add(new Label(Settings.version, Main.assets.debugSkin)).right().bottom().expand();
+        versionTable.pack();
+        stage.addActor(versionTable);
 
         play.addListener(new ClickListener() {
             @Override
