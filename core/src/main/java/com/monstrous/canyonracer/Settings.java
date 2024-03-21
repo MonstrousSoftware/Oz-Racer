@@ -5,7 +5,8 @@ import com.badlogic.gdx.Gdx;
 import static com.badlogic.gdx.Application.ApplicationType.Desktop;
 
 public class Settings {
-    static public boolean   release = false;
+    static public boolean   release = true;
+    static public String    version = "0.1 (March 2024)";
 
     static public float     ambientLightLevel = 0.75f;
     static public float     shadowLightLevel = 5.0f;

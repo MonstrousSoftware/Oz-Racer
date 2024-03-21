@@ -96,10 +96,11 @@ public class RegionScreen extends MenuScreen {
 
    }
 
+    private Color backgroundColor = new Color(38f/255f, 127f/255f, 102f/255f, 1.0f);
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(Color.CHARTREUSE);
+        ScreenUtils.clear(backgroundColor);
         super.render(delta);
     }
 
