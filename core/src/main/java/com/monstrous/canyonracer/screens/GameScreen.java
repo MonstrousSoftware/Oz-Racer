@@ -97,6 +97,7 @@ public class GameScreen implements Screen {
         showFinished = false;
         showDead = false;
         fire = null;
+        gameView.cameraController.setDistance(500f);
     }
 
 

@@ -65,11 +65,8 @@ public class GameView {
         sceneManager = new SceneManager();
 
         camera = new PerspectiveCamera(Settings.cameraFieldOfView, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-//        float d = 4.5f;
         camera.near = 1f;
         camera.far = 5000f;
-//        camera.position.set(0, d/3, -d);
-        camera.update();
         sceneManager.setCamera(camera);
 
         modelBatch = new ModelBatch();
@@ -81,21 +78,21 @@ public class GameView {
         buildEnvironment();
         buildDebugInstances();
 
-        cameraController = new CameraController(camera, world.playerPosition);
+        cameraController = new CameraController(camera);
         //cameraController.startCameraPosition(world.playerPosition, Vector3.Z, 300f );
 
         postFilter = new PostFilter();
 
-        particleEffects = new ParticleEffects(camera);
-        float x = 0;
-        float z = 100;
-        float y = world.terrain.getHeight(x, z);
+        particleEffects = new ParticleEffects(camera);      //... cam pos not fixed yet
+//        float x = 0;
+//        float z = 100;
+//        float y = world.terrain.getHeight(x, z);
 
         exhaust = particleEffects.addExhaustFumes(world.racer.getScene().modelInstance.transform);
 
         if( Gdx.app.getType() != Application.ApplicationType.Desktop) {
             Settings.multiSamplingFrameBufferAvailable = false;
-            Settings.useMultiSamplingFrameBuffer = false;       // only supported on desktop\
+            Settings.useMultiSamplingFrameBuffer = false;       // only supported on desktop
             Settings.usePostShader = false;
         }
     }
@@ -275,7 +272,6 @@ public class GameView {
         light.color.set(Color.WHITE);
         light.intensity = Settings.shadowLightLevel;
         sceneManager.environment.add(light);
-
 
         // setup quick IBL (image based lighting)
         IBLBuilder iblBuilder = IBLBuilder.createOutdoor(light);
