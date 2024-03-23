@@ -35,6 +35,7 @@ public class GameScreen implements Screen {
     private ParticleEffect fire;
     private boolean showFinished = false;
     private boolean showDead = false;
+    private boolean wasCollided = false;
 
 
     public GameScreen(Main game) {
@@ -123,11 +124,16 @@ public class GameScreen implements Screen {
             showFinished = true; // do this only once on finish
         }
         if( World.healthPercentage <= 0 && !showDead) {
-            gui.showMessage("RACER DAMAGED", .75f, 0, 5);
+            gui.showMessage("RACER DESTROYED", .75f, 0, 5);
             gui.showMessage("PRESS [R] TO RESTART", .25f, 2f, 999);
             fire = gameView.particleEffects.addFire(world.playerPosition);
             showDead = true; // do this only once on finish
         }
+
+
+        if(!wasCollided && world.collided )
+            gameView.cameraController.startCameraShake();
+        wasCollided =  world.collided;
 
 
         world.terrain.update(gameView.getCamera());     // update terrain to camera position

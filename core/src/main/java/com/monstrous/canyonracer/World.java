@@ -170,6 +170,7 @@ public class World implements Disposable {
                 normal.nor();
                 playerController.collisionImpact(normal);
             } else {
+                // swap racer mode for model of broken racer
                 brokenRacer.getScene().modelInstance.transform.set(racer.getScene().modelInstance.transform);
                 intactRacer.getScene().modelInstance.transform.translate(0, -100, 0);
                 racer = brokenRacer;

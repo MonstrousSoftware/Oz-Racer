@@ -62,6 +62,8 @@ public class CameraController extends InputAdapter {
         camera.up.set(up);
         //Gdx.app.log("lookat", focalOffset.toString());
 
+        updateCameraShake(camera, deltaTime);
+
         // top view
         if(skyCamMode) {
             camera.position.set(playerPosition.x, distance, playerPosition.z);
@@ -70,6 +72,20 @@ public class CameraController extends InputAdapter {
         }
 
         camera.update(true);
+    }
+
+    float scale = 0;
+
+    public void startCameraShake(){
+        scale = 3f;
+    }
+
+    public void updateCameraShake( PerspectiveCamera camera, float deltaTime ) {
+        if(scale <= 0)
+            return;
+        camera.position.y += (Math.random() - 0.5f)*scale;
+        scale -= deltaTime * 10f;
+
     }
 
 
