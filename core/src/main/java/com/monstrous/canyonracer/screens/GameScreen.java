@@ -31,6 +31,7 @@ public class GameScreen implements Screen {
     private MyControllerAdapter controllerAdapter;
     private Controller currentController;
     private CharacterOverlay overlay;
+    private boolean showFinished = false;
 
 
     public GameScreen(Main game) {
@@ -79,9 +80,20 @@ public class GameScreen implements Screen {
 
         target = new Vector3();
 
-
+        restart();
 
     }
+
+    private void restart(){
+        gui.clearMessages();
+        gui.showMessage("READY", .5f, 1f, .5f);
+        gui.showMessage("SET", .5f, 2f, .5f);
+        gui.showMessage("GO!", .5f, 3f, 1);
+        world.restart();
+        showFinished = false;
+    }
+
+
 
     @Override
     public void render(float deltaTime) {
@@ -91,6 +103,21 @@ public class GameScreen implements Screen {
             game.setScreen( new MainMenuScreen(game ));
             return;
         }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+            markSpot(world.playerPosition);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.R) ||
+            (currentController != null && currentController.getButton(currentController.getMapping().buttonA))) {
+            restart();
+        }
+
+        if( World.finished && !showFinished) {
+            gui.showMessage("FINISHED!\n   IN "+World.raceTimeString, .5f, 0, 5);
+            gui.showMessage("PRESS [R] TO RESTART", .25f, 2f, 999);
+            showFinished = true; // do this only once on finish
+        }
+
 
         world.terrain.update(gameView.getCamera());     // update terrain to camera position
         world.update(deltaTime);
@@ -114,6 +141,13 @@ public class GameScreen implements Screen {
         float fov = Settings.cameraFieldOfView;
         fov += .4f*factor*fov;
         gameView.cameraController.setFOV( fov );
+    }
+
+    private void markSpot( Vector3 spot ){
+        Vector3 fwd = world.playerController.forwardDirection;
+        float angle = (float)Math.atan2(fwd.x, fwd.z);
+
+        Gdx.app.log("marker", ""+spot+" angle:"+ angle*180f/Math.PI);
     }
 
     @Override

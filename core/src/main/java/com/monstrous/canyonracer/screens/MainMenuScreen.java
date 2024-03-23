@@ -144,7 +144,7 @@ public class MainMenuScreen extends MenuScreen {
         Image title = new Image( game.assets.title );
 
         TextButton play = new TextButton("Play Game", skin);
-        TextButton region = new TextButton("Region", skin);
+        TextButton region = new TextButton("Monitor Orientation", skin);
         TextButton keys = new TextButton("Keys", skin);
         TextButton options = new TextButton("Options", skin);
         TextButton scores = new TextButton("High Scores", skin);

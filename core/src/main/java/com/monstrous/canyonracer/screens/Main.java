@@ -40,7 +40,7 @@ public class Main extends Game {
         if(Settings.release)
             setScreen(new LogoScreen( this ));
         else
-            setScreen( new MainMenuScreen( this ));
+            setScreen( new GameScreen( this ));
         //setScreen(new SkyBoxConverter());
     }
 

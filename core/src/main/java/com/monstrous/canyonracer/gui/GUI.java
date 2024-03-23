@@ -1,13 +1,17 @@
 package com.monstrous.canyonracer.gui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.monstrous.canyonracer.Settings;
+import com.monstrous.canyonracer.World;
 import com.monstrous.canyonracer.screens.GameScreen;
 import com.monstrous.canyonracer.screens.Main;
 
@@ -20,8 +24,10 @@ public class GUI implements Disposable {
     private SettingsWindow lightSettings;
     private Label fps;
     private Label speed;
+    private Label time;
     private Label gameObjects;
     private Label message;
+    private Array<Label> messages;
 
 
     public GUI( GameScreen screen ) {
@@ -30,42 +36,75 @@ public class GUI implements Disposable {
         skin = Main.assets.skin;
         debugSkin = Main.assets.debugSkin;
         stage = new Stage(new ScreenViewport());
+        messages = new Array<>();
         addActors();
     }
 
     private void addActors(){
+        stage.clear();
         lightSettings = new SettingsWindow("Tweak Settings", Main.assets.debugSkin, screen);
         if(Settings.settingsMenu)
             stage.addActor(lightSettings);
 
-        fps = new Label("0", debugSkin);
+
+        time = new Label("0.00", skin);
         speed = new Label("-", skin);
-        gameObjects = new Label("0", debugSkin);
-        message = new Label("", debugSkin);
         Table table = new Table();
         table.setFillParent(true);
-        table.add(fps).top().left().row();
-        //table.add(new Label("game objects:", skin)).top().left();
-        table.add(gameObjects).top().left();
-        table.row();
-        table.add(message).top().left();
-        table.row();
+        table.add(time).width(300).top().right().row();
         table.add(speed).width(500).bottom().right().expand();
-        //table.row();
         stage.addActor(table);
+
+        fps = new Label("0", debugSkin);
+        gameObjects = new Label("0", debugSkin);
+        message = new Label("", debugSkin);
+
+        Table table2 = new Table();
+        table2.setFillParent(true);
+        table2.add(fps).top().left().row();
+        //table.add(new Label("game objects:", skin)).top().left();
+        table2.add(gameObjects).top().left();
+        table2.row();
+        table2.add(message).top().left().expand();
+        table2.row();
+
+        stage.addActor(table2);
+    }
+
+    public void showMessage(String msg, float yRel, float delay, float deleteDelay){
+        Label label = new Label(msg, skin);
+        float w = label.getWidth();
+
+        float x = stage.getWidth()/2;
+        float y = stage.getHeight()*yRel;
+        label.addAction(Actions.sequence(Actions.moveTo(-(x+w),y), Actions.delay(delay), Actions.moveTo(x-w/2f,y, 1f, Interpolation.bounceIn),
+            Actions.delay(deleteDelay), Actions.fadeOut( 0.5f), Actions.removeActor()));
+
+        stage.addActor(label);
+        messages.add(label);
+    }
+
+    public void clearMessages(){
+        for(Label msg : messages)
+            msg.addAction(Actions.sequence(Actions.fadeOut(1f), Actions.removeActor()));
     }
 
     public void render( float deltaTime ){
+        // debug stuff
         if(Settings.showFPS)
             fps.setText( "FPS: " +Gdx.graphics.getFramesPerSecond() );
         else
             fps.setText("");
-        speed.setText( "speed: " +(int) screen.world.playerController.speed);
+
         gameObjects.setText( "game objects: " + screen.gameView.sceneManager.getRenderableProviders().size+"  "+screen.world.getNumGameObjects() );
         if(screen.world.collided)
             message.setText("COLLISION!");
         else
             message.setText("");
+
+        // game stuff
+        speed.setText( "speed: " +(int) screen.world.playerController.getSpeed());
+        time.setText(World.raceTimeString); // may be empty string before the race
 
         stage.act(deltaTime);
         stage.draw();

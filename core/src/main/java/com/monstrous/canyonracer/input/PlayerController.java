@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.IntIntMap;
 import com.monstrous.canyonracer.GameObject;
 import com.monstrous.canyonracer.Settings;
+import com.monstrous.canyonracer.World;
 import com.monstrous.canyonracer.terrain.Terrain;
 
 public class PlayerController extends InputAdapter {
@@ -18,12 +19,12 @@ public class PlayerController extends InputAdapter {
     public static int turnRightKey = Input.Keys.D;
     public static int boostKey = Input.Keys.SPACE;
 
-    public float speed = 0f;
-    private float turnAngle = 0f;
-    private float rotation = 0f;
+    private float speed;
+    private float turnAngle;
+    public float rotation;
 
     private final IntIntMap keys = new IntIntMap();
-    private Vector3 forwardDirection;       // unit vector in forward direction
+    public Vector3 forwardDirection;       // unit vector in forward direction
     private Vector3 velocity;               // velocity vector
 
     private Vector3 tmpV = new Vector3();
@@ -40,8 +41,21 @@ public class PlayerController extends InputAdapter {
 
 
     public PlayerController() {
-        forwardDirection = new Vector3(0,0,1);
+        forwardDirection = new Vector3();
         velocity = new Vector3(0,0,0);
+        restart(0);
+    }
+
+    public void restart( float angle ){
+        speed = 0;
+        rotation = angle;
+        turnAngle = 0;
+        velocity.set(Vector3.Zero);
+        boostFactor = 0;
+    }
+
+    public float getSpeed(){
+        return speed;
     }
 
     @Override
@@ -56,7 +70,7 @@ public class PlayerController extends InputAdapter {
         return true;
     }
 
-    public void update (GameObject racer, Terrain terrain, float deltaTime ) {
+    public void update (GameObject racer, World world, Terrain terrain, float deltaTime ) {
 
         float acceleration = 0f;
         if (keys.containsKey(forwardKey) )
@@ -68,7 +82,7 @@ public class PlayerController extends InputAdapter {
         if(keys.containsKey(boostKey) && boostFactor < 1f)
             boostFactor += deltaTime;
         else if(stickBoost > 0)
-            boostFactor = MathUtils.lerp(boostFactor, stickBoost, 1.0f*deltaTime);          // todo fix combination
+            boostFactor = MathUtils.lerp(boostFactor, stickBoost, 1.0f*deltaTime);
         else if(boostFactor > 0)
             boostFactor -= deltaTime;
 
@@ -76,6 +90,7 @@ public class PlayerController extends InputAdapter {
         acceleration += boostFactor*acceleration;
 
         speed = velocity.len();
+
         // potential idea: turn rate depends on speed
         if (keys.containsKey(turnLeftKey)) {
             if (turnAngle < Settings.maxTurn)

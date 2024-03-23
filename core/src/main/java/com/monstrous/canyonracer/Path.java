@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.monstrous.canyonracer.terrain.Terrain;
-
+// OBSOLETE
 public class Path {
 
     private Terrain terrain;
