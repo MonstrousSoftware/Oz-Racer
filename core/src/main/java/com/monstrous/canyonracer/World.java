@@ -87,7 +87,8 @@ public class World implements Disposable {
     // restart the race
     public void restart(){
         racer = intactRacer;
-        playerPosition.set(-3350, 68, 30);
+        float y = terrain.getHeight(-3350, 30);
+        playerPosition.set(-3350, y+5f, 30);
         playerController.restart(90f);
         // get player position
         racer.getScene().modelInstance.transform.setTranslation(playerPosition);
@@ -105,12 +106,6 @@ public class World implements Disposable {
 
         start.getScene().modelInstance.transform.getTranslation(startPosition);
         finish.getScene().modelInstance.transform.getTranslation(finishPosition);
-
-//        placeCheckPoint(-2531, -278, 120);
-//        placeCheckPoint(-2092, -978, 80);
-//        placeCheckPoint(-1518, -641, 80);
-//        placeCheckPoint(-835, -16, 116);
-//        placeCheckPoint(-336, -523, 109);
     }
 
     private GameObject placeCheckPoint(float x, float z, float angle) {

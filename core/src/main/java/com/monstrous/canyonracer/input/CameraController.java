@@ -18,13 +18,21 @@ public class CameraController extends InputAdapter {
     private float angle = 0;
     private Vector3 up;
 
-    public CameraController(PerspectiveCamera camera ) {
+    public CameraController(PerspectiveCamera camera, Vector3 focusPosition ) {
         this.camera = camera;
         focalOffset.set(0,0,5);
         if(skyCamMode)
             distance = 200;
         up = new Vector3(Vector3.Y);
         setCameraUpSideDown( Settings.cameraInverted );
+
+
+    }
+
+    public void startCameraPosition(Vector3 playerPosition, Vector3 viewDirection, float distance){
+        camera.position.set(viewDirection).scl(-distance);       // distance behind player
+        camera.position.y = distance/3;                          // and above
+        camera.position.add(playerPosition);
     }
 
     public void setCameraUpSideDown( boolean mode ){
@@ -51,7 +59,7 @@ public class CameraController extends InputAdapter {
         float alpha = MathUtils.clamp(Settings.cameraSlerpFactor*deltaTime, 0.0f, 1.0f);    // make sure alpha <= 1 even at low frame rates
         camera.position.slerp(cameraTargetPosition, alpha);
 
-       camera.position.set(cameraTargetPosition);
+        camera.position.set(cameraTargetPosition);
 
         angle += deltaTime*50f;
        // camera.position.y += 0.01f*Math.sin(angle);    // camera vibration
