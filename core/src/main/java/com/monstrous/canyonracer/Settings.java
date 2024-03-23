@@ -31,7 +31,7 @@ public class Settings {
     static public float     nitroConsumption = 20f;
     static public float     nitroReplenishment = 10f;
 
-    static public float     collisionDamage = 25f;
+    static public float     collisionDamage = 0.25f;    // multiplied by speed, max health is 100
 
 
     // Terrain
