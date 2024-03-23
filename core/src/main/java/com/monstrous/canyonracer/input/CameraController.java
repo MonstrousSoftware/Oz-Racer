@@ -37,6 +37,7 @@ public class CameraController extends InputAdapter {
             up.y = 1;
     }
 
+    // can be used to temporarily move camera further away
     public void setDistance( float d ){
         distance = d;
     }
@@ -44,10 +45,12 @@ public class CameraController extends InputAdapter {
     // viewDirection is unit forward vector pointing for the racer
     public void update ( Matrix4 targetTransform, float deltaTime ) {
 
+        // get position and forward direction from racer's transform
         targetTransform.getTranslation(playerPosition);
         viewDirection.set(Vector3.Z);
         viewDirection.rot(targetTransform);
 
+        // smooth from actual distance to desired distance
         distance = MathUtils.lerp(distance, Settings.cameraDistance, 0.5f * deltaTime);
 
         // camera is at some position behind and above the player
@@ -57,17 +60,18 @@ public class CameraController extends InputAdapter {
 
 
         // smoothly slerp the camera towards the desired position
-        float alpha = MathUtils.clamp(Settings.cameraSlerpFactor*deltaTime, 0.0f, 1.0f);    // make sure alpha <= 1 even at low frame rates
-        if(alpha > 0.99f)
-            camera.position.set(cameraTargetPosition);
-        else
-            camera.position.slerp(cameraTargetPosition, alpha);
+//        float alpha = MathUtils.clamp(Settings.cameraSlerpFactor*deltaTime, 0.0f, 1.0f);    // make sure alpha <= 1 even at low frame rates
+//        if(alpha > 0.99f)
+//            camera.position.set(cameraTargetPosition);
+//        else
+//            camera.position.slerp(cameraTargetPosition, alpha);
+        // Slerping makes the camera jitter forward and back
+        camera.position.set(cameraTargetPosition);
 
         // camera is looking at a point in front of the racer so that racer appears in the bottom half of the screen, not centre screen
         focalOffset.set(viewDirection).scl(65).add(playerPosition);
         camera.lookAt(focalOffset);
         camera.up.set(up);
-        //Gdx.app.log("lookat", focalOffset.toString());
 
         updateCameraShake(camera, deltaTime);
 
