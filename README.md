@@ -46,5 +46,7 @@ to do:
 Textures
 https://freepbr.com/materials/eroded-smoothed-rockface/
 
+Rust texture by Radetzki Vladimir https://www.behance.net/Radetzki_Vladimir
+
 Rock surfaces in Blender tutorial
 https://www.youtube.com/watch?v=q9GbbZKBwNg

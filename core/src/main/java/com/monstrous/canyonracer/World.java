@@ -18,7 +18,9 @@ import net.mgsx.gltf.scene3d.scene.SceneAsset;
 public class World implements Disposable {
     private final Array<GameObject> gameObjects;
     private SceneAsset sceneAsset;
-    public final GameObject racer;
+    public GameObject racer;
+    public final GameObject intactRacer;
+    public final GameObject brokenRacer;
     public final GameObject enemy1;
     private GameObject finish;
     private Vector3 finishPosition = new Vector3();
@@ -55,7 +57,9 @@ public class World implements Disposable {
 //        playerController.rotation = 90f;
 
 //        playerPosition = new Vector3(0, 8,0);
-        racer = spawnObject("Feisar_Ship", true, playerPosition);
+        intactRacer = spawnObject("Feisar_Ship", true, playerPosition);
+        brokenRacer = spawnObject("BrokenRacer", true, new Vector3(0,-100,0)); // out of sight
+        racer = intactRacer;
 
         enemyPosition = new Vector3(4, 8, 6);
         enemy1 = spawnObject("Feisar_Ship", true, enemyPosition);
@@ -82,9 +86,10 @@ public class World implements Disposable {
 
     // restart the race
     public void restart(){
+        racer = intactRacer;
         playerPosition.set(-3350, 68, 30);
         playerController.restart(90f);
-        //playerController.rotation = 90f;
+        // get player position
         racer.getScene().modelInstance.transform.setTranslation(playerPosition);
 
         racing = false;
@@ -164,6 +169,10 @@ public class World implements Disposable {
                 normal.y = 0;  // horizontal impulse only
                 normal.nor();
                 playerController.collisionImpact(normal);
+            } else {
+                brokenRacer.getScene().modelInstance.transform.set(racer.getScene().modelInstance.transform);
+                intactRacer.getScene().modelInstance.transform.translate(0, -100, 0);
+                racer = brokenRacer;
             }
 
         }
