@@ -79,6 +79,7 @@ public class GameView {
         buildDebugInstances();
 
         cameraController = new CameraController(camera);
+        cameraController.update(world.racer.getScene().modelInstance.transform, 0.1f);  // force camera position init
         //cameraController.startCameraPosition(world.playerPosition, Vector3.Z, 300f );
 
         postFilter = new PostFilter();
@@ -145,29 +146,23 @@ public class GameView {
 
     }
 
-    private Vector3 playerForward = new Vector3();
+
     private Matrix4 exhaustTransform = new Matrix4();
-
-
 
     public void render(float deltaTime) {
 
-        // animate camera
-        Matrix4 transform = world.racer.getScene().modelInstance.transform;
-        transform.getTranslation(playerPos);
-        playerForward.set(Vector3.Z);
-        playerForward.rot(transform);
-
-        exhaustTransform.set(transform);
+        // reposition particle effect
+        exhaustTransform.set(world.racer.getScene().modelInstance.transform);
         exhaustTransform.translate(0.0f, -0.5f, -5f);           // offset for tail pipe
         exhaust.setTransform(exhaustTransform);
 
-        cameraController.update(playerPos, playerForward, deltaTime);
+        // animate camera
+        cameraController.update(world.racer.getScene().modelInstance.transform, deltaTime);
 
         light.setCenter(playerPos); // keep shadow light on player so that we have shadows
 
-        refresh();
-        DirectionalShadowLight shadowLight = sceneManager.getFirstDirectionalShadowLight();
+        refresh();  // fill scene array
+        DirectionalShadowLight shadowLight = sceneManager.getFirstDirectionalShadowLight();     // == light?
         csm.setCascades(sceneManager.camera, shadowLight, 0f, 20f);
 
         sceneManager.update(deltaTime);
@@ -179,8 +174,6 @@ public class GameView {
             renderWorldFBO();
         else
             renderWorldFBOAA();
-
-        //world.path.render(camera);
 
         lensFlare.render(sceneManager.camera, sunPosition);
 

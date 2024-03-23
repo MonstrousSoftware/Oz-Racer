@@ -42,6 +42,8 @@ to do:
 - race time
 - ai racers
 
+Music:
+fight.ogg via OpenGameArt.ogg, If you use this please (totally optional) credit to Ville Nousiainen and/or provide a link to http://soundcloud.com/mutkanto
 
 Textures
 https://freepbr.com/materials/eroded-smoothed-rockface/

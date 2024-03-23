@@ -5,12 +5,15 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.monstrous.canyonracer.Settings;
 
 public class CameraController extends InputAdapter {
 
     private final PerspectiveCamera camera;
+    private final Vector3 playerPosition = new Vector3();
+    private final Vector3 viewDirection = new Vector3();
     private final Vector3 focalOffset = new Vector3();
     private float distance = Settings.cameraDistance;
     private final Vector3 cameraTargetPosition = new Vector3();
@@ -39,7 +42,11 @@ public class CameraController extends InputAdapter {
     }
 
     // viewDirection is unit forward vector pointing for the racer
-    public void update ( Vector3 playerPosition, Vector3 viewDirection, float deltaTime ) {
+    public void update ( Matrix4 targetTransform, float deltaTime ) {
+
+        targetTransform.getTranslation(playerPosition);
+        viewDirection.set(Vector3.Z);
+        viewDirection.rot(targetTransform);
 
         distance = MathUtils.lerp(distance, Settings.cameraDistance, 0.5f * deltaTime);
 
@@ -51,8 +58,10 @@ public class CameraController extends InputAdapter {
 
         // smoothly slerp the camera towards the desired position
         float alpha = MathUtils.clamp(Settings.cameraSlerpFactor*deltaTime, 0.0f, 1.0f);    // make sure alpha <= 1 even at low frame rates
-        camera.position.slerp(cameraTargetPosition, alpha);
-      //  camera.position.set(cameraTargetPosition);
+        if(alpha > 0.99f)
+            camera.position.set(cameraTargetPosition);
+        else
+            camera.position.slerp(cameraTargetPosition, alpha);
 
         // camera is looking at a point in front of the racer so that racer appears in the bottom half of the screen, not centre screen
         focalOffset.set(viewDirection).scl(65).add(playerPosition);

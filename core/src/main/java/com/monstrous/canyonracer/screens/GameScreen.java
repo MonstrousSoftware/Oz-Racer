@@ -55,6 +55,7 @@ public class GameScreen implements Screen {
 
         world = new World();
         terrainDebug = new TerrainDebug(world.terrain);
+        world.playerController.update(world.racer, world, world.terrain, 0.1f); // force player transform to be updated
 
         gameView = new GameView(world);
         overlay = new CharacterOverlay();
@@ -145,7 +146,7 @@ public class GameScreen implements Screen {
 
         adjustCameraFOV( world.playerController.boostFactor );
 
-        gameView.render( deltaTime);
+        gameView.render( deltaTime );
 
         terrainDebug.debugRender(world.playerPosition, gameView.getCamera().position);
 
