@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
 import com.monstrous.canyonracer.CharacterOverlay;
@@ -31,6 +32,7 @@ public class GameScreen implements Screen {
     private MyControllerAdapter controllerAdapter;
     private Controller currentController;
     private CharacterOverlay overlay;
+    private ParticleEffect fire;
     private boolean showFinished = false;
     private boolean showDead = false;
 
@@ -93,6 +95,7 @@ public class GameScreen implements Screen {
         world.restart();
         showFinished = false;
         showDead = false;
+        fire = null;
     }
 
 
@@ -122,13 +125,16 @@ public class GameScreen implements Screen {
         if( World.healthPercentage <= 0 && !showDead) {
             gui.showMessage("RACER DAMAGED", .75f, 0, 5);
             gui.showMessage("PRESS [R] TO RESTART", .25f, 2f, 999);
-            gameView.particleEffects.addFire(world.playerPosition);
+            fire = gameView.particleEffects.addFire(world.playerPosition);
             showDead = true; // do this only once on finish
         }
 
 
         world.terrain.update(gameView.getCamera());     // update terrain to camera position
         world.update(deltaTime);
+
+        if(fire != null )
+            fire.setTransform(world.racer.getScene().modelInstance.transform);
 
         adjustCameraFOV( world.playerController.boostFactor );
 

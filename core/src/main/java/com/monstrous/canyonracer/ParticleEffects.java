@@ -83,7 +83,7 @@ public class ParticleEffects implements Disposable {
         activeEffects.add(effect);
     }
 
-    public void addFire(Vector3 position) {
+    public ParticleEffect addFire(Vector3 position) {
         // add loaded effect to particle system
 
         // we cannot use the originalEffect, we must make a copy each time we create new particle effect
@@ -93,6 +93,7 @@ public class ParticleEffects implements Disposable {
         effect.start();  // optional: particle will begin playing immediately
         particleSystem.add(effect);
         activeEffects.add(effect);
+        return effect;
     }
 
     public void addExplosion(Vector3 position) {
