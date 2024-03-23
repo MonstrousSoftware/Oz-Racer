@@ -59,7 +59,7 @@ public class MainMenuScreen extends MenuScreen {
         super.show();
 
         // create scene
-        sceneAsset = new GLTFLoader().load(Gdx.files.internal(FILE_NAME ));
+        sceneAsset = Main.assets.sceneAssetGame;
         sceneManager = new SceneManager();
         scene = new Scene(sceneAsset.scene,"Feisar_Ship");
         sceneManager.addScene(scene);
@@ -232,7 +232,6 @@ public class MainMenuScreen extends MenuScreen {
     public void dispose() {
         // Destroy screen's assets here.
         sceneManager.dispose();
-        sceneAsset.dispose();
         environmentCubemap.dispose();
         diffuseCubemap.dispose();
         specularCubemap.dispose();

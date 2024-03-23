@@ -1,6 +1,5 @@
 package com.monstrous.canyonracer.input;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.MathUtils;
@@ -22,6 +21,7 @@ public class PlayerController extends InputAdapter {
     private float speed;
     private float turnAngle;
     public float rotation;
+    private float hoverHeight = 5f;
 
     private final IntIntMap keys = new IntIntMap();
     public Vector3 forwardDirection;       // unit vector in forward direction
@@ -38,6 +38,7 @@ public class PlayerController extends InputAdapter {
     private boolean stickSteering = false;
 
     public float boostFactor;
+    private boolean enoughNitro;
 
 
     public PlayerController() {
@@ -50,8 +51,10 @@ public class PlayerController extends InputAdapter {
         speed = 0;
         rotation = angle;
         turnAngle = 0;
+        hoverHeight = 5f;
         velocity.set(Vector3.Zero);
         boostFactor = 0;
+        enoughNitro = true;
     }
 
     public float getSpeed(){
@@ -72,35 +75,50 @@ public class PlayerController extends InputAdapter {
 
     public void update (GameObject racer, World world, Terrain terrain, float deltaTime ) {
 
+        if(World.healthPercentage <= 0) {
+            hoverHeight = 0;
+        }
+
         float acceleration = 0f;
-        if (keys.containsKey(forwardKey) )
+        if (keys.containsKey(forwardKey) && World.healthPercentage > 0)
             acceleration = Settings.acceleration;
-        else if(stickVertical > 0)
+        else if(stickVertical > 0 && World.healthPercentage > 0)
             acceleration = Settings.acceleration * stickVertical;
-
-
-        if(keys.containsKey(boostKey) && boostFactor < 1f)
-            boostFactor += deltaTime;
-        else if(stickBoost > 0)
-            boostFactor = MathUtils.lerp(boostFactor, stickBoost, 1.0f*deltaTime);
-        else if(boostFactor > 0)
-            boostFactor -= deltaTime;
-
-
-        acceleration += boostFactor*acceleration;
 
         speed = velocity.len();
 
+        if (keys.containsKey(boostKey) && boostFactor < 1f && enoughNitro && speed > 0 && World.healthPercentage > 0)
+            boostFactor += deltaTime;
+        else if (stickBoost > 0 && enoughNitro && speed > 0 && World.healthPercentage > 0)
+            boostFactor = MathUtils.lerp(boostFactor, stickBoost, 1.0f * deltaTime);
+        else if(boostFactor > 0)
+            boostFactor -= deltaTime;
+
+        // consume nitro if boosting, or else slowly replenish the nitro
+        if(boostFactor > 0) {
+            World.nitroLevel -= boostFactor * deltaTime * Settings.nitroConsumption;
+            if(World.nitroLevel <= 0)
+                enoughNitro = false;
+        } else if (World.nitroLevel < 100 && World.healthPercentage > 0) {
+            World.nitroLevel += deltaTime * Settings.nitroReplenishment;
+            if(World.nitroLevel > 50)
+                enoughNitro = true;
+        }
+
+        acceleration += boostFactor*acceleration;
+
+
+
         // potential idea: turn rate depends on speed
-        if (keys.containsKey(turnLeftKey)) {
+        if (keys.containsKey(turnLeftKey)&& World.healthPercentage > 0) {
             if (turnAngle < Settings.maxTurn)
                 turnAngle += deltaTime * Settings.turnRate;
         }
-        else if (keys.containsKey(turnRightKey)) {
+        else if (keys.containsKey(turnRightKey)&& World.healthPercentage > 0) {
             if( turnAngle > -Settings.maxTurn)
                 turnAngle -= deltaTime *  Settings.turnRate;
         }
-        else if (stickSteering) { // do we have controller stick input?
+        else if (stickSteering && World.healthPercentage > 0) { // do we have controller stick input?
             float targetAngle = stickHorizontal * Settings.maxTurn;
             turnAngle = MathUtils.lerp(turnAngle, targetAngle, 5.0f*deltaTime);
         }
@@ -112,7 +130,7 @@ public class PlayerController extends InputAdapter {
         transform.getTranslation(playerPos);
 
         // place racer fixed distance above the terrain, i.e. it follows the terrain
-        targetHeight = 5f+terrain.getHeight(playerPos.x, playerPos.z);
+        targetHeight = hoverHeight+terrain.getHeight(playerPos.x, playerPos.z);
         playerPos.y = MathUtils.lerp(playerPos.y, targetHeight, Settings.heightLag*deltaTime);     // with a bit of lag
 
         // apply rotation to player transform (yaw)

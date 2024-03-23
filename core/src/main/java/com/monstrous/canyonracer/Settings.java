@@ -10,7 +10,7 @@ public class Settings {
 
     static public float     ambientLightLevel = 0.75f;
     static public float     shadowLightLevel = 5.0f;
-    static public float     shadowBias = 0.0008f;
+    static public float     shadowBias = 0.00005f;
     static public boolean   showLightBox = false;
 
     static public boolean    cameraInverted = release;
@@ -26,6 +26,12 @@ public class Settings {
     static public float     bankFactor = 0.25f;
     static public float     maxTurn = 95f;
     static public float     heightLag = 25f;
+
+
+    static public float     nitroConsumption = 20f;
+    static public float     nitroReplenishment = 10f;
+
+    static public float     collisionDamage = 25f;
 
 
     // Terrain

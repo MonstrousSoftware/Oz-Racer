@@ -3,6 +3,7 @@ package com.monstrous.canyonracer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.model.Node;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
@@ -15,9 +16,6 @@ import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
 public class World implements Disposable {
-    private static final String GLTF_FILE = "models/OzRacer.gltf";
-    private static final String GLTF_FILE2 = "models/rocks.gltf";
-
     private final Array<GameObject> gameObjects;
     private SceneAsset sceneAsset;
     public final GameObject racer;
@@ -39,12 +37,14 @@ public class World implements Disposable {
     public static String raceTimeString;
     public static boolean racing = false;
     public static boolean finished = false;
+    public static float nitroLevel = 75f;
+    public static float healthPercentage = 100;
 
 
     public World() {
         gameObjects = new Array<>();
 
-        sceneAsset = new GLTFLoader().load(Gdx.files.internal(GLTF_FILE));
+        sceneAsset = Main.assets.sceneAssetGame;
         for (Node node : sceneAsset.scene.model.nodes) {  // print some debug info
             Gdx.app.log("Node ", node.id);
         }
@@ -64,7 +64,7 @@ public class World implements Disposable {
         spawnObject("TestCube", true, new Vector3(0, 0, 0));
         spawnObject("Marker", true, new Vector3(10, 5, 80));
 
-        spawnObject("Arrow", true, new Vector3(-3350, 90, 30));
+       // spawnObject("Arrow", true, new Vector3(-3350, 90, 30));
 
         terrain = new Terrain(playerPosition);
         //path = new Path(terrain);
@@ -74,7 +74,7 @@ public class World implements Disposable {
         placeCheckPoints();
 
         //importRocks();
-        sceneAsset = new GLTFLoader().load(Gdx.files.internal(GLTF_FILE2));
+        sceneAsset = Main.assets.sceneAssetRocks;
         rocks = new Rocks(this);
 
         restart();
@@ -90,6 +90,8 @@ public class World implements Disposable {
         racing = false;
         finished = false;
         raceTime = 0;
+        healthPercentage = 100f;
+        nitroLevel = 100;
     }
 
     private void placeCheckPoints() {
@@ -125,6 +127,8 @@ public class World implements Disposable {
     private Vector3 colliderPosition = new Vector3();
 
     public void update(float deltaTime) {
+        if(healthPercentage <= 0)
+            racing = false;
         if (racing)
             raceTime += deltaTime;
         formatRaceTimeString();
@@ -153,13 +157,15 @@ public class World implements Disposable {
         collided = rocks.inCollision(playerPosition, colliderPosition);
         if (collided && !wasCollided) {
             Main.assets.COLLISION.play();
-            // throw player away from the collider
-            Vector3 normal = colliderPosition.sub(playerPosition);
-            normal.y = 0;  // horizontal impulse only
-            normal.nor();
-            //racer.getScene().modelInstance.transform.translate(impulse);
-            playerController.collisionImpact(normal);
-            // perhaps add some camera shake?
+            healthPercentage -= Settings.collisionDamage;
+            if(healthPercentage > 0) {
+                // throw player away from the collider
+                Vector3 normal = colliderPosition.sub(playerPosition);
+                normal.y = 0;  // horizontal impulse only
+                normal.nor();
+                playerController.collisionImpact(normal);
+            }
+
         }
     }
 

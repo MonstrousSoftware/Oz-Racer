@@ -51,7 +51,7 @@ public class GameView {
     private Model arrowModel;
     public CameraController cameraController;
     private Vector3 playerPos = new Vector3();
-    private ParticleEffects particleEffects;
+    public ParticleEffects particleEffects;
     private ParticleEffect exhaust;
     private PostFilter postFilter;
     private FrameBuffer fbo = null;
@@ -89,7 +89,7 @@ public class GameView {
         float x = 0;
         float z = 100;
         float y = world.terrain.getHeight(x, z);
-        particleEffects.addFire(new Vector3(x, y, z));
+
         exhaust = particleEffects.addExhaustFumes(world.racer.getScene().modelInstance.transform);
 
         if( Gdx.app.getType() != Application.ApplicationType.Desktop) {
@@ -97,8 +97,6 @@ public class GameView {
             Settings.useMultiSamplingFrameBuffer = false;       // only supported on desktop\
             Settings.usePostShader = false;
         }
-
-
     }
 
     public void resize(int width, int height) {

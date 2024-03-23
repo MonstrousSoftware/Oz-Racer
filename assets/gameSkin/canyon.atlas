@@ -4,24 +4,61 @@ size: 512, 512
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
+StalinistOne-Regular(1)
+  rotate: false
+  xy: 1, 190
+  size: 502, 316
+  orig: 502, 316
+  offset: 0, 0
+  index: -1
 checkbox_off
   rotate: false
-  xy: 1, 129
+  xy: 1, 162
   size: 50, 26
   orig: 50, 26
   offset: 0, 0
   index: -1
 checkbox_on
   rotate: false
-  xy: 1, 157
+  xy: 1, 134
   size: 50, 26
   orig: 50, 26
   offset: 0, 0
   index: -1
-StalinistOne-Regular(1)
+knob
   rotate: false
-  xy: 1, 185
-  size: 502, 316
-  orig: 502, 316
+  xy: 53, 183
+  size: 38, 5
+  orig: 38, 5
+  offset: 0, 0
+  index: -1
+knobHorizontal
+  rotate: false
+  xy: 505, 490
+  size: 3, 16
+  orig: 3, 16
+  offset: 0, 0
+  index: -1
+rect20
+  rotate: false
+  xy: 53, 161
+  size: 20, 20
+  split: 3, 3, 3, 3
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+knobHealth
+  rotate: false
+  xy: 1, 70
+  size: 38, 5
+  orig: 38, 5
+  offset: 0, 0
+  index: -1
+rect
+  rotate: false
+  xy: 1, 77
+  size: 46, 55
+  split: 4, 4, 4, 3
+  orig: 46, 55
   offset: 0, 0
   index: -1

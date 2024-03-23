@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
@@ -27,6 +28,8 @@ public class GUI implements Disposable {
     private Label time;
     private Label gameObjects;
     private Label message;
+    private ProgressBar nitro;
+    private ProgressBar health;
     private Array<Label> messages;
 
 
@@ -49,10 +52,18 @@ public class GUI implements Disposable {
 
         time = new Label("0.00", skin);
         speed = new Label("-", skin);
+        nitro = new ProgressBar(0,100, 1, true, skin);
+        health = new ProgressBar(0,100, 1, true, skin, "health");
+        health.setValue(75);
+
         Table table = new Table();
         table.setFillParent(true);
+        table.add();
         table.add(time).width(300).top().right().row();
-        table.add(speed).width(500).bottom().right().expand();
+        table.add(nitro).pad(150,20,20,20).left().expand();
+        table.add(health).pad(150,20,20,20).right().row();
+        table.add();
+        table.add(speed).width(500).bottom().right();
         stage.addActor(table);
 
         fps = new Label("0", debugSkin);
@@ -105,6 +116,8 @@ public class GUI implements Disposable {
         // game stuff
         speed.setText( "speed: " +(int) screen.world.playerController.getSpeed());
         time.setText(World.raceTimeString); // may be empty string before the race
+        nitro.setValue(World.nitroLevel);
+        health.setValue(World.healthPercentage);
 
         stage.act(deltaTime);
         stage.draw();

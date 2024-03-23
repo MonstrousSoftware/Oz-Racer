@@ -51,7 +51,7 @@ public class SettingsWindow extends Window {
         final Label SLlabel = new Label("shadow light", skin);
         add(SLslider); add(SLlabel);        row();
 
-        final Slider SBslider = new Slider(0.0f, 0.1f, 0.0005f, false, skin);
+        final Slider SBslider = new Slider(0.0f, 0.01f, 0.0001f, false, skin);
         SBslider.setValue(Settings.shadowBias);
         SBslider.addListener(new ChangeListener() {
             @Override

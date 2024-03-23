@@ -32,6 +32,7 @@ public class GameScreen implements Screen {
     private Controller currentController;
     private CharacterOverlay overlay;
     private boolean showFinished = false;
+    private boolean showDead = false;
 
 
     public GameScreen(Main game) {
@@ -91,6 +92,7 @@ public class GameScreen implements Screen {
         gui.showMessage("GO!", .5f, 3f, 1);
         world.restart();
         showFinished = false;
+        showDead = false;
     }
 
 
@@ -113,9 +115,15 @@ public class GameScreen implements Screen {
         }
 
         if( World.finished && !showFinished) {
-            gui.showMessage("FINISHED!\n   IN "+World.raceTimeString, .5f, 0, 5);
+            gui.showMessage("FINISHED!\n   IN "+World.raceTimeString, .75f, 0, 5);
             gui.showMessage("PRESS [R] TO RESTART", .25f, 2f, 999);
             showFinished = true; // do this only once on finish
+        }
+        if( World.healthPercentage <= 0 && !showDead) {
+            gui.showMessage("RACER DAMAGED", .75f, 0, 5);
+            gui.showMessage("PRESS [R] TO RESTART", .25f, 2f, 999);
+            gameView.particleEffects.addFire(world.playerPosition);
+            showDead = true; // do this only once on finish
         }
 
 
