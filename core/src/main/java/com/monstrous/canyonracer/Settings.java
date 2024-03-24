@@ -5,13 +5,14 @@ import com.badlogic.gdx.Gdx;
 import static com.badlogic.gdx.Application.ApplicationType.Desktop;
 
 public class Settings {
-    static public boolean   release = true;
+    static public boolean   release = false;
     static public String    version = "v1.0 (March 24, 2024)";
 
     static public float     ambientLightLevel = 0.75f;
     static public float     shadowLightLevel = 5.0f;
     static public float     shadowBias = 0.00005f;
     static public boolean   showLightBox = false;
+    static public boolean   cascadedShadows = false;
 
     static public boolean    cameraInverted = release;
     static public float      cameraDistance = 10f;
@@ -42,11 +43,11 @@ public class Settings {
     static public boolean   debugRockCollision = false;
 
     // Graphics settings - aimed at desktop
-    static public boolean   multiSamplingFrameBufferAvailable = true;      /////
-    static public boolean   useMultiSamplingFrameBuffer = true;
-    static public boolean   usePostShader = true; //
+    static public boolean   multiSamplingFrameBufferAvailable = false;      /////
+    static public boolean   useMultiSamplingFrameBuffer = false;
+    static public boolean   usePostShader = false; //
 
-    static public boolean   particleFX = true; //true;
+    static public boolean   particleFX = false; //true;
 
 
     static public boolean   supportControllers = (Gdx.app.getType() == Desktop);

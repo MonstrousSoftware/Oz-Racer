@@ -13,7 +13,7 @@ import com.monstrous.canyonracer.terrain.TerrainChunk;
 public class Rocks {
     private static float SCALE = 1;
     public static int AREA_LENGTH = 5000;
-    private static int SEPARATION_DISTANCE = 200;
+    private static int SEPARATION_DISTANCE = 200;  // 200
 
 
     private static String names[] = { "Rock", "Rock.001", "Rock.002", "Rock.003", "Rock.004" };

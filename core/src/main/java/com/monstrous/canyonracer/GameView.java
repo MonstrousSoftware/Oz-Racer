@@ -65,6 +65,10 @@ public class GameView {
 //        sceneManager = new SceneManager(PBRShaderProvider.createDefault(0), PBRShaderProvider.createDefaultDepth(0), new SceneRenderableSorter());
         sceneManager = new SceneManager(PBRShaderProvider.createDefault(0), PBRShaderProvider.createDefaultDepth(0), new MyRenderableSorter());
 
+        ModelBatch depthBatch = new ModelBatch(new MyRenderableSorter());
+        sceneManager.setDepthBatch(depthBatch);
+
+
         camera = new PerspectiveCamera(Settings.cameraFieldOfView, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.near = 1f;
         camera.far = 5000f;
@@ -157,8 +161,10 @@ public class GameView {
         light.setCenter(playerPos); // keep shadow light on player so that we have shadows
 
         refresh();  // fill scene array
-        DirectionalShadowLight shadowLight = sceneManager.getFirstDirectionalShadowLight();     // == light?
-        csm.setCascades(sceneManager.camera, shadowLight, 0, 20f);
+        if(Settings.cascadedShadows) {
+            DirectionalShadowLight shadowLight = sceneManager.getFirstDirectionalShadowLight();     // == light?
+            csm.setCascades(sceneManager.camera, shadowLight, 0, 20f);
+        }
 
         sceneManager.update(deltaTime);
         particleEffects.update(deltaTime);
@@ -231,9 +237,10 @@ public class GameView {
 
         sceneManager.environment.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, Settings.shadowBias));
 
-        csm = new CascadeShadowMap(2);
-        sceneManager.setCascadeShadowMap(csm);
-
+        if(Settings.cascadedShadows) {
+            csm = new CascadeShadowMap(2);
+            sceneManager.setCascadeShadowMap(csm);
+        }
         // setup light
 
 

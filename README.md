@@ -38,6 +38,22 @@ This project was generated with a template including simple application launcher
 Breaking error on teavm version:
 - java.lang.IllegalArgumentException: Comparison method violates its general contract!
 - It seems to be within sceneManager, it does not occur if there are zero scenes in sceneManager
+Even if we override the color sortet, the default renderable sorter is used for the depth pass
+and this gives non transitive results (due to overflows of (int)1000*dst2()).
+A distance of ca. 1500 from the camera causes an overflow of the integer to 2147483647.
+- From that point on all distances are equal
+
+[compares:] 0 : -1 vs 1
+[compares:] 1 : -1 vs 1
+[compares:] 2 : -1 vs 1
+[compares:] 3 : 1 vs -1
+[compares:] 4 : -1 vs 1
+
+[compares:] 0 : -1 vs 1 dst:0.0 d2:0.0 integer:0
+[compares:] 1 : -1 vs 1 dst:199.68153 d2:39872.715 integer:39872716
+[compares:] 2 : -1 vs 1 dst:262.9471 d2:69141.19 integer:69141184
+[compares:] 3 : 1 vs -1 dst:337.19852 d2:113702.836 integer:113702832
+[compares:] 4 : -1 vs 1 dst:527.04626 d2:277777.78 integer:277777792
 
 to do:
 - DONE: collision with rocks
