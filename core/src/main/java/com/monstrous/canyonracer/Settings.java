@@ -6,7 +6,7 @@ import static com.badlogic.gdx.Application.ApplicationType.Desktop;
 
 public class Settings {
     static public boolean   release = true;
-    static public String    version = "v0.1 (March 2024)";
+    static public String    version = "v1.0 (March 24, 2024)";
 
     static public float     ambientLightLevel = 0.75f;
     static public float     shadowLightLevel = 5.0f;
@@ -42,11 +42,11 @@ public class Settings {
     static public boolean   debugRockCollision = false;
 
     // Graphics settings - aimed at desktop
-    static public boolean   multiSamplingFrameBufferAvailable = true;
+    static public boolean   multiSamplingFrameBufferAvailable = true;      /////
     static public boolean   useMultiSamplingFrameBuffer = true;
     static public boolean   usePostShader = true; //
 
-    static public boolean   particleFX = true;
+    static public boolean   particleFX = true; //true;
 
 
     static public boolean   supportControllers = (Gdx.app.getType() == Desktop);
@@ -54,7 +54,7 @@ public class Settings {
     static public boolean   fullScreen = false;
     static public boolean   showFPS = !release;
     static public boolean   musicOn = release;
-    static public boolean   settingsMenu = false;
+    static public boolean   settingsMenu = false;        //
 
     static public boolean   showNarrator = release;
 }

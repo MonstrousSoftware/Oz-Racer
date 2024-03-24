@@ -147,7 +147,7 @@ public class MainMenuScreen extends MenuScreen {
         TextButton region = new TextButton("Monitor Orientation", skin);
         TextButton keys = new TextButton("Keys", skin);
         TextButton options = new TextButton("Options", skin);
-        TextButton scores = new TextButton("High Scores", skin);
+//        TextButton scores = new TextButton("High Scores", skin);
         TextButton quit = new TextButton("Quit", skin);
 
         float pad = 7f;
@@ -156,7 +156,7 @@ public class MainMenuScreen extends MenuScreen {
         screenTable.add(title).pad(50).row();
         screenTable.add(play).pad(pad).row();
         screenTable.add(region).pad(pad).row();
-        screenTable.add(scores).pad(pad).row();
+//        screenTable.add(scores).pad(pad).row();
         screenTable.add(options).pad(pad).row();
         // hide quit on web unless we have an outro screen
         if(!(Gdx.app.getType() == Application.ApplicationType.WebGL) )
@@ -202,8 +202,6 @@ public class MainMenuScreen extends MenuScreen {
             }
         });
 
-
-
         quit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -219,7 +217,7 @@ public class MainMenuScreen extends MenuScreen {
             stage.clearFocusableActors();
             stage.addFocusableActor(play);
             stage.addFocusableActor(region);
-            stage.addFocusableActor(scores);
+//            stage.addFocusableActor(scores);
             stage.addFocusableActor(options);
             stage.addFocusableActor(quit);
             stage.setFocusedActor(play);

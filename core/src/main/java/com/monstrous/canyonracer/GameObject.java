@@ -13,10 +13,12 @@ public class GameObject {
     public float radius;
     private static BoundingBox bbox = new BoundingBox();
     private Vector3 pos = new Vector3();
+    public boolean isRock;
 
     public GameObject(Scene scene) {
         this.scene = scene;
         calculateBoundingBox();
+        isRock = false;
     }
 
     // call this after rotation or scaling (expensive; don't do this per frame)

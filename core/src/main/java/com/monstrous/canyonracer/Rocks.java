@@ -62,6 +62,7 @@ public class Rocks {
         float y = world.terrain.getHeight(x,z);
         pos.set(x,y,z);
         GameObject gameObject = world.spawnObject(names[index], true, pos);
+        gameObject.isRock = true;
         gameObject.getScene().modelInstance.transform.scale(scale, scale, scale);
         gameObject.getScene().modelInstance.transform.rotate(Vector3.Y, rotation);
         gameObject.calculateBoundingBox();  // for frustum culling, update after scaling and rotating

@@ -21,16 +21,16 @@ public class World implements Disposable {
     public GameObject racer;
     public final GameObject intactRacer;
     public final GameObject brokenRacer;
-    public final GameObject enemy1;
+    //public final GameObject enemy1;
     private GameObject finish;
     private Vector3 finishPosition = new Vector3();
     private GameObject start;
     private Vector3 startPosition = new Vector3();
     public final PlayerController playerController;
     public Vector3 playerPosition;
-    public final Vector3 enemyPosition;
+    //public final Vector3 enemyPosition;
     public final Terrain terrain;
-    private final EnemyController enemyController;
+    //private final EnemyController enemyController;
     private Turbines turbines;
     public Rocks rocks;
     public boolean collided;
@@ -57,15 +57,14 @@ public class World implements Disposable {
         playerController = new PlayerController();
 
         playerPosition = new Vector3(-3350, 68, 30);
-//        playerController.rotation = 90f;
 
         intactRacer = spawnObject("Feisar_Ship", true, playerPosition);
         brokenRacer = spawnObject("BrokenRacer", true, new Vector3(0,-100,0)); // out of sight
         racer = intactRacer;
 
-        enemyPosition = new Vector3(4, 8, 6);
-        enemy1 = spawnObject("Feisar_Ship", true, enemyPosition);
-        enemyController = new EnemyController();
+//        enemyPosition = new Vector3(4, 8, 6);
+//        enemy1 = spawnObject("Feisar_Ship", true, enemyPosition);
+//        enemyController = new EnemyController();
 
         terrain = new Terrain(playerPosition);
         //path = new Path(terrain);
@@ -80,9 +79,6 @@ public class World implements Disposable {
         restart();
 
         leaderBoard = new LeaderBoard(10);
-//        leaderBoard.add("Joe", 2, true, "0:38", 38);
-//        leaderBoard.add("Joe", 1, true, "0:39", 39);
-//        leaderBoard.add("Joe", 3, true, "0:58", 58);
     }
 
     // restart the race
@@ -137,19 +133,20 @@ public class World implements Disposable {
         formatRaceTimeString();
 
         playerController.update(racer, this, terrain, deltaTime);
-        enemyController.update(enemy1, terrain, deltaTime);
+        //enemyController.update(enemy1, terrain, deltaTime);
         turbines.update(deltaTime);
 
         // update player position variable
         racer.getScene().modelInstance.transform.getTranslation(playerPosition);
 
-        if (!racing && startPosition.dst2(playerPosition) < 250) {
+        // gates are 66 units wide
+        if (!racing && startPosition.dst2(playerPosition) < 1000 ) {
             racing = true;
             finished = false;
             raceTime = 0;
             Gdx.app.log("started", "");
         }
-        if (racing && finishPosition.dst2(playerPosition) < 250) {
+        if (racing && finishPosition.dst2(playerPosition) < 1000 ) {
             racing = false;
             finished = true;
             Gdx.app.log("finished", "");

@@ -37,6 +37,7 @@ public class GameScreen implements Screen {
     private boolean showDead = false;
     private boolean wasCollided = false;
     private float startDistance = 500f;
+    private int width, height;
 
 
     public GameScreen(Main game) {
@@ -110,6 +111,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float deltaTime) {
+
         // exit with Escape or controller X button
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) ||
                     (currentController != null && currentController.getButton(currentController.getMapping().buttonX))) {
@@ -117,12 +119,25 @@ public class GameScreen implements Screen {
             return;
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-            markSpot(world.playerPosition);
-        }
+//        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+//            markSpot(world.playerPosition);
+//        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R) ||
             (currentController != null && currentController.getButton(currentController.getMapping().buttonA))) {
             restart();
+        }
+
+        // Use F11 key to toggle full screen / windowed screen
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F11)) {
+            if (!Gdx.graphics.isFullscreen()) {
+                width = Gdx.graphics.getWidth();
+                height = Gdx.graphics.getHeight();
+                Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+                Gdx.app.log("To fullscreen", "from "+width+" x "+height);
+            } else {
+                Gdx.graphics.setWindowedMode(width, height);
+                Gdx.app.log("To windowed mode", "" + width + " x " + height);
+            }
         }
 
         if( World.finished && !showFinished) {

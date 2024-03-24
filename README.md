@@ -34,13 +34,21 @@ This project was generated with a template including simple application launcher
     - Assumed to be intel driver bug, annoying but doesn't break anything.
 
 
+
+Breaking error on teavm version:
+- java.lang.IllegalArgumentException: Comparison method violates its general contract!
+- It seems to be within sceneManager, it does not occur if there are zero scenes in sceneManager
+
 to do:
-- collision with rocks
+- DONE: collision with rocks
 - camera avoidance of obstacles
 - camera orbit control
 - way points
-- race time
+- DONE: race time
 - ai racers
+
+
+
 
 Music:
 fight.ogg via OpenGameArt.ogg, If you use this please (totally optional) credit to Ville Nousiainen and/or provide a link to http://soundcloud.com/mutkanto

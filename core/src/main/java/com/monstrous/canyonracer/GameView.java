@@ -23,10 +23,8 @@ import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRFloatAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
 import net.mgsx.gltf.scene3d.lights.DirectionalShadowLight;
-import net.mgsx.gltf.scene3d.scene.Scene;
-import net.mgsx.gltf.scene3d.scene.SceneManager;
-import net.mgsx.gltf.scene3d.scene.CascadeShadowMap;
-import net.mgsx.gltf.scene3d.scene.SceneSkybox;
+import net.mgsx.gltf.scene3d.scene.*;
+import net.mgsx.gltf.scene3d.shaders.PBRShaderProvider;
 import net.mgsx.gltf.scene3d.utils.EnvironmentUtil;
 import net.mgsx.gltf.scene3d.utils.IBLBuilder;
 
@@ -62,7 +60,10 @@ public class GameView {
     public GameView(World world) {
         this.world = world;
 
-        sceneManager = new SceneManager();
+//        sceneManager = new SceneManager(0);
+
+//        sceneManager = new SceneManager(PBRShaderProvider.createDefault(0), PBRShaderProvider.createDefaultDepth(0), new SceneRenderableSorter());
+        sceneManager = new SceneManager(PBRShaderProvider.createDefault(0), PBRShaderProvider.createDefaultDepth(0), new MyRenderableSorter());
 
         camera = new PerspectiveCamera(Settings.cameraFieldOfView, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.near = 1f;
@@ -137,6 +138,7 @@ public class GameView {
                 sceneManager.addScene(go.getScene(), false);
             }
         }
+
     }
 
 
