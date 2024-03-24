@@ -13,11 +13,16 @@ import com.monstrous.canyonracer.screens.Main;
 
 
 // Project narrator character over the game screen to give intro etc.
-// todo more dialogue
 
 public class CharacterOverlay {
     public Stage stage;
-
+    private String text;
+    private String text1 = "G'day! Welcome to the outback!\nRound here they call me Krazy Kat.\n\nAre you ready for the\nmost dangerous race down under?\n"+
+        "Fastest time from East Gate to West Gate wins!\nMany have tried and many have died.\n\n[CLICK TO CONTINUE]";
+    private String text2 = "Use W for throttle and A and D for steering.\n"+
+        "Press SPACE for nitro boost.\nStay clear of the rocks, mate!\n\n[CLICK TO CONTINUE]";
+    private String text3 = "If you're not from round these parts\n"+
+        "and you wanna change your monitor settings,\nuse ESC to go back to the menu.\n\n[CLICK TO CONTINUE]";
 
     public CharacterOverlay() {
         stage = new Stage(new ScreenViewport());
@@ -28,9 +33,8 @@ public class CharacterOverlay {
     private void addActors(){
         Image narrator = new Image(Main.assets.character);
 
-        TextButton dialog = new TextButton("G'day! Welcome to the outback! My name is Krazy Kat.\n\nAre you ready for some high speed racing?\nUse W for throttle and A and D for steering.\n"+
-            "Press SPACE for nitro boost.\nStay clear of the rocks, mate!\n\n[CLICK TO CONTINUE]", Main.assets.debugSkin);
-        //dialog.getStyle().fontColor.set(Color.BLACK);
+        text = text1;
+        TextButton dialog = new TextButton(text, Main.assets.debugSkin);
 
         Table screenTable = new Table();
         screenTable.setFillParent(true);
@@ -55,8 +59,18 @@ public class CharacterOverlay {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Main.assets.MENU_CLICK.play();
-                screenTable.addAction( Actions.fadeOut(0.5f));           // fade out
-                dialog.setVisible(false);
+                if(text == text1){
+                    text = text2;
+                    dialog.setText(text);
+                }
+                else if(text == text2){
+                    text = text3;
+                    dialog.setText(text);
+                }
+                else {
+                    screenTable.addAction( Actions.fadeOut(0.5f));           // fade out
+                    dialog.setVisible(false);
+                }
             }
         });
 
