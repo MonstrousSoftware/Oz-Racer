@@ -31,8 +31,8 @@ public class World implements Disposable {
     public final Vector3 enemyPosition;
     public final Terrain terrain;
     private final EnemyController enemyController;
-    private final Turbines turbines;
-    public final Rocks rocks;
+    private Turbines turbines;
+    public Rocks rocks;
     public boolean collided;
     private StringBuffer sb = new StringBuffer();
     public static float raceTime = 0;
@@ -41,6 +41,9 @@ public class World implements Disposable {
     public static boolean finished = false;
     public static float nitroLevel = 75f;
     public static float healthPercentage = 100;
+    public LeaderBoard leaderBoard;
+    public String playerName = "Bob";
+    public int attempt = -1;
 
 
     public World() {
@@ -56,7 +59,6 @@ public class World implements Disposable {
         playerPosition = new Vector3(-3350, 68, 30);
 //        playerController.rotation = 90f;
 
-//        playerPosition = new Vector3(0, 8,0);
         intactRacer = spawnObject("Feisar_Ship", true, playerPosition);
         brokenRacer = spawnObject("BrokenRacer", true, new Vector3(0,-100,0)); // out of sight
         racer = intactRacer;
@@ -65,11 +67,6 @@ public class World implements Disposable {
         enemy1 = spawnObject("Feisar_Ship", true, enemyPosition);
         enemyController = new EnemyController();
 
-        spawnObject("TestCube", true, new Vector3(0, 0, 0));
-        spawnObject("Marker", true, new Vector3(10, 5, 80));
-
-       // spawnObject("Arrow", true, new Vector3(-3350, 90, 30));
-
         terrain = new Terrain(playerPosition);
         //path = new Path(terrain);
 
@@ -77,11 +74,15 @@ public class World implements Disposable {
 
         placeCheckPoints();
 
-        //importRocks();
         sceneAsset = Main.assets.sceneAssetRocks;
         rocks = new Rocks(this);
 
         restart();
+
+        leaderBoard = new LeaderBoard(10);
+//        leaderBoard.add("Joe", 2, true, "0:38", 38);
+//        leaderBoard.add("Joe", 1, true, "0:39", 39);
+//        leaderBoard.add("Joe", 3, true, "0:58", 58);
     }
 
     // restart the race
@@ -98,6 +99,8 @@ public class World implements Disposable {
         raceTime = 0;
         healthPercentage = 100f;
         nitroLevel = 100;
+
+        attempt++;
     }
 
     private void placeCheckPoints() {
@@ -150,6 +153,7 @@ public class World implements Disposable {
             racing = false;
             finished = true;
             Gdx.app.log("finished", "");
+            leaderBoard.add(playerName, attempt, true, raceTimeString, (int)(100*raceTime));
         }
 
 
@@ -169,6 +173,7 @@ public class World implements Disposable {
                 brokenRacer.getScene().modelInstance.transform.set(racer.getScene().modelInstance.transform);
                 intactRacer.getScene().modelInstance.transform.translate(0, -100, 0);
                 racer = brokenRacer;
+                leaderBoard.add(playerName, attempt, false, raceTimeString, (int)(100*raceTime));
             }
 
         }

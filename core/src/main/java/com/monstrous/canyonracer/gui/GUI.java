@@ -23,6 +23,7 @@ public class GUI implements Disposable {
     public Skin debugSkin;
     private GameScreen screen;
     private SettingsWindow lightSettings;
+    public LeaderBoardTable leaderBoard;
     private Label fps;
     private Label speed;
     private Label time;
@@ -31,6 +32,7 @@ public class GUI implements Disposable {
     private ProgressBar nitro;
     private ProgressBar health;
     private Array<Label> messages;
+    private boolean showingScores;
 
 
     public GUI( GameScreen screen ) {
@@ -48,6 +50,8 @@ public class GUI implements Disposable {
         lightSettings = new SettingsWindow("Tweak Settings", Main.assets.debugSkin, screen);
         if(Settings.settingsMenu)
             stage.addActor(lightSettings);
+
+
 
 
         time = new Label("0.00", skin);
@@ -78,8 +82,35 @@ public class GUI implements Disposable {
         table2.row();
         table2.add(message).top().left().expand();
         table2.row();
-
         stage.addActor(table2);
+
+        showingScores = false;
+
+        //showScores();
+    }
+
+    public void showScores(){
+        if(showingScores)
+            return;
+        showingScores = true;
+
+        leaderBoard = new LeaderBoardTable("Times", Main.assets.debugSkin, screen.world.leaderBoard);
+
+        float x = 30;
+        float y = stage.getHeight() - (100+leaderBoard.getHeight());
+        float w = leaderBoard.getWidth();
+        leaderBoard.addAction(Actions.sequence(Actions.moveTo(-(x+w),y), Actions.delay(0.5f), Actions.moveTo(x,y, 1f, Interpolation.swingIn)));
+
+        stage.addActor(leaderBoard);
+    }
+
+    public void hideScores() {
+        if(!showingScores)
+            return;
+        showingScores = false;
+        float y = stage.getHeight() - (100+leaderBoard.getHeight());
+        float w = leaderBoard.getWidth();
+        leaderBoard.addAction(Actions.sequence(Actions.moveTo(-w, y, 1f, Interpolation.swingOut), Actions.removeActor()));
     }
 
     public void showMessage(String msg, float yRel, float delay, float deleteDelay){

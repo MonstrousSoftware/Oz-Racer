@@ -80,15 +80,10 @@ public class GameView {
 
         cameraController = new CameraController(camera);
         cameraController.update(world.racer.getScene().modelInstance.transform, 0.1f);  // force camera position init
-        //cameraController.startCameraPosition(world.playerPosition, Vector3.Z, 300f );
 
         postFilter = new PostFilter();
 
-        particleEffects = new ParticleEffects(camera);      //... cam pos not fixed yet
-//        float x = 0;
-//        float z = 100;
-//        float y = world.terrain.getHeight(x, z);
-
+        particleEffects = new ParticleEffects(camera);
         exhaust = particleEffects.addExhaustFumes(world.racer.getScene().modelInstance.transform);
 
         if( Gdx.app.getType() != Application.ApplicationType.Desktop) {
@@ -142,8 +137,6 @@ public class GameView {
                 sceneManager.addScene(go.getScene(), false);
             }
         }
-
-
     }
 
 
@@ -163,7 +156,7 @@ public class GameView {
 
         refresh();  // fill scene array
         DirectionalShadowLight shadowLight = sceneManager.getFirstDirectionalShadowLight();     // == light?
-        csm.setCascades(sceneManager.camera, shadowLight, 0f, 20f);
+        csm.setCascades(sceneManager.camera, shadowLight, 0, 20f);
 
         sceneManager.update(deltaTime);
         particleEffects.update(deltaTime);
@@ -177,7 +170,7 @@ public class GameView {
 
         lensFlare.render(sceneManager.camera, sunPosition);
 
-        //lensFlare.showLightPosition();
+        //lensFlare.showLightPosition();    // debug
 
 
 

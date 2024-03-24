@@ -36,6 +36,7 @@ public class GameScreen implements Screen {
     private boolean showFinished = false;
     private boolean showDead = false;
     private boolean wasCollided = false;
+    private float startDistance = 500f;
 
 
     public GameScreen(Main game) {
@@ -51,9 +52,10 @@ public class GameScreen implements Screen {
         if(Settings.musicOn)
             music.play();
 
-        gui = new GUI(this);
+
 
         world = new World();
+        gui = new GUI(this);
         terrainDebug = new TerrainDebug(world.terrain);
         world.playerController.update(world.racer, world, world.terrain, 0.1f); // force player transform to be updated
 
@@ -86,6 +88,7 @@ public class GameScreen implements Screen {
         target = new Vector3();
 
         restart();
+        startDistance = 200f;   // shorter cinematic zoom-in sequence after a restart
 
     }
 
@@ -95,10 +98,12 @@ public class GameScreen implements Screen {
         gui.showMessage("SET", .5f, 2f, .5f);
         gui.showMessage("GO!", .5f, 3f, 1);
         world.restart();
+        gui.showScores();
         showFinished = false;
         showDead = false;
         fire = null;
-        gameView.cameraController.setDistance(500f);
+
+        gameView.cameraController.setDistance(startDistance);
     }
 
 
@@ -124,14 +129,19 @@ public class GameScreen implements Screen {
             gui.showMessage("FINISHED!\n   IN "+World.raceTimeString, .75f, 0, 5);
             gui.showMessage("PRESS [R] TO RESTART", .25f, 2f, 999);
             showFinished = true; // do this only once on finish
+            gui.showScores();
         }
         if( World.healthPercentage <= 0 && !showDead) {
             gui.showMessage("RACER DESTROYED", .75f, 0, 5);
             gui.showMessage("PRESS [R] TO RESTART", .25f, 2f, 999);
             fire = gameView.particleEffects.addFire(world.playerPosition);
             showDead = true; // do this only once on finish
+            gui.showScores();
         }
 
+        if(World.racing){
+            gui.hideScores();
+        }
 
         if(!wasCollided && world.collided )
             gameView.cameraController.startCameraShake();
@@ -153,8 +163,8 @@ public class GameScreen implements Screen {
         if(Settings.showNarrator)
             overlay.render(deltaTime);
         gui.render(deltaTime);
-        if(Settings.debugRockCollision)
-            world.rocks.debugRender(world.playerPosition);
+//        if(Settings.debugRockCollision)
+//            world.rocks.debugRender(world.playerPosition);
     }
 
 
