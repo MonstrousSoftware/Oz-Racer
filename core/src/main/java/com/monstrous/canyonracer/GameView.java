@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
+import com.badlogic.gdx.graphics.g3d.utils.DefaultRenderableSorter;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -42,7 +43,7 @@ public class GameView {
     private DirectionalShadowLight light;
     private Model frustumModel;
     private Vector3 lightPosition = new Vector3();
-    private Vector3 sunPosition = new Vector3();
+    private Vector3 sunPosition;
     private Vector3 lightCentre = new Vector3();
     private ModelBatch modelBatch;
     private Array<ModelInstance> instances;
@@ -60,18 +61,18 @@ public class GameView {
     public GameView(World world) {
         this.world = world;
 
-//        sceneManager = new SceneManager(0);
+ //       sceneManager = new SceneManager();
 
 //        sceneManager = new SceneManager(PBRShaderProvider.createDefault(0), PBRShaderProvider.createDefaultDepth(0), new SceneRenderableSorter());
         sceneManager = new SceneManager(PBRShaderProvider.createDefault(0), PBRShaderProvider.createDefaultDepth(0), new MyRenderableSorter());
 
-        ModelBatch depthBatch = new ModelBatch(new MyRenderableSorter());
+        ModelBatch depthBatch = new ModelBatch( PBRShaderProvider.createDefaultDepth(0), new MyRenderableSorter());
         sceneManager.setDepthBatch(depthBatch);
 
 
         camera = new PerspectiveCamera(Settings.cameraFieldOfView, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.near = 1f;
-        camera.far = 5000f;
+        camera.far = 4500f;
         sceneManager.setCamera(camera);
 
         modelBatch = new ModelBatch();
@@ -80,11 +81,13 @@ public class GameView {
         sunPosition = new Vector3(10,15, -15); // aligned with skybox texture
         lensFlare = new LensFlare();
 
+        cameraController = new CameraController(camera);
+        cameraController.update(world.racer.getScene().modelInstance.transform, 0.1f);  // force camera position init
+
+
         buildEnvironment();
         buildDebugInstances();
 
-        cameraController = new CameraController(camera);
-        cameraController.update(world.racer.getScene().modelInstance.transform, 0.1f);  // force camera position init
 
         postFilter = new PostFilter();
 
@@ -93,8 +96,7 @@ public class GameView {
 
         if( Gdx.app.getType() != Application.ApplicationType.Desktop) {
             Settings.multiSamplingFrameBufferAvailable = false;
-            Settings.useMultiSamplingFrameBuffer = false;       // only supported on desktop
-            Settings.usePostShader = false;
+            Settings.useMultiSamplingFrameBuffer = false;       // multi-sampling buffer only supported on desktop
         }
     }
 
@@ -162,8 +164,7 @@ public class GameView {
 
         refresh();  // fill scene array
         if(Settings.cascadedShadows) {
-            DirectionalShadowLight shadowLight = sceneManager.getFirstDirectionalShadowLight();     // == light?
-            csm.setCascades(sceneManager.camera, shadowLight, 0, 20f);
+            csm.setCascades(sceneManager.camera, light, 0, 20f);
         }
 
         sceneManager.update(deltaTime);
@@ -179,8 +180,6 @@ public class GameView {
         lensFlare.render(sceneManager.camera, sunPosition);
 
         //lensFlare.showLightPosition();    // debug
-
-
 
         if(Settings.showLightBox) {
             modelBatch.begin(sceneManager.camera);
@@ -249,6 +248,7 @@ public class GameView {
         // set the light parameters so that your area of interest is in the shadow light frustum
         // but keep it reasonably tight to keep sharper shadows
         lightPosition = new Vector3(0,135,0);    // even though this is a directional light and is "infinitely far away", use this to set the near plane
+        lightPosition.add(playerPos);
         float farPlane = 300;
         float nearPlane = 0;
         float VP_SIZE = 300f;
@@ -284,10 +284,6 @@ public class GameView {
         sceneManager.environment.set(new PBRTextureAttribute(PBRTextureAttribute.BRDFLUTTexture, brdfLUT));
         sceneManager.environment.set(PBRCubemapAttribute.createSpecularEnv(specularCubemap));
         sceneManager.environment.set(PBRCubemapAttribute.createDiffuseEnv(diffuseCubemap));
-
-        /// fog doesn't make sense
-//        sceneManager.environment.set(new ColorAttribute(ColorAttribute.Fog, Color.WHITE));
-//        sceneManager.environment.set(new FogAttribute(FogAttribute.FogEquation).set(5, 1500, 1.0f));
 
         // setup skybox
         skybox = new SceneSkybox(environmentCubemap);
