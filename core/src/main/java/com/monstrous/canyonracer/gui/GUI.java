@@ -27,7 +27,7 @@ public class GUI implements Disposable {
     private Label fps;
     private Label speed;
     private Label time;
-//    private Label gameObjects;
+    private Label gameObjects;
 //    private Label message;
     private ProgressBar nitro;
     private ProgressBar health;
@@ -71,15 +71,16 @@ public class GUI implements Disposable {
         stage.addActor(table);
 
         fps = new Label("0", debugSkin);
-//        gameObjects = new Label("0", debugSkin);
+        gameObjects = new Label("0", debugSkin);
 //        message = new Label("", debugSkin);
 
         Table table2 = new Table();
         table2.setFillParent(true);
-        table2.add(fps).top().left().expand();
-        //table.add(new Label("game objects:", skin)).top().left();
-//        table2.add(gameObjects).top().left();
-//        table2.row();
+        table2.add(fps).top().left();
+        table2.row();
+        table2.add(new Label("game objects:", skin)).top().left();
+        table2.add(gameObjects).top().left().expand();
+
 //        table2.add(message).top().left().expand();
 //        table2.row();
         stage.addActor(table2);
@@ -138,7 +139,7 @@ public class GUI implements Disposable {
         else
             fps.setText("");
 
-//        gameObjects.setText( "game objects: " + screen.gameView.sceneManager.getRenderableProviders().size+"  "+screen.world.getNumGameObjects() );
+        gameObjects.setText( "game objects: " + screen.gameView.sceneManager.getRenderableProviders().size+"  "+screen.world.getNumGameObjects() );
 //        if(screen.world.collided)
 //            message.setText("COLLISION!");
 //        else

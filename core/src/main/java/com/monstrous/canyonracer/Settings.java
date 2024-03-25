@@ -55,7 +55,7 @@ public class Settings {
     static public boolean   fullScreen = false;
     static public boolean   showFPS = !release;
     static public boolean   musicOn = release;
-    static public boolean   settingsMenu = !release;        //
+    static public boolean   settingsMenu = false;
 
     static public boolean   showNarrator = release;
 }

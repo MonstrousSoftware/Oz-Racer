@@ -61,9 +61,8 @@ public class GameView {
     public GameView(World world) {
         this.world = world;
 
- //       sceneManager = new SceneManager();
-
-//        sceneManager = new SceneManager(PBRShaderProvider.createDefault(0), PBRShaderProvider.createDefaultDepth(0), new SceneRenderableSorter());
+        // the default renderable sorter starts overflowing with distances > 1500
+        // so use our dedicated renderable sorter instead
         sceneManager = new SceneManager(PBRShaderProvider.createDefault(0), PBRShaderProvider.createDefaultDepth(0), new MyRenderableSorter());
 
         ModelBatch depthBatch = new ModelBatch( PBRShaderProvider.createDefaultDepth(0), new MyRenderableSorter());
