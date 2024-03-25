@@ -17,12 +17,12 @@ import com.monstrous.canyonracer.screens.Main;
 public class CharacterOverlay {
     public Stage stage;
     private String text;
-    private String text1 = "G'day! Welcome to the outback!\nRound here they call me Krazy Kat.\n\nAre you ready for the\nmost dangerous race down under?\n"+
-        "Fastest time from East Gate to West Gate wins!\nMany have tried and many have died.\n\n[CLICK TO CONTINUE]";
+    private String text1 = "G'day! Welcome to the outback!\nFolks call me Krazy Kat.\n\nAre you ready for the\nmost dangerous race down under?\n"+
+        "Fastest time from East Gate to West Gate wins!\nMany have tried, many have died.\n\n[CLICK TO CONTINUE]";
     private String text2 = "Use W for throttle and A and D for steering.\n"+
-        "Press SPACE for nitro boost.\nStay clear of the rocks, mate!\n\n[CLICK TO CONTINUE]";
-    private String text3 = "If you're not from round these parts\n"+
-        "and you wanna change your monitor settings,\nuse ESC to go back to the menu.\n\n[CLICK TO CONTINUE]";
+        "Press SPACE for some nitro boost.\nStay clear of the rocks, mate!\n\n[CLICK TO CONTINUE]";
+    private String text3 = "If you're not from round here\n"+
+        "you may wanna change your monitor settings,\nuse Q to get back to the menu.\n\n[CLICK TO CONTINUE]";
 
     public CharacterOverlay() {
         stage = new Stage(new ScreenViewport());

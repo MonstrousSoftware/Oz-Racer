@@ -17,7 +17,7 @@ public class Lwjgl3Launcher {
 
     private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
-        configuration.setTitle("CanyonRacer");
+        configuration.setTitle("Oz Racer");
         configuration.useVsync(false);
 
         //// Limits FPS to the refresh rate of the currently active monitor.
@@ -29,8 +29,8 @@ public class Lwjgl3Launcher {
         configuration.setBackBufferConfig(8, 8, 8, 8, 16, 0, 4);
         configuration.setWindowIcon("monstrous128.png", "monstrous64.png", "monstrous32.png", "monstrous16.png");
 
-        // Use OpenGL 4.3 to emulate GL ES 3.1
-        configuration.setOpenGLEmulation(Lwjgl3ApplicationConfiguration.GLEmulation.GL31, 4,3);
+        // Use OpenGL 3.2 to emulate GL ES 3.1
+        configuration.setOpenGLEmulation(Lwjgl3ApplicationConfiguration.GLEmulation.GL31, 3,2);
         return configuration;
     }
 }

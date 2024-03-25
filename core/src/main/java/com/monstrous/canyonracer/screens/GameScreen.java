@@ -95,15 +95,15 @@ public class GameScreen implements Screen {
 
     private void restart(){
         gui.clearMessages();
-        gui.showMessage("READY", .25f, 1f, .5f);
-        gui.showMessage("SET", .25f, 2f, .5f);
-        gui.showMessage("GO!", .25f, 3f, 1);
+        gui.showMessage("READY", .25f, .4f, .5f);
+        gui.showMessage("SET", .25f, 1.4f, .5f);
+        gui.showMessage("GO!", .25f, 2.4f, 1);
         world.restart();
         gui.showScores();
         showFinished = false;
         showDead = false;
         fire = null;
-        //Main.assets.START_BEEP.play();
+        Main.assets.START_BEEP.play();
 
         gameView.cameraController.setDistance(startDistance);
     }
@@ -114,7 +114,7 @@ public class GameScreen implements Screen {
     public void render(float deltaTime) {
 
         // exit with Escape or controller X button
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) ||
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyJustPressed(Input.Keys.Q) ||
                     (currentController != null && currentController.getButton(currentController.getMapping().buttonX))) {
             game.setScreen( new MainMenuScreen(game ));
             return;

@@ -40,7 +40,7 @@ public class Assets implements Disposable {
 
         assets.load("sound/click_002.ogg", Sound.class);
         assets.load("sound/explosionCrunch_000.ogg", Sound.class);
-        assets.load("sound/startbeep.ogg", Sound.class);
+        assets.load("sound/startbeeps.ogg", Sound.class);
 
         assets.load("music/fight.ogg", Music.class);
 
@@ -66,7 +66,7 @@ public class Assets implements Disposable {
         gameMusic = assets.get("music/fight.ogg");
         MENU_CLICK = assets.get("sound/click_002.ogg");
         COLLISION = assets.get("sound/explosionCrunch_000.ogg");
-        START_BEEP = assets.get("sound/startbeep.ogg");
+        START_BEEP = assets.get("sound/startbeeps.ogg");
         sceneAssetGame = assets.get("models/OzRacer.gltf");
         sceneAssetRocks = assets.get("models/rocks.gltf");
         sceneAssetLogo = assets.get("models/libGDX-logo.gltf");
