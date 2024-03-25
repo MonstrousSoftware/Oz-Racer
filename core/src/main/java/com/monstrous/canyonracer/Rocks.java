@@ -3,27 +3,31 @@ package com.monstrous.canyonracer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g3d.ModelCache;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.canyonracer.terrain.Terrain;
 import com.monstrous.canyonracer.terrain.TerrainChunk;
+import net.mgsx.gltf.scene3d.scene.Scene;
 
 
-public class Rocks {
+public class Rocks implements Disposable {
     private static float SCALE = 1;
     public static int AREA_LENGTH = 5000;
     private static int SEPARATION_DISTANCE = 200;  // 200
-
 
     private static String names[] = { "Rock", "Rock.001", "Rock.002", "Rock.003", "Rock.004" };
     private static float radius[] = { 20f,      21f,        10f,        20f,        14f };
 
 
     private ShapeRenderer sr = new ShapeRenderer();
-
     private Array<Rock> rocks;
     private Vector3 pos = new Vector3();
+    public ModelCache cache;
+
 
     static class Rock{
         Vector2 position;   // in horizontal (XZ) plane
@@ -40,32 +44,43 @@ public class Rocks {
     public Rocks(World world ) {
         rocks = new Array<>();
 
+
         MathUtils.random.setSeed(1234);
 
         // generate a random poisson distribution of instances over a rectangular area, meaning instances are never too close together
         PoissonDistribution poisson = new PoissonDistribution();
         Rectangle area = new Rectangle(1, 1, AREA_LENGTH, AREA_LENGTH);
         Array<Vector2> points = poisson.generatePoissonDistribution(SEPARATION_DISTANCE, area);
-        Gdx.app.log("Rocks:", ""+points.size);
 
+
+        cache = new ModelCache();
+        cache.begin();
         for(Vector2 point : points ) {
             point.x -= AREA_LENGTH/2;
             point.y -= AREA_LENGTH/2;
-            addRock(world, point.x, point.y);
+            cache.add( addRock(world, point.x, point.y));
         }
+        cache.end();
+        Gdx.app.log("Rocks:", ""+points.size);
+
     }
 
-    private void addRock( World world, float x, float z ){
+    private ModelInstance addRock( World world, float x, float z ){
         int index = MathUtils.random( names.length-1 );
         float scale = MathUtils.random(0.5f, 5.5f);
         float rotation = MathUtils.random(0f, 360f);
         float y = world.terrain.getHeight(x,z);
         pos.set(x,y,z);
-        GameObject gameObject = world.spawnObject(names[index], true, pos);
-        gameObject.isRock = true;
-        gameObject.getScene().modelInstance.transform.scale(scale, scale, scale);
-        gameObject.getScene().modelInstance.transform.rotate(Vector3.Y, rotation);
-        gameObject.calculateBoundingBox();  // for frustum culling, update after scaling and rotating
+
+        Scene scene = world.loadNode(names[index], true, pos);
+        scene.modelInstance.transform.scale(scale, scale, scale);
+        scene.modelInstance.transform.rotate(Vector3.Y, rotation);
+
+//        GameObject gameObject = world.spawnObject(names[index], true, pos);
+//        gameObject.isRock = true;
+//        gameObject.getScene().modelInstance.transform.scale(scale, scale, scale);
+//        gameObject.getScene().modelInstance.transform.rotate(Vector3.Y, rotation);
+//        gameObject.calculateBoundingBox();  // for frustum culling, update after scaling and rotating
 
         if(index == 0) { // rock
             // this rock is rectangular, so we use 3 collision circles
@@ -82,6 +97,8 @@ public class Rocks {
         }
         else
             rocks.add( new Rock( new Vector2(x, z), radius[index] * scale) );
+
+        return scene.modelInstance;
     }
 
     private Vector2 vec2 = new Vector2();
@@ -125,4 +142,8 @@ public class Rocks {
     }
 
 
+    @Override
+    public void dispose() {
+        cache.dispose();
+    }
 }

@@ -31,7 +31,7 @@ public class World implements Disposable {
     //public final Vector3 enemyPosition;
     public final Terrain terrain;
     //private final EnemyController enemyController;
-    private Turbines turbines;
+    public Turbines turbines;
     public Rocks rocks;
     public boolean collided;
     private StringBuffer sb = new StringBuffer();
@@ -186,7 +186,7 @@ public class World implements Disposable {
         return go;
     }
 
-    private Scene loadNode(String nodeName, boolean resetPosition, Vector3 position) {
+    public Scene loadNode(String nodeName, boolean resetPosition, Vector3 position) {
         Scene scene = new Scene(sceneAsset.scene, nodeName);
         if (scene.modelInstance.nodes.size == 0)
             throw new RuntimeException("Cannot find node in GLTF file: " + nodeName);

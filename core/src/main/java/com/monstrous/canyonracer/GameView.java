@@ -71,7 +71,7 @@ public class GameView {
 
         camera = new PerspectiveCamera(Settings.cameraFieldOfView, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.near = 1f;
-        camera.far = 4500f;
+        camera.far = 6500f;
         sceneManager.setCamera(camera);
 
         modelBatch = new ModelBatch();
@@ -134,6 +134,9 @@ public class GameView {
         // terrain chunks are taken directly from the Terrain class, these are not game objects
         for(Scene scene : world.terrain.scenes)
             sceneManager.addScene(scene, false);
+
+        sceneManager.getRenderableProviders().add(world.rocks.cache);
+        sceneManager.getRenderableProviders().add(world.turbines.cache);
 
         // add scene for each game object
         int num = world.getNumGameObjects();

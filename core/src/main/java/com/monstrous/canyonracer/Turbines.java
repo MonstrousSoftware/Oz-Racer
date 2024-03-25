@@ -2,8 +2,12 @@ package com.monstrous.canyonracer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g3d.ModelCache;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.Array;
+import net.mgsx.gltf.scene3d.scene.Scene;
 
 
 public class Turbines {
@@ -13,8 +17,7 @@ public class Turbines {
     private float angle;
     private Array<GameObject> blades;
     private Vector3 pos = new Vector3();
-
-
+    public ModelCache cache;
 
     // note: perhaps we should generate along with chunks to have an infinite amount
 
@@ -27,25 +30,42 @@ public class Turbines {
         PoissonDistribution poisson = new PoissonDistribution();
         Rectangle area = new Rectangle(1, 1, AREA_LENGTH, AREA_LENGTH);
         Array<Vector2> points = poisson.generatePoissonDistribution(SEPARATION_DISTANCE, area);
-        Gdx.app.log("Wind turbines:", ""+points.size);
+
 
         float rocksAreaSize = Rocks.AREA_LENGTH;
         rocksAreaSize *= 1.2f;  // enlarge a bit for margin
         Rectangle rocksArea = new Rectangle(-rocksAreaSize/2, -rocksAreaSize/2, rocksAreaSize, rocksAreaSize);
+
+        cache = new ModelCache();
+        cache.begin();
         for(Vector2 point : points ) {
             float x = point.x-AREA_LENGTH/2;
             float z = point.y-AREA_LENGTH/2;
-            if(!rocksArea.contains(x,z))
-                addTurbine(world, x, z);
+            if(!rocksArea.contains(x,z)) {
+                cache.add(addTurbine(world, x, z));
+                addTurbineBlades(world, x, z);
+            }
         }
+        cache.end();
+
+        Gdx.app.log("Wind turbines:", ""+points.size);
     }
 
-    private void addTurbine( World world, float x, float z ){
+    private ModelInstance addTurbine(World world, float x, float z ){
         float y = world.terrain.getHeight(x,z);
         pos.set(x,y,z);
-        world.spawnObject("Turbine", true, pos);
 
-        //pos.y += 52;
+        Scene scene = world.loadNode("Turbine", true, pos);
+
+//        world.spawnObject("Turbine", true, pos);
+
+//        blades.add( world.spawnObject("Blades", false, pos) );
+        return scene.modelInstance;
+    }
+
+    private void addTurbineBlades(World world, float x, float z ){
+        float y = world.terrain.getHeight(x,z);
+        pos.set(x,y,z);
         blades.add( world.spawnObject("Blades", false, pos) );
     }
 

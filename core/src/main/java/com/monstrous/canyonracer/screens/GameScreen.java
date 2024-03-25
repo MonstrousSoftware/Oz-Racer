@@ -95,14 +95,15 @@ public class GameScreen implements Screen {
 
     private void restart(){
         gui.clearMessages();
-        gui.showMessage("READY", .5f, 1f, .5f);
-        gui.showMessage("SET", .5f, 2f, .5f);
-        gui.showMessage("GO!", .5f, 3f, 1);
+        gui.showMessage("READY", .25f, 1f, .5f);
+        gui.showMessage("SET", .25f, 2f, .5f);
+        gui.showMessage("GO!", .25f, 3f, 1);
         world.restart();
         gui.showScores();
         showFinished = false;
         showDead = false;
         fire = null;
+        //Main.assets.START_BEEP.play();
 
         gameView.cameraController.setDistance(startDistance);
     }
