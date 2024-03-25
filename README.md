@@ -1,4 +1,4 @@
-# CanyonRacer
+# Oz Racer
 
 Game inspired by Wipeout and Star Wars pod racer.
 

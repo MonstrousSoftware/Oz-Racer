@@ -25,6 +25,7 @@ import com.monstrous.canyonracer.Settings;
 public class OptionsScreen extends MenuScreen {
     private Controller controller;
     private Label controllerLabel;
+    private CheckBox fullScreen;
 
     public OptionsScreen(Main game) {
         super(game);
@@ -84,15 +85,15 @@ public class OptionsScreen extends MenuScreen {
        }
    }
 
-   @Override
-   protected void rebuild() {
+    @Override
+    protected void rebuild() {
        stage.clear();
 
        Table screenTable = new Table();
        screenTable.setFillParent(true);
 
 
-       CheckBox fullScreen = new CheckBox("Full Screen", skin);
+       fullScreen = new CheckBox("Full Screen", skin);
        fullScreen.setChecked(Settings.fullScreen);
 
        CheckBox fps = new CheckBox("Show FPS", skin);
@@ -123,10 +124,14 @@ public class OptionsScreen extends MenuScreen {
        screenTable.add(settingsMenu).pad(pad).left().row();
 
 
-       screenTable.add(done).pad(20).row();
-
-       screenTable.add(new Label("Controller =", skin)).pad(pad).left().row();
-       screenTable.add(controllerLabel).left().row();
+       screenTable.add(done).pad(40,5,80,5).row();
+       if(Settings.supportControllers) {
+           Table ct = new Table();
+           ct.add(new Label("Controller = ", skin));
+           ct.add(controllerLabel);
+           ct.pack();
+           screenTable.add(ct).bottom().pad(2*pad);
+       }
 
 
        screenTable.pack();
@@ -152,16 +157,17 @@ public class OptionsScreen extends MenuScreen {
            super.focusActor(fullScreen);    // highlight focused actor
        }
 
+       // note: if user presses F11 this will force a resize and hence a rebuild which will update this checkbox
+
        fullScreen.addListener(new ChangeListener() {
            @Override
            public void changed(ChangeEvent event, Actor actor) {
                playSelectNoise();
                Settings.fullScreen = fullScreen.isChecked();
-               Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
                if(Settings.fullScreen)
-                   Gdx.graphics.setFullscreenMode(currentMode);
+                   enterFullScreen();
                else
-                   Gdx.graphics.setWindowedMode(1200, 800);         // todo
+                   leaveFullScreen();
            }
        });
 

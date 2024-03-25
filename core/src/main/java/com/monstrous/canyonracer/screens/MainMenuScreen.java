@@ -126,11 +126,7 @@ public class MainMenuScreen extends MenuScreen {
         super.render(deltaTime);    // menu overlay
     }
 
-    @Override
-    public void resize(int width, int height) {
-        // Resize your screen here. The parameters represent the new window size.
-        sceneManager.updateViewport(width, height);
-    }
+    // don't override resize(): rely on parent class resize
 
 
     @Override
