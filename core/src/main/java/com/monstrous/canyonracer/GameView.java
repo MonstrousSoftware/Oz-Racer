@@ -30,7 +30,7 @@ import net.mgsx.gltf.scene3d.utils.EnvironmentUtil;
 import net.mgsx.gltf.scene3d.utils.IBLBuilder;
 
 public class GameView {
-    private static final int SHADOW_MAP_SIZE = 2048;
+    private static final int SHADOW_MAP_SIZE = 4096;
 
     private World world;
     public SceneManager sceneManager;
@@ -42,6 +42,7 @@ public class GameView {
     private SceneSkybox skybox;
     private DirectionalShadowLight light;
     private Model frustumModel;
+    private  ModelInstance frustumInstance;
     private Vector3 lightPosition = new Vector3();
     private Vector3 sunPosition;
     private Vector3 lightCentre = new Vector3();
@@ -49,7 +50,6 @@ public class GameView {
     private Array<ModelInstance> instances;
     private Model arrowModel;
     public CameraController cameraController;
-    private Vector3 playerPos = new Vector3();
     public ParticleEffects particleEffects;
     private ParticleEffect exhaust;
     private PostFilter postFilter;
@@ -81,13 +81,13 @@ public class GameView {
         sunPosition = new Vector3(10,15, -15); // aligned with skybox texture
         lensFlare = new LensFlare();
 
+        buildEnvironment();
+
         cameraController = new CameraController(camera);
         cameraController.update(world.racer.getScene().modelInstance.transform, 0.1f);  // force camera position init
 
 
-        buildEnvironment();
         buildDebugInstances();
-
 
         postFilter = new PostFilter();
 
@@ -152,15 +152,17 @@ public class GameView {
 
     public void render(float deltaTime) {
 
+        Matrix4 racerTransform = world.racer.getScene().modelInstance.transform;
+
         // reposition particle effect
-        exhaustTransform.set(world.racer.getScene().modelInstance.transform);
+        exhaustTransform.set(racerTransform);
         exhaustTransform.translate(0.0f, -0.5f, -5f);           // offset for tail pipe
         exhaust.setTransform(exhaustTransform);
 
         // animate camera
-        cameraController.update(world.racer.getScene().modelInstance.transform, deltaTime);
+        cameraController.update(racerTransform, deltaTime);
 
-        light.setCenter(playerPos); // keep shadow light on player so that we have shadows
+        light.setCenter(world.playerPosition); // keep shadow light on player so that we have shadows
 
         refresh();  // fill scene array
         if(Settings.cascadedShadows) {
@@ -241,14 +243,13 @@ public class GameView {
             sceneManager.setCascadeShadowMap(csm);
         }
         // setup light
-
-
         if(light != null)
             sceneManager.environment.remove(light);
+
         // set the light parameters so that your area of interest is in the shadow light frustum
         // but keep it reasonably tight to keep sharper shadows
         lightPosition = new Vector3(0,135,0);    // even though this is a directional light and is "infinitely far away", use this to set the near plane
-        lightPosition.add(playerPos);
+        lightPosition.add(world.playerPosition);
         float farPlane = 300;
         float nearPlane = 0;
         float VP_SIZE = 300f;
@@ -294,13 +295,13 @@ public class GameView {
 
     private void buildDebugInstances() {
 
-        // force the light.camera to be set to the correct position and direction
+        // force the light.camera and hence its frustum to be set to the correct position and direction
         light.begin();
         light.end();
 
         // create a frustum model (box shape, since the camera is orthogonal) for the directional shadow light
         frustumModel = createFrustumModel(light.getCamera().frustum.planePoints);
-        ModelInstance frustumInstance = new ModelInstance(frustumModel, lightPosition);
+        frustumInstance = new ModelInstance(frustumModel, lightPosition);
 
         // move frustum to world position of light camera
         Vector3 offset = new Vector3(light.getCamera().position).scl(-1);

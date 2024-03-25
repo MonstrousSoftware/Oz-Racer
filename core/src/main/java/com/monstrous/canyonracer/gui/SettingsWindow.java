@@ -22,7 +22,7 @@ public class SettingsWindow extends Window {
     private void rebuild() {
 
 
-        final Slider ALslider = new Slider(0.0f, 1.0f, 0.05f, false, skin);
+        final Slider ALslider = new Slider(0.0f, 5.0f, 0.05f, false, skin);
         ALslider.setValue(Settings.ambientLightLevel);
         //final Label label2 = new Label(String.valueOf(Settings.ambientLightLevel), skin);
         ALslider.addListener(new ChangeListener() {
@@ -38,7 +38,7 @@ public class SettingsWindow extends Window {
         final Label ALlabel = new Label("ambient light", skin);
         add(ALslider); add(ALlabel);        row();
 
-        final Slider SLslider = new Slider(0.0f, 1.0f, 0.05f, false, skin);
+        final Slider SLslider = new Slider(0.0f, 5.0f, 0.05f, false, skin);
         SLslider.setValue(Settings.shadowLightLevel);
         SLslider.addListener(new ChangeListener() {
             @Override
