@@ -179,8 +179,8 @@ public class GameScreen implements Screen {
         if(Settings.showNarrator)
             overlay.render(deltaTime);
         gui.render(deltaTime);
-//        if(Settings.debugRockCollision)
-//            world.rocks.debugRender(world.playerPosition);
+        if(Settings.debugRockCollision)
+            world.rocks.debugRender(world.playerPosition);
     }
 
 

@@ -5,8 +5,8 @@ import com.badlogic.gdx.Gdx;
 import static com.badlogic.gdx.Application.ApplicationType.Desktop;
 
 public class Settings {
-    static public boolean   release = true;
-    static public String    version = "v1.03 (March 24, 2024)";
+    static public boolean   release = false;
+    static public String    version = "v1.04 (March 24, 2024)";
 
     static public float     ambientLightLevel = 0.75f;
     static public float     shadowLightLevel = 5.0f;
@@ -40,12 +40,12 @@ public class Settings {
     static public int       chunkCacheSize = 50;
     static public boolean   debugChunkAllocation = false;
 
-    static public boolean   debugRockCollision = false;
+    static public boolean   debugRockCollision = true;
 
     // Graphics settings - aimed at desktop
     static public boolean   multiSamplingFrameBufferAvailable = true;
     static public boolean   useMultiSamplingFrameBuffer = true;
-    static public boolean   usePostShader = true;
+    static public boolean   usePostShader = false;////
 
     static public boolean   particleFX = true;
 
