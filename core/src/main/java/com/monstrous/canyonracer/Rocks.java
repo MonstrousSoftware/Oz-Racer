@@ -26,15 +26,11 @@ public class Rocks implements Disposable {
 
     private Vector3 pos = new Vector3();
     public ModelCache cache;
-    public Colliders colliders;
-    public CollidersView collidersView;
 
 
     // note: perhaps we should generate along with chunks to have an infinite amount
 
     public Rocks(World world ) {
-        colliders = new Colliders();
-        collidersView = new CollidersView();
 
         MathUtils.random.setSeed(1234);
 
@@ -77,7 +73,7 @@ public class Rocks implements Disposable {
         scene.modelInstance.transform.scale(scale, scale, scale);
         scene.modelInstance.transform.rotate(Vector3.Y, rotation);
 
-        colliders.addCollider(scene.modelInstance, y+5f);
+        world.colliders.addCollider(scene.modelInstance, y+5f);
 
         return scene.modelInstance;
     }
@@ -85,6 +81,5 @@ public class Rocks implements Disposable {
     @Override
     public void dispose() {
         cache.dispose();
-        collidersView.dispose();
     }
 }

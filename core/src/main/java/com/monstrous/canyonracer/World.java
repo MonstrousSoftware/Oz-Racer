@@ -17,6 +17,8 @@ import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
 public class World implements Disposable {
     private final Array<GameObject> gameObjects;
+    public Colliders colliders;
+    public CollidersView collidersView;
     private SceneAsset sceneAsset;
     public GameObject racer;
     public final GameObject intactRacer;
@@ -48,6 +50,9 @@ public class World implements Disposable {
 
     public World() {
         gameObjects = new Array<>();
+        colliders = new Colliders();
+        collidersView = new CollidersView();
+
 
         sceneAsset = Main.assets.sceneAssetGame;
         for (Node node : sceneAsset.scene.model.nodes) {  // print some debug info
@@ -155,7 +160,7 @@ public class World implements Disposable {
 
 
         boolean wasCollided = collided;
-        collided = rocks.colliders.inCollision(playerPosition, colliderPosition);
+        collided = colliders.inCollision(playerPosition, colliderPosition);
         if (collided && !wasCollided) {
             Main.assets.COLLISION.play();
             healthPercentage -= Settings.collisionDamage * playerController.getSpeed();
@@ -223,6 +228,6 @@ public class World implements Disposable {
     public void dispose() {
 
         sceneAsset.dispose();
-
+        collidersView.dispose();
     }
 }
