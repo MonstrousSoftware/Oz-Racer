@@ -57,9 +57,8 @@ public class Turbines {
 
         Scene scene = world.loadNode("Turbine", true, pos);
 
-//        world.spawnObject("Turbine", true, pos);
-
-//        blades.add( world.spawnObject("Blades", false, pos) );
+        float h = world.terrain.getHeight(x,z);
+        world.colliders.addCollider(scene.modelInstance, h+5f);
         return scene.modelInstance;
     }
 

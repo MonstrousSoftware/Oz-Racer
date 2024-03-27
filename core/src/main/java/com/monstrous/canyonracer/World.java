@@ -53,7 +53,6 @@ public class World implements Disposable {
         colliders = new Colliders();
         collidersView = new CollidersView();
 
-
         sceneAsset = Main.assets.sceneAssetGame;
         for (Node node : sceneAsset.scene.model.nodes) {  // print some debug info
             Gdx.app.log("Node ", node.id);
@@ -116,6 +115,8 @@ public class World implements Disposable {
         float y = terrain.getHeight(x, z);
         GameObject go = spawnObject("CheckPoint", true, new Vector3(x, y, z));
         go.getScene().modelInstance.transform.rotate(Vector3.Y, angle);
+        colliders.addCollider(go.getScene().modelInstance, y+5f);
+
         return go;
     }
 
