@@ -180,7 +180,7 @@ public class GameScreen implements Screen {
             overlay.render(deltaTime);
         gui.render(deltaTime);
         if(Settings.debugRockCollision)
-            world.rocks.debugRender(world.playerPosition);
+            world.rocks.collidersView.debugRender(world.playerPosition, world.rocks.colliders);
     }
 
 

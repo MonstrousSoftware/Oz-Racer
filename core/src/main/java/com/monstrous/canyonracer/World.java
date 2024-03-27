@@ -155,7 +155,7 @@ public class World implements Disposable {
 
 
         boolean wasCollided = collided;
-        collided = rocks.inCollision(playerPosition, colliderPosition);
+        collided = rocks.colliders.inCollision(playerPosition, colliderPosition);
         if (collided && !wasCollided) {
             Main.assets.COLLISION.play();
             healthPercentage -= Settings.collisionDamage * playerController.getSpeed();
