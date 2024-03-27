@@ -18,9 +18,11 @@ import net.mgsx.gltf.scene3d.scene.Scene;
 // Collision detection is done with dedicated methods.
 
 public class Rocks implements Disposable {
-    private static float SCALE = 10;
+    private static float DEBUG_VIEW_SCALE = 10;
     public static int AREA_LENGTH = 5000;
+    public static int AREA_LENGTH2 = 8000;
     private static int SEPARATION_DISTANCE = 200;  // 200
+    private static int SEPARATION_DISTANCE2 = 1000;  // 200
 
     private static String names[] = { "Rock", "Rock.001", "Rock.002", "Rock.003", "Rock.004" };
     private static float radius[] = { 20f,      21f,        10f,        20f,        14f };
@@ -58,14 +60,23 @@ public class Rocks implements Disposable {
         PoissonDistribution poisson = new PoissonDistribution();
         Rectangle area = new Rectangle(1, 1, AREA_LENGTH, AREA_LENGTH);
         Array<Vector2> points = poisson.generatePoissonDistribution(SEPARATION_DISTANCE, area);
-
+        for(Vector2 point : points ) {
+            point.x -= AREA_LENGTH/2;
+            point.y -= AREA_LENGTH/2;
+        }
+        Rectangle area2 = new Rectangle(1, 1, AREA_LENGTH2, AREA_LENGTH2);
+        Array<Vector2> points2 = poisson.generatePoissonDistribution(SEPARATION_DISTANCE2, area);
+        for(Vector2 point : points2 ) {
+            point.x -= AREA_LENGTH2/2;
+            point.y -= AREA_LENGTH2/2;
+        }
+        points.addAll( points2 );
+        points2.clear();
 
         cache = new ModelCache();
         cache.begin();
 
         for(Vector2 point : points ) {
-            point.x -= AREA_LENGTH/2;
-            point.y -= AREA_LENGTH/2;
             cache.add( addRock(world, point.x, point.y));
         }
         cache.end();
@@ -158,8 +169,8 @@ public class Rocks implements Disposable {
         Polygon poly = new Polygon(test);
 
         sr.setColor(Color.GREEN);
-        poly.setScale(1f/SCALE, 1f/SCALE);
-        poly.translate(600-playerPos.z/SCALE, 400-playerPos.x/SCALE);
+        poly.setScale(1f/ DEBUG_VIEW_SCALE, 1f/ DEBUG_VIEW_SCALE);
+        poly.translate(600-playerPos.z/ DEBUG_VIEW_SCALE, 400-playerPos.x/ DEBUG_VIEW_SCALE);
         sr.polygon(poly.getTransformedVertices());
 
         //float[] test2 = { -25, 25, 25, 25, 25, -25, -25, -25};
@@ -171,8 +182,8 @@ public class Rocks implements Disposable {
         for(Polygon p : collisionPolygons){
 
            poly2.setVertices(p.getVertices());
-           poly2.setScale(1f/SCALE, 1f/SCALE);
-           poly2.setPosition(600-playerPos.z/SCALE, 400-playerPos.x/SCALE);
+           poly2.setScale(1f/ DEBUG_VIEW_SCALE, 1f/ DEBUG_VIEW_SCALE);
+           poly2.setPosition(600-playerPos.z/ DEBUG_VIEW_SCALE, 400-playerPos.x/ DEBUG_VIEW_SCALE);
 
 //           float[] verts = poly2.getTransformedVertices();
 //           for(int j = 0; j < verts.length; j += 2){
@@ -193,8 +204,8 @@ public class Rocks implements Disposable {
 
     // convert x,z from chunk units to screen pixels x,y
     private void convert(Vector2 pos){
-        pos.x  = 400 + pos.x/SCALE;
-        pos.y  = 600 + pos.y/SCALE;
+        pos.x  = 400 + pos.x/ DEBUG_VIEW_SCALE;
+        pos.y  = 600 + pos.y/ DEBUG_VIEW_SCALE;
     }
 
     public void rockSlicer(ModelInstance rock, float h){
