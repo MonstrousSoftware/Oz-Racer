@@ -19,14 +19,13 @@ public class Settings {
     static public float      cameraFieldOfView = 100f;
     static public float      cameraSlerpFactor = 10f; //80f;
 
-
     // Racer control
     static public float     dragFactor = 1.6f;
     static public float     acceleration = 360f;
     static public float     turnRate = 490f;
     static public float     bankFactor = 0.25f;
     static public float     maxTurn = 95f;
-    static public float     heightLag = 25f;
+    static public float     heightLag = 50f;
 
 
     static public float     nitroConsumption = 20f;

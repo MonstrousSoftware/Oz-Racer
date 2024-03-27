@@ -131,7 +131,9 @@ public class PlayerController extends InputAdapter {
 
         // place racer fixed distance above the terrain, i.e. it follows the terrain
         targetHeight = hoverHeight+terrain.getHeight(playerPos.x, playerPos.z);
-        playerPos.y = MathUtils.lerp(playerPos.y, targetHeight, Settings.heightLag*deltaTime);     // with a bit of lag
+
+        // lerp with deltaTime is not appropriate!
+        playerPos.y = moveTowards(playerPos.y, targetHeight, Settings.heightLag*deltaTime);
 
         // apply rotation to player transform (yaw)
         rotation += turnAngle*deltaTime;
@@ -189,6 +191,13 @@ public class PlayerController extends InputAdapter {
 
     public void boostAxisMoved(float value) {       // -1 to 1
         stickBoost = value;
+    }
+
+    float moveTowards(float current, float target, float maxSpeed){
+        float delta = target - current;
+        if(Math.abs(delta) < maxSpeed)
+            return target;
+        return current + maxSpeed * Math.signum(delta);
     }
 
 }

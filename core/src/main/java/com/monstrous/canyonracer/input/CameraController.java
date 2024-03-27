@@ -1,8 +1,6 @@
 package com.monstrous.canyonracer.input;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
@@ -51,7 +49,8 @@ public class CameraController extends InputAdapter {
         viewDirection.rot(targetTransform);
 
         // smooth from actual distance to desired distance
-        distance = MathUtils.lerp(distance, Settings.cameraDistance, 0.5f * deltaTime);
+        // not frame rate independent
+        distance = MathUtils.lerp(distance, Settings.cameraDistance, 0.05f );
 
         // camera is at some position behind and above the player
         cameraTargetPosition.set(viewDirection).scl(-distance);       // distance behind player
@@ -85,18 +84,17 @@ public class CameraController extends InputAdapter {
         camera.update(true);
     }
 
-    float scale = 0;
+    private float shakeScale = 0;
 
     public void startCameraShake(){
-        scale = 3f;
+        shakeScale = 3f;
     }
 
     public void updateCameraShake( PerspectiveCamera camera, float deltaTime ) {
-        if(scale <= 0)
+        if(shakeScale <= 0)
             return;
-        camera.position.y += (Math.random() - 0.5f)*scale;
-        scale -= deltaTime * 10f;
-
+        camera.position.y += (Math.random() - 0.5f)* shakeScale;
+        shakeScale -= deltaTime * 10f;
     }
 
 
@@ -116,5 +114,12 @@ public class CameraController extends InputAdapter {
             return false;
         distance += amount;
         return true;
+    }
+
+    float moveTowards(float current, float target, float maxSpeed){
+        float delta = target - current;
+        if(Math.abs(delta) < maxSpeed)
+            return target;
+        return current + maxSpeed * Math.signum(delta);
     }
 }
