@@ -40,7 +40,7 @@ public class Settings {
     static public int       chunkCacheSize = 50;
     static public boolean   debugChunkAllocation = false;
 
-    static public boolean   debugRockCollision = true;
+    static public boolean   debugRockCollision = false;
 
     // Graphics settings - aimed at desktop
     static public boolean   multiSamplingFrameBufferAvailable = true;

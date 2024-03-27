@@ -120,9 +120,9 @@ public class GameScreen implements Screen {
             return;
         }
 
-//        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-//            markSpot(world.playerPosition);
-//        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+            Settings.debugRockCollision = !Settings.debugRockCollision;
+        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R) ||
             (currentController != null && currentController.getButton(currentController.getMapping().buttonA))) {
             restart();
@@ -189,13 +189,6 @@ public class GameScreen implements Screen {
         float fov = Settings.cameraFieldOfView;
         fov += .4f*factor*fov;
         gameView.cameraController.setFOV( fov );
-    }
-
-    private void markSpot( Vector3 spot ){
-        Vector3 fwd = world.playerController.forwardDirection;
-        float angle = (float)Math.atan2(fwd.x, fwd.z);
-
-        Gdx.app.log("marker", ""+spot+" angle:"+ angle*180f/Math.PI);
     }
 
     @Override
