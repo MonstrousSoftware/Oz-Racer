@@ -8,7 +8,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
-import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
 import com.monstrous.canyonracer.CharacterOverlay;
 import com.monstrous.canyonracer.GameView;
@@ -21,13 +20,11 @@ import com.monstrous.canyonracer.terrain.TerrainDebug;
 
 public class GameScreen implements Screen {
 
-    private Main game;
+    private final Main game;
     private Music music;
     private GUI gui;
     public World world;
     public GameView gameView;
-    private Vector3 target;
-    private int changes = 0;
     private TerrainDebug terrainDebug;
     private MyControllerAdapter controllerAdapter;
     private Controller currentController;
@@ -85,8 +82,6 @@ public class GameScreen implements Screen {
         im.addProcessor(overlay.stage);
         im.addProcessor(gameView.cameraController);
         im.addProcessor(world.playerController);
-
-        target = new Vector3();
 
         restart();
         startDistance = 200f;   // shorter cinematic zoom-in sequence after a restart
