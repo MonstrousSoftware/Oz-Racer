@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 
@@ -32,18 +33,17 @@ public class CollidersView implements Disposable {
         sr.begin(ShapeRenderer.ShapeType.Line);
         sr.setColor(Color.BLUE);
 
-        for(Polygon p : colliders.collisionPolygons){
+        for (Polygon p : colliders.collisionPolygons) {
             // copy the polygon to convert it to screen view
             // relative tp racer position
             // world X is up on the screen (y)
-           poly.setVertices(p.getVertices());
-           poly.setRotation(90);
-           poly.setScale(1f/ DEBUG_VIEW_SCALE, -1f/ DEBUG_VIEW_SCALE);
-           poly.setPosition(cx-playerPos.z/ DEBUG_VIEW_SCALE, cy-playerPos.x/ DEBUG_VIEW_SCALE);
+            poly.setVertices(p.getVertices());
+            poly.setRotation(90);
+            poly.setScale(1f / DEBUG_VIEW_SCALE, -1f / DEBUG_VIEW_SCALE);
+            poly.setPosition(cx - playerPos.z / DEBUG_VIEW_SCALE, cy - playerPos.x / DEBUG_VIEW_SCALE);
 
-           sr.polygon(poly.getTransformedVertices());
+            sr.polygon(poly.getTransformedVertices());
         }
-
 
         // racer
         sr.setColor(Color.YELLOW);

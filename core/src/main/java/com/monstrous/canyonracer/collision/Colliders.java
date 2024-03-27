@@ -15,17 +15,22 @@ public class Colliders {
 
     private final Vector3 pos = new Vector3();
     private final Array<Vector3> intersections;
-    final Array<Polygon> collisionPolygons;
+    final Array<Polygon> collisionPolygons;         // used only for CollidersView (debug)
     private final Vector2 vec2 = new Vector2();
+    final SpatialHash spatialHash;
 
     public Colliders() {
         intersections = new Array<>();
         collisionPolygons = new Array<>();
+        spatialHash = new SpatialHash();
     }
 
     public boolean inCollision(Vector3 racerPosition, Vector3 outColliderPosition ){
+        Array<Polygon> polygons = spatialHash.findPolygons(racerPosition.x, racerPosition.z);
+        if(polygons == null)
+            return false;
         vec2.set(racerPosition.x, racerPosition.z);         // only consider 2d position in horizontal plane
-        for(Polygon poly : collisionPolygons) {
+        for(Polygon poly : polygons) {
             // first do a quick test against the bounding rectangle, the polygon instance caches this
             if(!poly.getBoundingRectangle().contains(vec2))
                 continue;
@@ -105,14 +110,14 @@ public class Colliders {
 
         }
 
-        for(GridPoint3 e : edges ){
-            Gdx.app.log("edges", "v"+e.x + " - v"+e.y);
-        }
+//        for(GridPoint3 e : edges ){
+//            Gdx.app.log("edges", "v"+e.x + " - v"+e.y);
+//        }
 
         Array<Vector3> polyNodes = new Array<>();
         int start = 0;
         int curr = start;
-        Gdx.app.log("start", String.valueOf(curr));
+        //Gdx.app.log("start", String.valueOf(curr));
         polyNodes.add( intersections.get(curr) );
         while(true) {
             boolean found = false;
@@ -133,14 +138,14 @@ public class Colliders {
                 }
             }
             if(!found) {
-                Gdx.app.log("end (error)", "");
+                //Gdx.app.log("end (error)", "");
                 break;
             }
-            else
-                Gdx.app.log("next", String.valueOf(curr));
+            //else
+               // Gdx.app.log("next", String.valueOf(curr));
 
             if(curr == start) {
-                Gdx.app.log("loop closed", String.valueOf(curr));
+                //Gdx.app.log("loop closed", String.valueOf(curr));
 
                 if(polyNodes.size >= 3) {
                     float[] vertexData = new float[2 * polyNodes.size];
@@ -152,6 +157,7 @@ public class Colliders {
                     Polygon poly = new Polygon(vertexData);
                     rock.transform.getTranslation(pos);
                     poly.setOrigin(pos.x, pos.z);
+                    spatialHash.addPolygon(poly);
                     collisionPolygons.add(poly);
                 }
                 polyNodes.clear();
