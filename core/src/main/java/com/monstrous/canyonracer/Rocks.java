@@ -18,9 +18,9 @@ import net.mgsx.gltf.scene3d.scene.Scene;
 
 public class Rocks implements Disposable {
     public static int AREA_LENGTH = 5000;
-    public static int AREA_LENGTH2 = 8000;
+    public static int AREA_LENGTH2 = 12000;
     private static int SEPARATION_DISTANCE = 200;  // 200
-    private static int SEPARATION_DISTANCE2 = 1000;  // 200
+    private static int SEPARATION_DISTANCE2 = 1500;  // 200
 
     private static String names[] = { "Rock", "Rock.001", "Rock.002", "Rock.003", "Rock.004" };
 
@@ -39,16 +39,19 @@ public class Rocks implements Disposable {
         Rectangle area = new Rectangle(1, 1, AREA_LENGTH, AREA_LENGTH);
         Array<Vector2> points = poisson.generatePoissonDistribution(SEPARATION_DISTANCE, area);
         for(Vector2 point : points ) {
-            point.x -= AREA_LENGTH/2;
-            point.y -= AREA_LENGTH/2;
+            point.x -= AREA_LENGTH/2f;
+            point.y -= AREA_LENGTH/2f;
         }
+        // add more rocks with lower density in a wider outer area
         Rectangle area2 = new Rectangle(1, 1, AREA_LENGTH2, AREA_LENGTH2);
-        Array<Vector2> points2 = poisson.generatePoissonDistribution(SEPARATION_DISTANCE2, area);
+        Array<Vector2> points2 = poisson.generatePoissonDistribution(SEPARATION_DISTANCE2, area2);
         for(Vector2 point : points2 ) {
-            point.x -= AREA_LENGTH2/2;
-            point.y -= AREA_LENGTH2/2;
+            if(!area.contains(point)) { // avoid putting more rocks in inner area
+                point.x -= AREA_LENGTH2 / 2f;
+                point.y -= AREA_LENGTH2 / 2f;
+                points.add(point);
+            }
         }
-        points.addAll( points2 );
         points2.clear();
 
         cache = new ModelCache();
@@ -58,7 +61,7 @@ public class Rocks implements Disposable {
             cache.add( addRock(world, point.x, point.y));
         }
         cache.end();
-        Gdx.app.log("Rocks:", ""+points.size);
+        Gdx.app.log("Rocks:", String.valueOf(points.size));
     }
 
 

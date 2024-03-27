@@ -91,12 +91,14 @@ public class Terrain implements Disposable {
                     oldest = chunk;
             }
             // now remove this chunk
-            Integer key = (Integer) makeKey(oldest.coord.x, oldest.coord.y);
-            chunks.remove(key);
-            scenes.removeValue(oldest.getScene(), true);
-            oldest.dispose();
-            //Gdx.app.log("deleting "+oldest.coord.toString(), "num chunks"+chunks.size());
-            return true;
+            if(oldest != null) {
+                Integer key = (Integer) makeKey(oldest.coord.x, oldest.coord.y);
+                chunks.remove(key);
+                scenes.removeValue(oldest.getScene(), true);
+                oldest.dispose();
+                Gdx.app.log("deleting "+oldest.coord.toString(), "num chunks"+chunks.size());
+                return true;
+            }
         }
         return added > 0;
     }

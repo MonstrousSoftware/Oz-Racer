@@ -203,6 +203,7 @@ public class GameScreen implements Screen {
         gameView.resize(width, height);
         gui.resize(width, height);
         overlay.resize(width, height);
+        world.collidersView.resize(width, height);
     }
 
     @Override

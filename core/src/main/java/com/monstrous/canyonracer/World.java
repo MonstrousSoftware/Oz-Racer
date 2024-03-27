@@ -3,15 +3,14 @@ package com.monstrous.canyonracer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.model.Node;
-import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.monstrous.canyonracer.input.EnemyController;
+import com.monstrous.canyonracer.collision.Colliders;
+import com.monstrous.canyonracer.collision.CollidersView;
 import com.monstrous.canyonracer.input.PlayerController;
 import com.monstrous.canyonracer.screens.Main;
 import com.monstrous.canyonracer.terrain.Terrain;
-import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
 

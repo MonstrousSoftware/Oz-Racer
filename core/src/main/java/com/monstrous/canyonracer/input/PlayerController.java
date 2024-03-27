@@ -90,7 +90,7 @@ public class PlayerController extends InputAdapter {
         if (keys.containsKey(boostKey) && boostFactor < 1f && enoughNitro && speed > 0 && World.healthPercentage > 0)
             boostFactor += deltaTime;
         else if (stickBoost > 0 && enoughNitro && speed > 0 && World.healthPercentage > 0)
-            boostFactor = MathUtils.lerp(boostFactor, stickBoost, 1.0f * deltaTime);
+            boostFactor = MathUtils.lerp(boostFactor, stickBoost,  deltaTime);
         else if(boostFactor > 0)
             boostFactor -= deltaTime;
 

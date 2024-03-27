@@ -39,8 +39,8 @@ public class Turbines {
         cache = new ModelCache();
         cache.begin();
         for(Vector2 point : points ) {
-            float x = point.x-AREA_LENGTH/2;
-            float z = point.y-AREA_LENGTH/2;
+            float x = point.x-AREA_LENGTH/2f;
+            float z = point.y-AREA_LENGTH/2f;
             if(!rocksArea.contains(x,z)) {
                 cache.add(addTurbine(world, x, z));
                 addTurbineBlades(world, x, z);
@@ -48,7 +48,7 @@ public class Turbines {
         }
         cache.end();
 
-        Gdx.app.log("Wind turbines:", ""+points.size);
+        Gdx.app.log("Wind turbines:", String.valueOf(points.size));
     }
 
     private ModelInstance addTurbine(World world, float x, float z ){

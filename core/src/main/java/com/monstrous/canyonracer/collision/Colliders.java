@@ -1,26 +1,22 @@
-package com.monstrous.canyonracer;
+package com.monstrous.canyonracer.collision;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttributes;
-import com.badlogic.gdx.graphics.g3d.ModelCache;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Disposable;
-import net.mgsx.gltf.scene3d.scene.Scene;
+
 
 // Collision detection is done with dedicated methods.
 
 public class Colliders {
     private static final float EPSILON = 0.001f;
 
-    private Vector3 pos = new Vector3();
-    private Array<Vector3> intersections;
-    public Array<Polygon> collisionPolygons;
-    private Vector2 vec2 = new Vector2();
+    private final Vector3 pos = new Vector3();
+    private final Array<Vector3> intersections;
+    final Array<Polygon> collisionPolygons;
+    private final Vector2 vec2 = new Vector2();
 
     public Colliders() {
         intersections = new Array<>();
@@ -63,11 +59,6 @@ public class Colliders {
         Vector3 v1 = new Vector3();
 
         intersections.clear();
-
-//        for(int i = 0; i < numVertices; i++){
-//            v0.set(vertices[stride*i+posOffset], vertices[stride*i+posOffset+1],vertices[stride*i+posOffset+2]);
-//            Gdx.app.log("vertex:", ""+i+" : xyz="+v0.toString());
-//        }
 
         Vector3 edge = new Vector3();
         Vector3 midPoint = new Vector3();
@@ -121,7 +112,7 @@ public class Colliders {
         Array<Vector3> polyNodes = new Array<>();
         int start = 0;
         int curr = start;
-        Gdx.app.log("start", ""+curr);
+        Gdx.app.log("start", String.valueOf(curr));
         polyNodes.add( intersections.get(curr) );
         while(true) {
             boolean found = false;
@@ -146,10 +137,10 @@ public class Colliders {
                 break;
             }
             else
-                Gdx.app.log("next", ""+curr);
+                Gdx.app.log("next", String.valueOf(curr));
 
             if(curr == start) {
-                Gdx.app.log("loop closed", "" + curr);
+                Gdx.app.log("loop closed", String.valueOf(curr));
 
                 if(polyNodes.size >= 3) {
                     float[] vertexData = new float[2 * polyNodes.size];

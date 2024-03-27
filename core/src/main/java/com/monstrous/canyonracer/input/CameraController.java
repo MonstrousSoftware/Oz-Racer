@@ -15,7 +15,7 @@ public class CameraController extends InputAdapter {
     private final Vector3 playerPosition = new Vector3();
     private final Vector3 viewDirection = new Vector3();
     private final Vector3 focalOffset = new Vector3();
-    private float distance = Settings.cameraDistance;
+    private float distance;
     private final Vector3 cameraTargetPosition = new Vector3();
     public boolean skyCamMode = false;
     private Vector3 up;
