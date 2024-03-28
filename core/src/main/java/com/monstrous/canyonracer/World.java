@@ -1,6 +1,7 @@
 package com.monstrous.canyonracer;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.math.Matrix4;
@@ -89,8 +90,17 @@ public class World implements Disposable {
     }
 
     // restart the race
-    public void restart(){
-        racer = intactRacer;
+    public void restart() {
+        if (racer == brokenRacer) {
+            // make sure broken racer is on the ground, not still hovering
+            Matrix4 transform = brokenRacer.getScene().modelInstance.transform;
+            float y = terrain.getHeight(playerPosition.x, playerPosition.z);
+            transform.setTranslation(playerPosition.x, y, playerPosition.z);
+            // preserve the transform of the corpse
+            corpses.add(new Matrix4(transform));
+            transform.setTranslation(0, 100, 0); // hide below ground
+            racer = intactRacer;
+        }
         float y = terrain.getHeight(-3350, 30);
         playerPosition.set(-3350, y+5f, 30);
         playerController.restart(90f);
@@ -99,6 +109,7 @@ public class World implements Disposable {
 
         // litter the field with corpses from previous runs
         sceneAsset = Main.assets.sceneAssetGame;
+        Gdx.app.log("corpses", String.valueOf(corpses.size));
         for(Matrix4 mat : corpses ){
             GameObject corpse = spawnObject("BrokenRacer", true, Vector3.Zero);
             corpse.getScene().modelInstance.transform.set(mat);
@@ -170,6 +181,15 @@ public class World implements Disposable {
         }
 
 
+        if(Gdx.input.isKeyJustPressed(Input.Keys.L)){
+            brokenRacer.getScene().modelInstance.transform.set(racer.getScene().modelInstance.transform);
+            intactRacer.getScene().modelInstance.transform.translate(0, -100, 0);
+            racer = brokenRacer;
+            if(!finished)
+                leaderBoard.add(playerName, attempt, false, raceTimeString, (int)(100*raceTime));
+            healthPercentage = 0;
+        }
+
         boolean wasCollided = collided;
         collided = colliders.inCollision(playerPosition, colliderPosition);
         if (collided && !wasCollided) {
@@ -185,7 +205,6 @@ public class World implements Disposable {
                 // swap racer mode for model of broken racer
                 brokenRacer.getScene().modelInstance.transform.set(racer.getScene().modelInstance.transform);
                 intactRacer.getScene().modelInstance.transform.translate(0, -100, 0);
-                corpses.add(new Matrix4(brokenRacer.getScene().modelInstance.transform));
                 racer = brokenRacer;
                 if(!finished)
                     leaderBoard.add(playerName, attempt, false, raceTimeString, (int)(100*raceTime));

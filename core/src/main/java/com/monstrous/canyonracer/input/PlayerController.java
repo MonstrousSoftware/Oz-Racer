@@ -169,6 +169,7 @@ public class PlayerController extends InputAdapter {
         // reflect the velocity vector across the normal vector of the collider surface: r = d - 2(d.n)n
         float dot = velocity.dot(normal);
         velocity.sub(normal.scl(2f*dot));
+        rotation = dot;
         turnAngle = dot;
     }
 
