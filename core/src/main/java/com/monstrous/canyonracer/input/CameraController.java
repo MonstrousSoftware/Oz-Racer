@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.monstrous.canyonracer.Settings;
+import com.monstrous.canyonracer.World;
 
 public class CameraController extends InputAdapter {
 
@@ -40,6 +41,8 @@ public class CameraController extends InputAdapter {
         distance = d;
     }
 
+    private Vector3 vTmp = new Vector3();
+
     // viewDirection is unit forward vector pointing for the racer
     public void update ( Matrix4 targetTransform, float deltaTime ) {
 
@@ -59,7 +62,6 @@ public class CameraController extends InputAdapter {
         cameraTargetPosition.y = distance/3;                          // and above
         cameraTargetPosition.add(playerPosition);
 
-        // Slerping makes the camera jitter forward and back
         camera.position.set(cameraTargetPosition);
 
         // camera is looking at a point in front of the racer so that racer appears in the bottom half of the screen, not centre screen

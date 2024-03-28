@@ -25,7 +25,7 @@ public class MyRenderableSorter  implements RenderableSorter, Comparator<Rendera
     public void sort (final Camera camera, final Array<Renderable> renderables) {
         this.camera = camera;
 
-        // not sorting at all provide a speed-up!
+        // not sorting at all provides a speed-up!
 
         //renderables.sort(this);
     }

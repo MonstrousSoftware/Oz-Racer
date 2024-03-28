@@ -3,7 +3,9 @@ package com.monstrous.canyonracer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.model.Node;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.Vector4;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.canyonracer.collision.Colliders;
@@ -45,17 +47,19 @@ public class World implements Disposable {
     public LeaderBoard leaderBoard;
     public String playerName = "Bob";
     public int attempt = -1;
+    private Array<Matrix4> corpses;
 
 
     public World() {
         gameObjects = new Array<>();
         colliders = new Colliders();
         collidersView = new CollidersView();
+        corpses = new Array<>();
 
         sceneAsset = Main.assets.sceneAssetGame;
-        for (Node node : sceneAsset.scene.model.nodes) {  // print some debug info
-            Gdx.app.log("Node ", node.id);
-        }
+//        for (Node node : sceneAsset.scene.model.nodes) {  // print some debug info
+//            Gdx.app.log("Node ", node.id);
+//        }
 
         playerController = new PlayerController();
 
@@ -92,6 +96,13 @@ public class World implements Disposable {
         playerController.restart(90f);
         // get player position
         racer.getScene().modelInstance.transform.setTranslation(playerPosition);
+
+        // litter the field with corpses from previous runs
+        sceneAsset = Main.assets.sceneAssetGame;
+        for(Matrix4 mat : corpses ){
+            GameObject corpse = spawnObject("BrokenRacer", true, Vector3.Zero);
+            corpse.getScene().modelInstance.transform.set(mat);
+        }
 
         racing = false;
         finished = false;
@@ -174,8 +185,10 @@ public class World implements Disposable {
                 // swap racer mode for model of broken racer
                 brokenRacer.getScene().modelInstance.transform.set(racer.getScene().modelInstance.transform);
                 intactRacer.getScene().modelInstance.transform.translate(0, -100, 0);
+                corpses.add(new Matrix4(brokenRacer.getScene().modelInstance.transform));
                 racer = brokenRacer;
-                leaderBoard.add(playerName, attempt, false, raceTimeString, (int)(100*raceTime));
+                if(!finished)
+                    leaderBoard.add(playerName, attempt, false, raceTimeString, (int)(100*raceTime));
             }
 
         }

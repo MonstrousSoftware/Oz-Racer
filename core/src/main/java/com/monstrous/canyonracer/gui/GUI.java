@@ -134,25 +134,25 @@ public class GUI implements Disposable {
             msg.addAction(Actions.sequence(Actions.fadeOut(1f), Actions.removeActor()));
     }
 
-    public void render( float deltaTime ){
-        // debug stuff
-        if(Settings.showFPS)
-            fps.setText( "FPS: " +Gdx.graphics.getFramesPerSecond() );
-        else
-            fps.setText("");
+    private float updateTimer;
 
-//        gameObjects.setText( "game objects: " + screen.gameView.sceneManager.getRenderableProviders().size+"  "+screen.world.getNumGameObjects() );
-//        if(screen.world.collided)
-//            message.setText("COLLISION!");
-//        else
-//            message.setText("");
+    public void render( float deltaTime ) {
+        updateTimer -= deltaTime;
+        if (updateTimer < 0) {
+            updateTimer = 0.2f;
 
-        // game stuff
-        speed.setText( "speed: " +(int) screen.world.playerController.getSpeed());
-        time.setText(World.raceTimeString); // may be empty string before the race
-        nitro.setValue(World.nitroLevel);
-        health.setValue(World.healthPercentage);
+            // debug stuff
+            if (Settings.showFPS)
+                fps.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
+            else
+                fps.setText("");
 
+            // game stuff
+            speed.setText("speed: " + (int) screen.world.playerController.getSpeed());
+            time.setText(World.raceTimeString); // may be empty string before the race
+            nitro.setValue(World.nitroLevel);
+            health.setValue(World.healthPercentage);
+        }
         stage.act(deltaTime);
         stage.draw();
     }

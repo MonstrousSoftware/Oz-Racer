@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.GLFrameBuffer.FrameBufferBuilder;
+import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -57,9 +58,16 @@ public class GameView {
     private FrameBuffer fboMS = null;
     private LensFlare lensFlare;
     private CascadeShadowMap csm;
+    private boolean doProfiling = false;
+    private GLProfiler glProfiler;
 
     public GameView(World world) {
         this.world = world;
+
+        if(doProfiling){
+            glProfiler = new GLProfiler(Gdx.graphics);
+            glProfiler.enable();
+        }
 
         // the default renderable sorter starts overflowing with distances > 1500
         // so use our dedicated renderable sorter instead
@@ -154,12 +162,14 @@ public class GameView {
     private Matrix4 exhaustTransform = new Matrix4();
 
     public void render(float deltaTime) {
+        if(doProfiling)
+            glProfiler.reset();
 
         Matrix4 racerTransform = world.racer.getScene().modelInstance.transform;
 
         // reposition particle effect
         exhaustTransform.set(racerTransform);
-        exhaustTransform.translate(0.0f, -0.5f, -5f);           // offset for tail pipe
+        exhaustTransform.translate(0.0f, 0.5f, -6f);           // offset for engine
         exhaust.setTransform(exhaustTransform);
 
         // animate camera
@@ -190,6 +200,10 @@ public class GameView {
             modelBatch.begin(sceneManager.camera);
             modelBatch.render(instances);
             modelBatch.end();
+        }
+        if(doProfiling) {
+            Gdx.app.log("draw calls", "drawcalls:" + glProfiler.getDrawCalls()
+                + "tex binds:" + glProfiler.getTextureBindings() + " sdr swtch:" + glProfiler.getShaderSwitches() );
         }
 
     }

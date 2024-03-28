@@ -24,7 +24,7 @@ public class ParticleEffects implements Disposable {
     private Array<ParticleEffect> deleteList;
 
     private ParticleEffect smokeEffect;
-    private ParticleEffect ringEffect;
+//    private ParticleEffect ringEffect;
     private ParticleEffect exhaustFumesEffect;
 
     private Matrix4 tmpTransform = new Matrix4();
@@ -35,7 +35,7 @@ public class ParticleEffects implements Disposable {
 
         // create a point sprite batch and add it to the particle system
         PointSpriteParticleBatch  pointSpriteBatch = new PointSpriteParticleBatch(1000,  new ParticleShader.Config(ParticleShader.ParticleType.Point),
-                                new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 0.1f), null );
+                                new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 0.5f), null );
         pointSpriteBatch.setCamera(cam);
         particleSystem.add(pointSpriteBatch);
 
@@ -43,14 +43,14 @@ public class ParticleEffects implements Disposable {
         AssetManager assets = new AssetManager();
         ParticleEffectLoader.ParticleEffectLoadParameter loadParam = new ParticleEffectLoader.ParticleEffectLoadParameter(particleSystem.getBatches());
         assets.load("particle/fire-and-smoke.pfx", ParticleEffect.class, loadParam);
-        assets.load("particle/explosion-ring.pfx", ParticleEffect.class, loadParam);
-        assets.load("particle/green-scatter.pfx", ParticleEffect.class, loadParam);
-        assets.load("particle/rocket-plume.pfx", ParticleEffect.class, loadParam);
+//        assets.load("particle/explosion-ring.pfx", ParticleEffect.class, loadParam);
+//        assets.load("particle/green-scatter.pfx", ParticleEffect.class, loadParam);
+        assets.load("particle/rocket-plume3.pfx", ParticleEffect.class, loadParam);
         assets.finishLoading();
         smokeEffect = assets.get("particle/fire-and-smoke.pfx");
-        ringEffect = assets.get("particle/explosion-ring.pfx");
-        //exhaustFumesEffect = assets.get("particle/green-scatter.pfx");
-        exhaustFumesEffect = assets.get("particle/rocket-plume.pfx");
+//        ringEffect = assets.get("particle/explosion-ring.pfx");
+//        //exhaustFumesEffect = assets.get("particle/green-scatter.pfx");
+        exhaustFumesEffect = assets.get("particle/rocket-plume3.pfx");
 
         activeEffects = new Array<>();
         deleteList = new Array<>();
@@ -96,17 +96,17 @@ public class ParticleEffects implements Disposable {
         return effect;
     }
 
-    public void addExplosion(Vector3 position) {
-        // add loaded effect to particle system
-
-        // we cannot use the originalEffect, we must make a copy each time we create new particle effect
-        ParticleEffect effect = ringEffect.copy();
-        effect.translate(position);
-        effect.init();
-        effect.start();  // optional: particle will begin playing immediately
-        particleSystem.add(effect);
-        activeEffects.add(effect);
-    }
+//    public void addExplosion(Vector3 position) {
+//        // add loaded effect to particle system
+//
+//        // we cannot use the originalEffect, we must make a copy each time we create new particle effect
+//        ParticleEffect effect = ringEffect.copy();
+//        effect.translate(position);
+//        effect.init();
+//        effect.start();  // optional: particle will begin playing immediately
+//        particleSystem.add(effect);
+//        activeEffects.add(effect);
+//    }
 
     public void update( float deltaTime ) {
         if(!Settings.particleFX)

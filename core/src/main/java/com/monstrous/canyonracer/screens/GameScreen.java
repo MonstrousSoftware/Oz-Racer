@@ -150,13 +150,13 @@ public class GameScreen implements Screen {
         }
 
         if( World.finished && !showFinished) {
-            gui.showMessage("FINISHED!\n   IN "+World.raceTimeString, .75f, 0, 5);
+            gui.showMessage("FINISHED!\n   IN "+World.raceTimeString, .85f, 0, 5);
             gui.showMessage("PRESS [R] TO RESTART", .25f, 2f, 999);
             showFinished = true; // do this only once on finish
             gui.showScores();
         }
         if( World.healthPercentage <= 0 && !showDead) {
-            gui.showMessage("RACER DESTROYED", .75f, 0, 5);
+            gui.showMessage("RACER DESTROYED", .65f, 0, 5);
             gui.showMessage("PRESS [R] TO RESTART", .25f, 2f, 999);
             fire = gameView.particleEffects.addFire(world.playerPosition);
             showDead = true; // do this only once on finish
