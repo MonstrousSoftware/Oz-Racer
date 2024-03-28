@@ -22,19 +22,16 @@ public class World implements Disposable {
     public Colliders colliders;
     public CollidersView collidersView;
     private SceneAsset sceneAsset;
-    public GameObject racer;
+    public GameObject racer;                // reference to either intactRacer or brokenRacer
     public final GameObject intactRacer;
     public final GameObject brokenRacer;
-    //public final GameObject enemy1;
     private GameObject finish;
     private Vector3 finishPosition = new Vector3();
     private GameObject start;
     private Vector3 startPosition = new Vector3();
     public final PlayerController playerController;
     public Vector3 playerPosition;
-    //public final Vector3 enemyPosition;
     public final Terrain terrain;
-    //private final EnemyController enemyController;
     public Turbines turbines;
     public Rocks rocks;
     public boolean collided;
@@ -58,10 +55,6 @@ public class World implements Disposable {
         corpses = new Array<>();
 
         sceneAsset = Main.assets.sceneAssetGame;
-//        for (Node node : sceneAsset.scene.model.nodes) {  // print some debug info
-//            Gdx.app.log("Node ", node.id);
-//        }
-
         playerController = new PlayerController();
 
         playerPosition = new Vector3(-3350, 68, 30);
@@ -70,12 +63,7 @@ public class World implements Disposable {
         brokenRacer = spawnObject("BrokenRacer", true, new Vector3(0,-100,0)); // out of sight
         racer = intactRacer;
 
-//        enemyPosition = new Vector3(4, 8, 6);
-//        enemy1 = spawnObject("Feisar_Ship", true, enemyPosition);
-//        enemyController = new EnemyController();
-
         terrain = new Terrain(playerPosition);
-        //path = new Path(terrain);
 
         turbines = new Turbines(this);
 
@@ -195,21 +183,20 @@ public class World implements Disposable {
         if (collided && !wasCollided) {
             Main.assets.COLLISION.play();
             healthPercentage -= Settings.collisionDamage * playerController.getSpeed();
-            if(healthPercentage > 0) {
-                // throw player away from the collider
-                Vector3 normal = colliderPosition.sub(playerPosition);
-                normal.y = 0;  // horizontal impulse only
-                normal.nor();
-                playerController.collisionImpact(normal);
-            } else {
+            if(healthPercentage <= 0) {
                 // swap racer mode for model of broken racer
                 brokenRacer.getScene().modelInstance.transform.set(racer.getScene().modelInstance.transform);
                 intactRacer.getScene().modelInstance.transform.translate(0, -100, 0);
                 racer = brokenRacer;
-                if(!finished)
-                    leaderBoard.add(playerName, attempt, false, raceTimeString, (int)(100*raceTime));
+                if (!finished)
+                    leaderBoard.add(playerName, attempt, false, raceTimeString, (int) (100 * raceTime));
             }
-
+            // collision response:  throw player away from the collider
+            // note: even if player died there is still momentum, so we need to keep collision response
+            Vector3 normal = colliderPosition.sub(playerPosition);
+            normal.y = 0;  // horizontal impulse only
+            normal.nor();
+            playerController.collisionImpact(normal, racer);
         }
     }
 

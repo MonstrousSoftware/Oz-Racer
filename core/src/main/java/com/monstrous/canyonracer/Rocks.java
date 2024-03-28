@@ -57,8 +57,6 @@ public class Rocks implements Disposable {
         cache = new ModelCache();
         cache.begin();
 
-        cache.add( addRock(world, -3000, 0));
-
         for(Vector2 point : points ) {
             cache.add( addRock(world, point.x, point.y));
         }

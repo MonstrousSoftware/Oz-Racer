@@ -163,14 +163,16 @@ public class PlayerController extends InputAdapter {
     }
 
     // act on collision impact
-    public void collisionImpact( Vector3 normal ) {
+    public void collisionImpact( Vector3 normal, GameObject racer ) {
         boostFactor = 0;                    // remove any boost
 
         // reflect the velocity vector across the normal vector of the collider surface: r = d - 2(d.n)n
         float dot = velocity.dot(normal);
         velocity.sub(normal.scl(2f*dot));
-        rotation = dot;
+        //rotation = dot;
         turnAngle = dot;
+        tmpV.set(velocity).scl(.1f);
+        racer.getScene().modelInstance.transform.translate(tmpV);
     }
 
 
