@@ -96,7 +96,7 @@ public class OptionsScreen extends MenuScreen {
        fullScreen = new CheckBox("Full Screen (F11)", skin);
        fullScreen.setChecked(Settings.fullScreen);
 
-       CheckBox fps = new CheckBox("Show FPS", skin);
+       CheckBox fps = new CheckBox("Show FPS (F)", skin);
        fps.setChecked(Settings.showFPS);
 
        CheckBox particles = new CheckBox("Particle effects", skin);
@@ -110,13 +110,14 @@ public class OptionsScreen extends MenuScreen {
 
        TextButton done = new TextButton("Done", skin);
 
-       controllerLabel = new Label("None", skin);
+       controllerLabel = new Label("None", skin, "small");
        if(controller != null)
            controllerLabel.setText(controller.getName());
 
 
        int pad = 10;
 
+       screenTable.add(new Label("Options", skin)).pad(2*pad).center().row();
        screenTable.add(fullScreen).pad(pad).left().row();
        screenTable.add(fps).pad(pad).left().row();
        screenTable.add(particles).pad(pad).left().row();
@@ -127,7 +128,7 @@ public class OptionsScreen extends MenuScreen {
        screenTable.add(done).pad(40,5,80,5).row();
        if(Settings.supportControllers) {
            Table ct = new Table();
-           ct.add(new Label("Controller = ", skin));
+           ct.add(new Label("Controller = ", skin, "small"));
            ct.add(controllerLabel);
            ct.pack();
            screenTable.add(ct).bottom().pad(2*pad);
@@ -218,12 +219,13 @@ public class OptionsScreen extends MenuScreen {
 
    }
 
+    private static final Color bg = new Color(0xff9f8eff);
 
     @Override
     public void render(float delta) {
         if(Settings.supportControllers)
             checkControllerChanges();
-        ScreenUtils.clear(Color.BROWN);
+        ScreenUtils.clear(bg);
         super.render(delta);
     }
 

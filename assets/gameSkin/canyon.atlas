@@ -1,64 +1,78 @@
 
 canyon.png
-size: 512, 512
+size: 1024, 1024
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
 StalinistOne-Regular(1)
   rotate: false
-  xy: 1, 190
+  xy: 1, 36
   size: 502, 316
   orig: 502, 316
   offset: 0, 0
   index: -1
 checkbox_off
   rotate: false
-  xy: 1, 162
+  xy: 509, 704
   size: 50, 26
   orig: 50, 26
   offset: 0, 0
   index: -1
 checkbox_on
   rotate: false
-  xy: 1, 134
+  xy: 1, 8
   size: 50, 26
   orig: 50, 26
   offset: 0, 0
   index: -1
 knob
   rotate: false
-  xy: 53, 183
+  xy: 561, 725
+  size: 38, 5
+  orig: 38, 5
+  offset: 0, 0
+  index: -1
+knobHealth
+  rotate: false
+  xy: 1, 1
   size: 38, 5
   orig: 38, 5
   offset: 0, 0
   index: -1
 knobHorizontal
   rotate: false
-  xy: 505, 490
+  xy: 509, 629
   size: 3, 16
   orig: 3, 16
   offset: 0, 0
   index: -1
+rect
+  rotate: false
+  xy: 509, 647
+  size: 46, 55
+  split: 4, 4, 4, 3
+  orig: 46, 55
+  offset: 0, 0
+  index: -1
 rect20
   rotate: false
-  xy: 53, 161
+  xy: 53, 14
   size: 20, 20
   split: 3, 3, 3, 3
   orig: 20, 20
   offset: 0, 0
   index: -1
-knobHealth
+StalinistOne-Regular(2)
   rotate: false
-  xy: 1, 70
-  size: 38, 5
-  orig: 38, 5
+  xy: 1, 446
+  size: 506, 284
+  orig: 506, 284
   offset: 0, 0
   index: -1
-rect
+StalinistOne-Regular(6)
   rotate: false
-  xy: 1, 77
-  size: 46, 55
-  split: 4, 4, 4, 3
-  orig: 46, 55
+  xy: 1, 354
+  size: 505, 90
+  orig: 505, 90
   offset: 0, 0
   index: -1

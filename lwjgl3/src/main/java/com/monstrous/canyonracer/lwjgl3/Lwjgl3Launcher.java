@@ -32,6 +32,7 @@ public class Lwjgl3Launcher {
         configuration.setWindowIcon("monstrous128.png", "monstrous64.png", "monstrous32.png", "monstrous16.png");
 
         // Use OpenGL 3.2 to emulate GL ES 3.1
+        // needed for AA frame buffer
         configuration.setOpenGLEmulation(Lwjgl3ApplicationConfiguration.GLEmulation.GL31, 3,2);
         return configuration;
     }

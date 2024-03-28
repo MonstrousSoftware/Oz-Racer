@@ -28,7 +28,6 @@ public class GUI implements Disposable {
     private Label speed;
     private Label time;
     private Label gameObjects;
-//    private Label message;
     private ProgressBar nitro;
     private ProgressBar health;
     private Array<Label> messages;
@@ -98,7 +97,7 @@ public class GUI implements Disposable {
             return;
         showingScores = true;
 
-        leaderBoard = new LeaderBoardTable("Times", Main.assets.debugSkin, screen.world.leaderBoard);
+        leaderBoard = new LeaderBoardTable("Times", Main.assets.skin, screen.world.leaderBoard);
 
         float x = 30;
         float y = stage.getHeight() - (100+leaderBoard.getHeight());

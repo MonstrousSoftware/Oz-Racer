@@ -1,7 +1,13 @@
 {
 com.badlogic.gdx.graphics.g2d.BitmapFont: {
-	StalinistOne-Regular1-48: {
-		file: StalinistOne-Regular(1).fnt
+	StalinistOne-Regular24: {
+		file: StalinistOne-Regular(6).fnt
+		scaledSize: -1
+		markupEnabled: false
+		flip: false
+	}
+	StalinistOne-Regular48: {
+		file: StalinistOne-Regular(2).fnt
 		scaledSize: -1
 		markupEnabled: false
 		flip: false
@@ -37,14 +43,18 @@ com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
 	default: {
 		checkboxOn: checkbox_on
 		checkboxOff: checkbox_off
-		font: StalinistOne-Regular1-48
+		font: StalinistOne-Regular24
 		fontColor: blue
 		overFontColor: bright-blue
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	default: {
-		font: StalinistOne-Regular1-48
+		font: StalinistOne-Regular48
+		fontColor: blue
+	}
+	small: {
+		font: StalinistOne-Regular24
 		fontColor: blue
 	}
 }
@@ -64,7 +74,7 @@ com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 	default: {
-		font: StalinistOne-Regular1-48
+		font: StalinistOne-Regular48
 		fontColor: blue
 		overFontColor: bright-blue
 		pressedOffsetX: 1

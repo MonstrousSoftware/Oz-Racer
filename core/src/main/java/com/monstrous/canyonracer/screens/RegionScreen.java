@@ -31,7 +31,9 @@ public class RegionScreen extends MenuScreen {
        Table screenTable = new Table();
        screenTable.setFillParent(true);
 
-       Label title = new Label("For best Monitor Orientation\nindicate your region:\n", skin);
+       Label title = new Label("Monitor Orientation", skin);
+
+       Label intro = new Label("Indicate your region:", skin, "small");
 
        ButtonGroup<CheckBox> buttonGroup = new ButtonGroup<>();
 
@@ -47,9 +49,10 @@ public class RegionScreen extends MenuScreen {
 
        int pad = 10;
 
-       screenTable.add(title).pad(pad).left().row();
-       screenTable.add(australia).pad(pad+10).left().row();
-       screenTable.add(notAustralia).pad(pad+10).left().row();
+       screenTable.add(title).pad(pad).row();
+       screenTable.add(intro).pad(pad).row();
+       screenTable.add(australia).pad(10,40,10,10  ).left().row();
+       screenTable.add(notAustralia).pad(10,40,10,10).left().row();
 
        screenTable.add(done).pad(20).row();
 
