@@ -10,14 +10,12 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.monstrous.canyonracer.Settings;
-import com.monstrous.canyonracer.input.MyControllerAdapter;
 import com.monstrous.canyonracer.input.MyControllerMenuStage;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
@@ -36,10 +34,9 @@ public class LogoScreen implements Screen {
     private static final String FILE_NAME = "models/libGDX-logo.gltf";
     private static final int SHADOW_MAP_SIZE = 2048;
 
-    private Main game;
+    private final Main game;
     private SceneManager sceneManager;
     private SceneAsset sceneAsset;
-    private Scene scene;
     private PerspectiveCamera camera;
     private Cubemap diffuseCubemap;
     private Cubemap environmentCubemap;
@@ -47,10 +44,8 @@ public class LogoScreen implements Screen {
     private Texture brdfLUT;
     private float time;
     private SceneSkybox skybox;
-    private DirectionalLightEx light;
     private CameraInputController camController;
     private MyControllerMenuStage stage;
-    private Label prompt;
     private Controller currentController;
 
     public LogoScreen(Main game) {
@@ -61,12 +56,11 @@ public class LogoScreen implements Screen {
     public void show() {
         // create scene
         sceneAsset = new GLTFLoader().load(Gdx.files.internal(FILE_NAME ));
-        scene = new Scene(sceneAsset.scene);
+        Scene scene = new Scene(sceneAsset.scene);
         sceneManager = new SceneManager();
         sceneManager.addScene(scene);
 
         camera = new PerspectiveCamera(60f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        float d = 250.0f;
         camera.near = 0.01f;
         camera.far = 1000f;
         sceneManager.setCamera(camera);
@@ -81,11 +75,11 @@ public class LogoScreen implements Screen {
 
         // setup light
         //light = new DirectionalLightEx();
-        light = new DirectionalShadowLight(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE).setViewport(5,5,5,40);
+        DirectionalShadowLight light = new DirectionalShadowLight(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE).setViewport(5,5,5,40);
 
         light.direction.set(1, -3, -1).nor();
         light.color.set(Color.WHITE);
-        light.intensity = 2f;
+        light.intensity = 5f;
         sceneManager.environment.add(light);
 
 
@@ -132,7 +126,7 @@ public class LogoScreen implements Screen {
 
         Table promptTable = new Table();
         promptTable.setFillParent(true);
-        prompt = new Label("Press Any Key...", Main.assets.skin);
+        Label prompt = new Label("Press Any Key...", Main.assets.skin);
         promptTable.add(prompt).bottom().expand();
 
         // fade in

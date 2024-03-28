@@ -22,7 +22,7 @@ public class Rocks implements Disposable {
     private static int SEPARATION_DISTANCE = 200;  // 200
     private static int SEPARATION_DISTANCE2 = 1500;  // 200
 
-    private static String names[] = { "Rock", "Rock.001", "Rock.002", "Rock.003", "Rock.004" };
+    private static String[] names = { "Rock", "Rock.001", "Rock.002", "Rock.003", "Rock.004" };
 
     private Vector3 pos = new Vector3();
     public ModelCache cache;

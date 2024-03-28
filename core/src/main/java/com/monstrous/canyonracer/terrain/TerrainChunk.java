@@ -34,11 +34,11 @@ public class TerrainChunk implements Disposable {
     private static Texture terrainTexture;         //  shared between chunks
     private ModelInstance modelInstance;
     private Scene scene;
-    private float heightMap[][];
-    private float vertPositions[];  // for collision detection, 3 floats per vertex
-    private short indices[];    // 3 indices per triangle
+    private float[][] heightMap;
+    private float[] vertPositions;  // for collision detection, 3 floats per vertex
+    private short[] indices;    // 3 indices per triangle
     private int numIndices;
-    private Vector3 normalVectors[][] = new Vector3[MAP_SIZE+1][MAP_SIZE+1];
+    private Vector3[][] normalVectors = new Vector3[MAP_SIZE+1][MAP_SIZE+1];
     private Vector3 position; // position of terrain in world coordinates
     public BoundingBox bbox;
 
@@ -109,8 +109,8 @@ public class TerrainChunk implements Disposable {
         MeshBuilder meshBuilder = (MeshBuilder) modelBuilder.part("face", primitive, attr, material);
         final int numVerts = (N + 1) * (N + 1);
         final int numTris = 2 * N * N;
-        Vector3 positions[] = new Vector3[numVerts];
-        Vector3 normals[] = new Vector3[numVerts];
+        Vector3[] positions = new Vector3[numVerts];
+        Vector3[] normals = new Vector3[numVerts];
 
         vertPositions = new float[3 * numVerts];      // todo redundant?
         indices = new short[3 * numTris];

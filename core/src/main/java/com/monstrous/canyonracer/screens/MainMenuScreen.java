@@ -14,12 +14,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.monstrous.canyonracer.Settings;
-import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRFloatAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
 import net.mgsx.gltf.scene3d.lights.DirectionalLightEx;
-import net.mgsx.gltf.scene3d.lights.DirectionalShadowLight;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
 import net.mgsx.gltf.scene3d.scene.SceneManager;
@@ -31,7 +29,6 @@ import net.mgsx.gltf.scene3d.utils.IBLBuilder;
 
 public class MainMenuScreen extends MenuScreen {
 
-    private static final String FILE_NAME = "models/Feisar.gltf";
     private static final int SHADOW_MAP_SIZE = 2048;
 
     private SceneManager sceneManager;
@@ -77,13 +74,13 @@ public class MainMenuScreen extends MenuScreen {
 
         // setup light
         //light = new DirectionalLightEx();
-        light = new DirectionalShadowLight(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE).setViewport(5,5,5,40);
+        light = new DirectionalLightEx();
+        //DirectionalShadowLight(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE).setViewport(5,5,5,40);
 
         light.direction.set(1, -3, -1).nor();
         light.color.set(Color.WHITE);
-        light.intensity = 2f;
+        light.intensity = 8f;
         sceneManager.environment.add(light);
-
 
         // setup quick IBL (image based lighting)
         IBLBuilder iblBuilder = IBLBuilder.createOutdoor(light);
@@ -137,27 +134,29 @@ public class MainMenuScreen extends MenuScreen {
         Table screenTable = new Table();
         screenTable.setFillParent(true);
 
-        Image title = new Image( game.assets.title );
+        Image title = new Image( Main.assets.title );
 
         TextButton play = new TextButton("Play Game", skin);
         TextButton region = new TextButton("Monitor Orientation", skin);
-        TextButton keys = new TextButton("Keys", skin);
         TextButton options = new TextButton("Options", skin);
 //        TextButton scores = new TextButton("High Scores", skin);
         TextButton quit = new TextButton("Quit", skin);
 
-        float pad = 7f;
+        float pad = 17f;
         //screenTable.debug();
         screenTable.top();
-        screenTable.add(title).pad(50).row();
-        screenTable.add(play).pad(pad).row();
-        screenTable.add(region).pad(pad).row();
+        screenTable.add(title).pad(50,10,150,10).row();
+
+        Table menu = new Table();
+        menu.add(play).pad(pad).left().bottom().row();
+        menu.add(region).pad(pad).left().row();
 //        screenTable.add(scores).pad(pad).row();
-        screenTable.add(options).pad(pad).row();
+        menu.add(options).pad(pad).left().row();
         // hide quit on web unless we have an outro screen
         if(!(Gdx.app.getType() == Application.ApplicationType.WebGL) )
-            screenTable.add(quit).pad(pad).row();
+            menu.add(quit).pad(pad).left().row();
 
+        screenTable.add(menu).left().bottom().expand();
         screenTable.pack();
 
         screenTable.setColor(1,1,1,0);                   // set alpha to zero

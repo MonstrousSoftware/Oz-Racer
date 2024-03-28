@@ -17,7 +17,7 @@ public class LensFlare implements Disposable {
 
     public static boolean showLensFlare = true;
 
-    private Texture textures[];
+    private Texture[] textures;
     private SpriteBatch batch;
     private float lightX, lightY;
     private float centreX, centreY;

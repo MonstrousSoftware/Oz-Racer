@@ -92,7 +92,7 @@ public class Terrain implements Disposable {
             }
             // now remove this chunk
             if(oldest != null) {
-                Integer key = (Integer) makeKey(oldest.coord.x, oldest.coord.y);
+                Integer key =  makeKey(oldest.coord.x, oldest.coord.y);
                 chunks.remove(key);
                 scenes.removeValue(oldest.getScene(), true);
                 oldest.dispose();
@@ -130,7 +130,7 @@ public class Terrain implements Disposable {
         //
         int cx = (int)Math.floor(x/Settings.chunkSize);
         int cz = (int)Math.floor(z/Settings.chunkSize);
-        Integer key = (Integer)makeKey(cx, cz);
+        Integer key = makeKey(cx, cz);
         TerrainChunk chunk = chunks.get(key);
         if(chunk == null){
             Gdx.app.error("position outside chunks", "x:"+x+", z:"+z);
