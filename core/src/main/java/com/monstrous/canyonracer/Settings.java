@@ -17,7 +17,7 @@ public class Settings {
     static public boolean    cameraInverted = release;
     static public float      cameraDistance = 10f;
     static public float      cameraFieldOfView = 100f;
-    static public float      cameraSlerpFactor = 10f; //80f;
+//    static public float      cameraSlerpFactor = 10f;
 
     // Racer control
     static public float     dragFactor = 1.6f;

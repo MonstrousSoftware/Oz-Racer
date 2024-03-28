@@ -22,7 +22,7 @@ public class GUI implements Disposable {
     public Skin skin;
     public Skin debugSkin;
     private GameScreen screen;
-    private SettingsWindow lightSettings;
+    private SettingsWindow settingsWindow;
     public LeaderBoardTable leaderBoard;
     private Label fps;
     private Label speed;
@@ -47,12 +47,8 @@ public class GUI implements Disposable {
 
     private void addActors(){
         stage.clear();
-        lightSettings = new SettingsWindow("Tweak Settings", Main.assets.debugSkin, screen);
-        if(Settings.settingsMenu)
-            stage.addActor(lightSettings);
-
-
-
+        settingsWindow = new SettingsWindow("Tweak Settings", Main.assets.debugSkin, screen);
+        showDebugMenu(Settings.settingsMenu);
 
         time = new Label("0.00", skin);
         speed = new Label("-", skin);
@@ -88,6 +84,13 @@ public class GUI implements Disposable {
         showingScores = false;
 
         //showScores();
+    }
+
+    public void showDebugMenu(boolean mode){
+        if(mode)
+            stage.addActor(settingsWindow);
+        else
+            settingsWindow.remove();
     }
 
     public void showScores(){

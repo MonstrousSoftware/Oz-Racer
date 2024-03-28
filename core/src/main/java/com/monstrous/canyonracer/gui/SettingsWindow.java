@@ -72,7 +72,7 @@ public class SettingsWindow extends Window {
                 Settings.showLightBox = LBcheckbox.isChecked();
             }
         });
-        add(LBcheckbox);        row();
+        add(LBcheckbox).left();        row();
 
         final CheckBox TCcheckbox = new CheckBox("terrain chunks allocation", skin);
         TCcheckbox.setChecked(Settings.debugChunkAllocation);
@@ -84,7 +84,7 @@ public class SettingsWindow extends Window {
         });
         add(TCcheckbox).left();        row();
 
-        final CheckBox RCcheckbox = new CheckBox("show rock colliders", skin);
+        final CheckBox RCcheckbox = new CheckBox("show colliders map (P)", skin);
         RCcheckbox.setChecked(Settings.debugRockCollision);
         RCcheckbox.addListener(new ChangeListener() {
             @Override
@@ -92,7 +92,7 @@ public class SettingsWindow extends Window {
                 Settings.debugRockCollision = RCcheckbox.isChecked();
             }
         });
-        add(RCcheckbox);        row();
+        add(RCcheckbox).left();        row();
 
         final CheckBox PostCheckbox = new CheckBox("post-processing shader", skin);
         PostCheckbox.setChecked(Settings.usePostShader);
@@ -154,17 +154,17 @@ public class SettingsWindow extends Window {
 
 
 
-        final Slider CSslider = new Slider(0.0f, 100f, 5f, false, skin);
-        CSslider.setValue(Settings.cameraSlerpFactor);
-        CSslider.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Settings.cameraSlerpFactor = CSslider.getValue();
-                Gdx.app.log("camera slerp factor", ""+Settings.cameraSlerpFactor);
-            }
-        });
-        final Label CSlabel = new Label("cam slerp", skin);
-        add(CSslider); add(CSlabel);        row();
+//        final Slider CSslider = new Slider(0.0f, 100f, 5f, false, skin);
+//        CSslider.setValue(Settings.cameraSlerpFactor);
+//        CSslider.addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//                Settings.cameraSlerpFactor = CSslider.getValue();
+//                Gdx.app.log("camera slerp factor", ""+Settings.cameraSlerpFactor);
+//            }
+//        });
+//        final Label CSlabel = new Label("cam slerp", skin);
+//        add(CSslider); add(CSlabel);        row();
 
         pack();
 

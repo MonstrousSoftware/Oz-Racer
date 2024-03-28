@@ -49,21 +49,16 @@ public class CameraController extends InputAdapter {
         viewDirection.rot(targetTransform);
 
         // smooth from actual distance to desired distance
+        // slow down as you get closer (speed is proportional to difference)
         // not frame rate independent
-        distance = MathUtils.lerp(distance, Settings.cameraDistance, 0.05f );
+        float diff = distance - Settings.cameraDistance;
+        distance = moveTowards(distance, Settings.cameraDistance, diff*deltaTime);
 
         // camera is at some position behind and above the player
         cameraTargetPosition.set(viewDirection).scl(-distance);       // distance behind player
         cameraTargetPosition.y = distance/3;                          // and above
         cameraTargetPosition.add(playerPosition);
 
-
-        // smoothly slerp the camera towards the desired position
-//        float alpha = MathUtils.clamp(Settings.cameraSlerpFactor*deltaTime, 0.0f, 1.0f);    // make sure alpha <= 1 even at low frame rates
-//        if(alpha > 0.99f)
-//            camera.position.set(cameraTargetPosition);
-//        else
-//            camera.position.slerp(cameraTargetPosition, alpha);
         // Slerping makes the camera jitter forward and back
         camera.position.set(cameraTargetPosition);
 
@@ -116,10 +111,10 @@ public class CameraController extends InputAdapter {
         return true;
     }
 
-    float moveTowards(float current, float target, float maxSpeed){
+    float moveTowards(float current, float target, float maxStep){
         float delta = target - current;
-        if(Math.abs(delta) < maxSpeed)
+        if(Math.abs(delta) < maxStep)
             return target;
-        return current + maxSpeed * Math.signum(delta);
+        return current + maxStep * Math.signum(delta);
     }
 }

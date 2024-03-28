@@ -26,7 +26,9 @@ public class Lwjgl3Launcher {
         //// useful for testing performance, but can also be very stressful to some hardware.
         //// You may also need to configure GPU drivers to fully disable Vsync; this can cause screen tearing.
         configuration.setWindowedMode(1280, 960);
-        configuration.setBackBufferConfig(8, 8, 8, 8, 16, 0, 4);
+
+        // we rely on fbo anti-aliasing so don't need it here
+       // configuration.setBackBufferConfig(8, 8, 8, 8, 16, 0, 4);
         configuration.setWindowIcon("monstrous128.png", "monstrous64.png", "monstrous32.png", "monstrous16.png");
 
         // Use OpenGL 3.2 to emulate GL ES 3.1

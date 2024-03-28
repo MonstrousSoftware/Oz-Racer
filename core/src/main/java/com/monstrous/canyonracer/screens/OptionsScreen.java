@@ -93,7 +93,7 @@ public class OptionsScreen extends MenuScreen {
        screenTable.setFillParent(true);
 
 
-       fullScreen = new CheckBox("Full Screen", skin);
+       fullScreen = new CheckBox("Full Screen (F11)", skin);
        fullScreen.setChecked(Settings.fullScreen);
 
        CheckBox fps = new CheckBox("Show FPS", skin);
@@ -102,10 +102,10 @@ public class OptionsScreen extends MenuScreen {
        CheckBox particles = new CheckBox("Particle effects", skin);
        particles.setChecked(Settings.particleFX);
 
-       CheckBox music = new CheckBox("Music", skin);
+       CheckBox music = new CheckBox("Music (M)", skin);
        music.setChecked(Settings.musicOn);
 
-       CheckBox settingsMenu = new CheckBox("Tweaker Menu", skin);
+       CheckBox settingsMenu = new CheckBox("Tweaker Menu (T)", skin);
        settingsMenu.setChecked(Settings.settingsMenu);
 
        TextButton done = new TextButton("Done", skin);

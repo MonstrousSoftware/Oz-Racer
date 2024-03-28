@@ -107,6 +107,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float deltaTime) {
+       // deltaTime = 0.2f;
 
         // exit with Escape or controller X button
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyJustPressed(Input.Keys.Q) ||
@@ -116,7 +117,21 @@ public class GameScreen implements Screen {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+            Settings.musicOn = !Settings.musicOn;
+            if(Settings.musicOn)
+                music.play();
+            else
+                music.stop();
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+            Settings.showFPS = !Settings.showFPS;
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             Settings.debugRockCollision = !Settings.debugRockCollision;
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
+            Settings.settingsMenu = !Settings.settingsMenu;
+            gui.showDebugMenu(Settings.settingsMenu);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R) ||
             (currentController != null && currentController.getButton(currentController.getMapping().buttonA))) {
