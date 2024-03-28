@@ -104,15 +104,20 @@ public class SettingsWindow extends Window {
         });
         add(PostCheckbox).left();        row();
 
-        final CheckBox AAcheckbox = new CheckBox("multi-sample frame buffer", skin);
-        AAcheckbox.setChecked(Settings.useMultiSamplingFrameBuffer);
-        AAcheckbox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Settings.useMultiSamplingFrameBuffer = AAcheckbox.isChecked();
-            }
-        });
-        add(AAcheckbox).left();        row();
+        if(Settings.multiSamplingFrameBufferAvailable) {
+            final CheckBox AAcheckbox = new CheckBox("multi-sample frame buffer", skin);
+            AAcheckbox.setChecked(Settings.useMultiSamplingFrameBuffer);
+            AAcheckbox.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    Settings.useMultiSamplingFrameBuffer = AAcheckbox.isChecked();
+                }
+            });
+            add(AAcheckbox).left();
+        }
+        else
+            add(new Label("multi-sample frame buffer not available", skin)).left();
+        row();
 
         final CheckBox CIcheckbox = new CheckBox("camera inverted", skin);
         CIcheckbox.setChecked(Settings.cameraInverted);

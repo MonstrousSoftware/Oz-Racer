@@ -93,7 +93,8 @@ public class GameView {
         particleEffects = new ParticleEffects(camera);
         exhaust = particleEffects.addExhaustFumes(world.racer.getScene().modelInstance.transform);
 
-        if( Gdx.app.getType() != Application.ApplicationType.Desktop) {
+        // multi-sampling frame buffer only for Desktop on GL ES 3.1+
+        if( Gdx.app.getType() != Application.ApplicationType.Desktop || !Gdx.graphics.isGL31Available()) {
             Settings.multiSamplingFrameBufferAvailable = false;
             Settings.useMultiSamplingFrameBuffer = false;       // multi-sampling buffer only supported on desktop
         }

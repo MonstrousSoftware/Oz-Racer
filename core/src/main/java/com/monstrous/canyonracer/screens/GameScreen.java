@@ -51,14 +51,12 @@ public class GameScreen implements Screen {
             music.play();
 
 
-
         world = new World();
-        gui = new GUI(this);
         terrainDebug = new TerrainDebug(world.terrain);
         world.playerController.update(world.racer, world, world.terrain, 0.1f); // force player transform to be updated
-
         gameView = new GameView(world);
         overlay = new CharacterOverlay();
+        gui = new GUI(this);
 
         // controller
         if (Settings.supportControllers) {
