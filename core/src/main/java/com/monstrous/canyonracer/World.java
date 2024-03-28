@@ -216,7 +216,7 @@ public class World implements Disposable {
             int fractions = (int) (10 * (World.raceTime - seconds));
             sb.setLength(0);
             sb.append(seconds);
-            sb.append('.');
+            sb.append(':');
             sb.append(fractions);
             raceTimeString = sb.toString();
         }

@@ -59,7 +59,7 @@ configure(subprojects) {
 }
 
 subprojects {
-  version = '1.0.3b'
+  version = '1.0.4'
   ext.appName = 'Oz Racer'
   repositories {
     mavenCentral()
