@@ -96,7 +96,7 @@ public class Terrain implements Disposable {
                 chunks.remove(key);
                 scenes.removeValue(oldest.getScene(), true);
                 oldest.dispose();
-                Gdx.app.log("deleting "+oldest.coord.toString(), "num chunks"+chunks.size());
+                //Gdx.app.log("deleting "+oldest.coord.toString(), "num chunks"+chunks.size());
                 return true;
             }
         }

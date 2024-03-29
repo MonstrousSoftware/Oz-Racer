@@ -5,6 +5,8 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
 import net.mgsx.gltf.loaders.gltf.GLTFAssetLoader;
@@ -23,6 +25,7 @@ public class Assets implements Disposable {
     public SceneAsset   sceneAssetGame;
     public SceneAsset   sceneAssetRocks;
     public SceneAsset   sceneAssetLogo;
+
 
     private AssetManager assets;
 
@@ -48,6 +51,7 @@ public class Assets implements Disposable {
         assets.load(  "models/OzRacer.gltf", SceneAsset.class);
         assets.load(  "models/rocks.gltf", SceneAsset.class);
         assets.load(  "models/libGDX-logo.gltf", SceneAsset.class);
+
     }
 
 

@@ -44,12 +44,10 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
 
-
         music = Main.assets.gameMusic;
         music.setLooping(true);
         if(Settings.musicOn)
             music.play();
-
 
         world = new World();
         terrainDebug = new TerrainDebug(world.terrain);
@@ -105,7 +103,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float deltaTime) {
-       // deltaTime = 0.2f;
 
         // exit with Escape or controller X button
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyJustPressed(Input.Keys.Q) ||

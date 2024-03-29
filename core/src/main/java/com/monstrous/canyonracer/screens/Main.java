@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.controllers.Controllers;
 import com.monstrous.canyonracer.Assets;
+import com.monstrous.canyonracer.ParticleEffects;
 import com.monstrous.canyonracer.Settings;
 import com.monstrous.canyonracer.input.MyControllerMappings;
 import com.monstrous.canyonracer.screens.GameScreen;
@@ -17,7 +18,6 @@ public class Main extends Game {
 
     public static Assets assets;
     public ControllerToInputAdapter controllerToInputAdapter;
-
 
     @Override
     public void create() {
