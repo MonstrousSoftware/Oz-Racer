@@ -43,10 +43,10 @@ public class ParticleEffects implements Disposable {
         AssetManager assets = new AssetManager();
         ParticleEffectLoader.ParticleEffectLoadParameter loadParam = new ParticleEffectLoader.ParticleEffectLoadParameter(particleSystem.getBatches());
         assets.load("particle/fire-and-smoke.pfx", ParticleEffect.class, loadParam);
-        assets.load("particle/rocket-plume.pfx", ParticleEffect.class, loadParam);
+        assets.load("particle/rocket-plume3.pfx", ParticleEffect.class, loadParam);
         assets.finishLoading();
         smokeEffect = assets.get("particle/fire-and-smoke.pfx");
-        exhaustEffect = assets.get("particle/rocket-plume.pfx");
+        exhaustEffect = assets.get("particle/rocket-plume3.pfx");
 
         activeEffects = new Array<>();
         deleteList = new Array<>();
