@@ -2,11 +2,9 @@ package com.monstrous.canyonracer.input;
 
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.monstrous.canyonracer.Settings;
-import com.monstrous.canyonracer.World;
 
 public class CameraController extends InputAdapter {
 
@@ -19,7 +17,7 @@ public class CameraController extends InputAdapter {
     public boolean skyCamMode = false;
     private Vector3 up;
 
-    public CameraController(PerspectiveCamera camera ) {
+    public CameraController( PerspectiveCamera camera ) {
         this.camera = camera;
         focalOffset.set(0,0,5);
         if(skyCamMode)
@@ -41,12 +39,11 @@ public class CameraController extends InputAdapter {
         distance = d;
     }
 
-    private Vector3 vTmp = new Vector3();
 
-    // viewDirection is unit forward vector pointing for the racer
     public void update ( Matrix4 targetTransform, float deltaTime ) {
 
         // get position and forward direction from racer's transform
+        // viewDirection is unit forward vector pointing for the racer
         targetTransform.getTranslation(playerPosition);
         viewDirection.set(Vector3.Z);
         viewDirection.rot(targetTransform);
@@ -69,9 +66,10 @@ public class CameraController extends InputAdapter {
         camera.lookAt(focalOffset);
         camera.up.set(up);
 
+        // add cam shake if active
         updateCameraShake(camera, deltaTime);
 
-        // top view
+        // top view (debug)
         if(skyCamMode) {
             camera.position.set(playerPosition.x, distance, playerPosition.z);
             camera.up.set(Vector3.Z);

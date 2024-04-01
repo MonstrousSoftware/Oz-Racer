@@ -19,8 +19,6 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.monstrous.canyonracer.input.CameraController;
-import com.monstrous.canyonracer.screens.Main;
-import net.mgsx.gltf.scene3d.attributes.FogAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRFloatAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
@@ -29,6 +27,10 @@ import net.mgsx.gltf.scene3d.scene.*;
 import net.mgsx.gltf.scene3d.shaders.PBRShaderProvider;
 import net.mgsx.gltf.scene3d.utils.EnvironmentUtil;
 import net.mgsx.gltf.scene3d.utils.IBLBuilder;
+
+
+// This does the game rendering.
+// It owns the SceneManager and retrieves game objects and scenes from World.
 
 public class GameView {
     private static final int SHADOW_MAP_SIZE = 4096;
@@ -60,6 +62,7 @@ public class GameView {
     private CascadeShadowMap csm;
     private boolean doProfiling = false;
     private GLProfiler glProfiler;
+    private Matrix4 exhaustTransform = new Matrix4();
 
     public GameView(World world) {
         this.world = world;
@@ -70,9 +73,10 @@ public class GameView {
         }
 
         // the default renderable sorter starts overflowing with distances > 1500
-        // so use our dedicated renderable sorter instead
+        // You may get the exception: Comparison method violates its general contract!
+        // Especially on teavm version.
+        // So use our dedicated renderable sorter instead
         sceneManager = new SceneManager(PBRShaderProvider.createDefault(0), PBRShaderProvider.createDefaultDepth(0), new MyRenderableSorter());
-
         ModelBatch depthBatch = new ModelBatch( PBRShaderProvider.createDefaultDepth(0), new MyRenderableSorter());
         sceneManager.setDepthBatch(depthBatch);
 
@@ -85,7 +89,7 @@ public class GameView {
         modelBatch = new ModelBatch();
         instances = new Array<>();
 
-        sunPosition = new Vector3(10,15, -15); // aligned with skybox texture
+        sunPosition = new Vector3(10,15, -15); // manually aligned with skybox texture
         lensFlare = new LensFlare();
 
         buildEnvironment();
@@ -137,16 +141,20 @@ public class GameView {
     }
 
     public void refresh() {
+        // Here we add all scenes to the scene manager.  This is called every frame, which sounds expensive
+        // but actually isn't.
+        //
         sceneManager.getRenderableProviders().clear();        // remove all scenes
 
         // terrain chunks are taken directly from the Terrain class, these are not game objects
         for(Scene scene : world.terrain.scenes)
             sceneManager.addScene(scene, false);
 
+        // rocks and turbines are taken from their model cache
         sceneManager.getRenderableProviders().add(world.rocks.cache);
         sceneManager.getRenderableProviders().add(world.turbines.cache);
 
-        // add scene for each game object
+        // add scene for each (visible) game object
         int num = world.getNumGameObjects();
         for(int i = 0; i < num; i++){
             GameObject go =  world.getGameObject(i);
@@ -158,7 +166,7 @@ public class GameView {
     }
 
 
-    private Matrix4 exhaustTransform = new Matrix4();
+
 
     public void render(float deltaTime) {
         if(doProfiling)
@@ -174,6 +182,7 @@ public class GameView {
         // animate camera
         cameraController.update(racerTransform, deltaTime);
 
+        // relocate shadow light
         light.setCenter(world.playerPosition); // keep shadow light on player so that we have shadows
 
         refresh();  // fill scene array
@@ -195,6 +204,7 @@ public class GameView {
 
         //lensFlare.showLightPosition();    // debug
 
+        // debug option: show shadow light frustum (only visible without the post shader)
         if(Settings.showLightBox) {
             modelBatch.begin(sceneManager.camera);
             modelBatch.render(instances);
@@ -230,7 +240,7 @@ public class GameView {
         sceneManager.renderColors();
         particleEffects.render(camera);
         fboMS.end();
-        fboMS.transfer(fbo);
+        fboMS.transfer(fbo);        // transfer multi-sampling fbo to output fbo
         postFilter.render(fbo);
     }
 
@@ -289,7 +299,6 @@ public class GameView {
         IBLBuilder iblBuilder = IBLBuilder.createOutdoor(light);
         environmentCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(),
             "skybox/side-", ".png", EnvironmentUtil.FACE_NAMES_NEG_POS);
-        //environmentCubemap = iblBuilder.buildEnvMap(1024);
         diffuseCubemap = iblBuilder.buildIrradianceMap(256);
         specularCubemap = iblBuilder.buildRadianceMap(10);
         iblBuilder.dispose();

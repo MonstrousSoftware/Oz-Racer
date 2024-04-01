@@ -6,12 +6,13 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerAdapter;
 
 
-// to handle game controllers
-// relays events to player controller
+// to handle game controllers in-game.
+// relays events to player controller: button presses are mapped to key presses
+// axis movements are passed to the player controller.
 
 
 public class MyControllerAdapter extends ControllerAdapter {
-    private PlayerController playerController;
+    private final PlayerController playerController;
 
     public MyControllerAdapter(PlayerController playerController) {
         super();

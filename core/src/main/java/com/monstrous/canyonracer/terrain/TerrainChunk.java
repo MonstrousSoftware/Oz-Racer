@@ -12,9 +12,9 @@ import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.math.collision.BoundingBox;
-import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.canyonracer.Settings;
+import com.monstrous.canyonracer.screens.Main;
 import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
 import net.mgsx.gltf.scene3d.scene.Scene;
 
@@ -28,19 +28,17 @@ public class TerrainChunk implements Disposable {
 
 
     public GridPoint2 coord;
-    public int creationTime;            // when was chunk created? used to delete oldest chunks when needed
+    public int creationTime;            // when was chunk created? used to delete old chunks when needed
     public int lastSeen;
+    public BoundingBox bbox;
+
     private Model model;
     private static Texture terrainTexture;         //  shared between chunks
     private ModelInstance modelInstance;
     private Scene scene;
     private float[][] heightMap;
-    private float[] vertPositions;  // for collision detection, 3 floats per vertex
-    private short[] indices;    // 3 indices per triangle
-    private int numIndices;
-    private Vector3[][] normalVectors = new Vector3[MAP_SIZE+1][MAP_SIZE+1];
     private Vector3 position; // position of terrain in world coordinates
-    public BoundingBox bbox;
+
 
 
     public TerrainChunk(int xoffset, int yoffset, int creationTime) {
@@ -62,22 +60,14 @@ public class TerrainChunk implements Disposable {
                 heightMap[y][x] *= AMPLITUDE;
 
 
-        // todo use asset manager
         if(terrainTexture == null) {
-            terrainTexture = new Texture(Gdx.files.internal("textures/ground/smooth+sand+dunes-512x512.jpg"), true);
+            terrainTexture = Main.assets.terrainTexture; //new Texture(Gdx.files.internal("textures/ground/smooth+sand+dunes-512x512.jpg"), true);
             terrainTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
             terrainTexture.setFilter(Texture.TextureFilter.MipMap, Texture.TextureFilter.Nearest);
         }
 
-//        Texture normalTexture = new Texture(Gdx.files.internal("textures/ground/ground-normal.png"), true);
-//        normalTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-//        normalTexture.setFilter(Texture.TextureFilter.MipMap, Texture.TextureFilter.Nearest);
-
-
-
         Material material =  new Material();
         material.set(PBRTextureAttribute.createBaseColorTexture(terrainTexture));
-//        material.set(PBRTextureAttribute.createNormalTexture(normalTexture));
 
         model = makeGridModel(heightMap, SCALE, MAP_SIZE, GL20.GL_TRIANGLES, material);
         modelInstance =  new ModelInstance(model, position);
@@ -99,8 +89,6 @@ public class TerrainChunk implements Disposable {
     // make a Model consisting of a square grid
     private Model makeGridModel(float[][] heightMap, float scale, int divisions, int primitive, Material material) {
         final int N = divisions;
-        numIndices = 0;
-        int numFloats = 0;
 
         int attr = VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates;
 
@@ -111,9 +99,6 @@ public class TerrainChunk implements Disposable {
         final int numTris = 2 * N * N;
         Vector3[] positions = new Vector3[numVerts];
         Vector3[] normals = new Vector3[numVerts];
-
-        vertPositions = new float[3 * numVerts];      // todo redundant?
-        indices = new short[3 * numTris];
 
         meshBuilder.ensureVertices(numVerts);
         meshBuilder.ensureTriangleIndices(numTris);
@@ -134,7 +119,6 @@ public class TerrainChunk implements Disposable {
             }
         }
 
-        numIndices = 0;
         for (int y = 1; y <= N; y++) {
             short v0 = (short) ((y - 1) * (N + 1));    // vertex number at top left of this row
             for (int x = 0; x <= N-1; x++, v0++) {
@@ -155,12 +139,8 @@ public class TerrainChunk implements Disposable {
             normal.set(normals[i]);     // sum of normals to get smoothed normals
             normal.nor();               // take average
 
-
-
             int x = i % (N+1);	// e.g. in [0 .. 3] if N == 3
             int y = i / (N+1);
-
-            normalVectors[y][x] = new Vector3(normal);
 
             float reps=64; //16
             float u = (x*reps)/(float)(N+1);
@@ -170,10 +150,6 @@ public class TerrainChunk implements Disposable {
             vert.uv.x = u;					// texture needs to have repeat wrapping enables to handle u,v > 1
             vert.uv.y = v;
             meshBuilder.vertex(vert);
-
-            vertPositions[numFloats++] = vert.position.x;
-            vertPositions[numFloats++] = vert.position.y;
-            vertPositions[numFloats++] = vert.position.z;
         }
 
         Model model = modelBuilder.end();
@@ -190,12 +166,7 @@ public class TerrainChunk implements Disposable {
         //      | /  |
         //     v0 --v1
         // triangle v0,v1,v2 and v2, v3, v0
-        indices[numIndices++] = v0;
-        indices[numIndices++] = v1;
-        indices[numIndices++] = v2;
-        indices[numIndices++] = v2;
-        indices[numIndices++] = v3;
-        indices[numIndices++] = v0;
+
     }
 
     /*
@@ -220,21 +191,12 @@ public class TerrainChunk implements Disposable {
         normals[v2].add(n);
     }
 
-    public boolean intersect(Ray ray, Vector3 intersection ) {
-        ray.origin.sub(position);  // make ray relative to terrain space
-        boolean hit = Intersector.intersectRayTriangles(ray, vertPositions, indices, 3, intersection);
-        intersection.add(position); // convert local terrain coordinate to world coordinate
-        return hit;
-    }
-
 
     private Vector2 baryCoord = new Vector2();
 
     // x, z relative to terrain chunk
     public float getHeight(float relx, float relz) {
         // position relative to terrain origin
-//        float relx = x - position.x;
-//        float relz = z - position.z;
 
         // position in grid (rounded down) : grid cell coordinates [0.. MAP_SIZE-1]
         int mx = (int)Math.floor((relx * MAP_SIZE) / Settings.chunkSize);
@@ -258,23 +220,6 @@ public class TerrainChunk implements Disposable {
             ht =  GeometryUtils.fromBarycoord(baryCoord, heightMap[mz+1][mx+1], heightMap[mz+1][mx], heightMap[mz][mx+1]);
         }
         return ht;
-    }
-
-    public void getNormal(float x, float z, Vector3 outNormal) {
-        // position relative to terrain origin
-        float relx = x - position.x;
-        float relz = z - position.z;
-
-        // position in grid (rounded down)
-        int mx = (int)Math.floor(relx * (MAP_SIZE-1) / Settings.chunkSize);
-        int mz = (int)Math.floor(relz * (MAP_SIZE-1) / Settings.chunkSize);
-
-        if(mx < 0 ||mx >= (MAP_SIZE-1) || mz < 0 || mz >= (MAP_SIZE-1)) {
-            outNormal.set(0,1,0);
-            return;
-        }
-        // note: we're using one normal per quad, not per triangle to reduce jitter of the tank
-        outNormal.set(normalVectors[mz][mx]);           // use smoothed vertex normal
     }
 
 }

@@ -29,8 +29,6 @@ import net.mgsx.gltf.scene3d.utils.IBLBuilder;
 
 public class MainMenuScreen extends MenuScreen {
 
-    private static final int SHADOW_MAP_SIZE = 2048;
-
     private SceneManager sceneManager;
     private SceneAsset sceneAsset;
     private Scene scene;
@@ -63,9 +61,7 @@ public class MainMenuScreen extends MenuScreen {
         scene = new Scene(sceneAsset.scene,"BackDrop");
         sceneManager.addScene(scene);
 
-        // setup camera (The BoomBox model is very small so you may need to adapt camera settings for your scene)
         camera = new PerspectiveCamera(60f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        float d = 250.0f;
         camera.near = 0.01f;
         camera.far = 1000f;
         sceneManager.setCamera(camera);
@@ -73,9 +69,7 @@ public class MainMenuScreen extends MenuScreen {
         sceneManager.environment.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, 0.001f));
 
         // setup light
-        //light = new DirectionalLightEx();
         light = new DirectionalLightEx();
-        //DirectionalShadowLight(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE).setViewport(5,5,5,40);
 
         light.direction.set(1, -3, -1).nor();
         light.color.set(Color.WHITE);
@@ -139,7 +133,6 @@ public class MainMenuScreen extends MenuScreen {
         TextButton play = new TextButton("Play Game", skin);
         TextButton region = new TextButton("Monitor Orientation", skin);
         TextButton options = new TextButton("Options", skin);
-//        TextButton scores = new TextButton("High Scores", skin);
         TextButton quit = new TextButton("Quit", skin);
 
         float pad = 17f;
@@ -150,8 +143,8 @@ public class MainMenuScreen extends MenuScreen {
         Table menu = new Table();
         menu.add(play).pad(pad).left().bottom().row();
         menu.add(region).pad(pad).left().row();
-//        screenTable.add(scores).pad(pad).row();
         menu.add(options).pad(pad).left().row();
+
         // hide quit on web unless we have an outro screen
         if(!(Gdx.app.getType() == Application.ApplicationType.WebGL) )
             menu.add(quit).pad(pad).left().row();
@@ -212,7 +205,6 @@ public class MainMenuScreen extends MenuScreen {
             stage.clearFocusableActors();
             stage.addFocusableActor(play);
             stage.addFocusableActor(region);
-//            stage.addFocusableActor(scores);
             stage.addFocusableActor(options);
             stage.addFocusableActor(quit);
             stage.setFocusedActor(play);

@@ -7,18 +7,16 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import net.mgsx.gltf.scene3d.scene.Scene;
 
 public class GameObject {
-    private Scene scene;
+    private final Scene scene;
     public final Vector3 center = new Vector3();
     public final Vector3 dimensions = new Vector3();
     public float radius;
-    private static BoundingBox bbox = new BoundingBox();
-    private Vector3 pos = new Vector3();
-    public boolean isRock;
+    private static final BoundingBox bbox = new BoundingBox();
+    private final Vector3 pos = new Vector3();
 
     public GameObject(Scene scene) {
         this.scene = scene;
         calculateBoundingBox();
-        isRock = false;
     }
 
     // call this after rotation or scaling (expensive; don't do this per frame)

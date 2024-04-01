@@ -10,18 +10,16 @@ import net.mgsx.gltf.scene3d.scene.Scene;
 import java.util.HashMap;
 
 
-
 // Infinite Terrain using terrain chunks that are generated on demand.
 // It is subdivided into chunks of size Settings.chunkSize
 
 
 public class Terrain implements Disposable {
-    private static int RANGE = 2;
+    private static final int RANGE = 2;               // viewing range in chunks
 
-    HashMap<Integer, TerrainChunk> chunks;      // map of terrain chunk per grid point
-    public Array<Scene> scenes;                 // scenes to be rendered
-    int timeCounter;
-    private Noise noise = new Noise();
+    final HashMap<Integer, TerrainChunk> chunks;      // map of terrain chunk per grid point
+    public final Array<Scene> scenes;                 // scenes to be rendered
+    int timeCounter;                            // used as timestamp for chunk creation time
 
     public Terrain( Vector3 startPosition) {
         chunks = new HashMap<>();
@@ -31,7 +29,7 @@ public class Terrain implements Disposable {
         int pz = (int)Math.floor(startPosition.z/Settings.chunkSize);
 
         // Add a NxN square of chunks to the scenes array (is RANGE is 2, this is 5x5)
-        // Create chunks as needed (but not more than one at a time)
+        // Create chunks as needed
 
         for (int cx = px-RANGE; cx <= px+RANGE; cx++) {
             for (int cz = pz-RANGE; cz <= pz+RANGE; cz++) {
@@ -56,7 +54,7 @@ public class Terrain implements Disposable {
         int pz = (int)Math.floor(cam.position.z/Settings.chunkSize);
 
         // Add a NxN square of chunks to the scenes array (is RANGE is 2, this is 5x5)
-        // Create chunks as needed (but not more than one at a time)
+        // Create chunks as needed (but not more than one at a time to avoid stutter)
 
         int added = 0;
         scenes.clear();
@@ -80,7 +78,7 @@ public class Terrain implements Disposable {
         }
 
         // keep the chunk cache at a reasonable size
-        // delete the oldest chunk if necessary
+        // delete the oldest chunk if cache gets too big
 
         if(added == 0 && chunks.size() > Settings.chunkCacheSize){
             // find the oldest chunk
@@ -111,19 +109,6 @@ public class Terrain implements Disposable {
 
     // get terrain height at (x,z)
     public float getHeight(float x, float z) {
-
-
-//        x /= Settings.chunkSize;
-//        z /= Settings.chunkSize;
-//        //z += 1000* TerrainChunk.MAP_SIZE;
-//        float px = x / (float)TerrainChunk.GRID_SCALE;
-//        float pz = z / (float)TerrainChunk.GRID_SCALE;
-//
-//        float y = noise.PerlinNoise(px, pz);
-//        y *= TerrainChunk.AMPLITUDE;
-//        return y;
-
-
 
         // work out what chunk we're in
         // and the relative position for that chunk

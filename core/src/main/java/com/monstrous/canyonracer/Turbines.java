@@ -1,23 +1,23 @@
 package com.monstrous.canyonracer;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.ModelCache;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.Array;
 import net.mgsx.gltf.scene3d.scene.Scene;
 
+// Similar to Rocks.
+// Because blades are rotating they are not in the model cache but are game objects.
 
 public class Turbines {
-    private static int AREA_LENGTH = 10000;
-    private static int SEPARATION_DISTANCE = 500;
+    private static final int AREA_LENGTH = 10000;
+    private static final int SEPARATION_DISTANCE = 500;
 
     private float angle;
-    private Array<GameObject> blades;
-    private Vector3 pos = new Vector3();
-    public ModelCache cache;
+    private final Array<GameObject> blades;
+    private final Vector3 pos = new Vector3();
+    public final ModelCache cache;
 
     // note: perhaps we should generate along with chunks to have an infinite amount
 
@@ -58,7 +58,7 @@ public class Turbines {
         Scene scene = world.loadNode("Turbine", true, pos);
 
         float h = world.terrain.getHeight(x,z);
-        world.colliders.addCollider(scene.modelInstance, h+5f);
+        world.colliders.addCollider(scene.modelInstance, h+Settings.flyHeight);
         return scene.modelInstance;
     }
 

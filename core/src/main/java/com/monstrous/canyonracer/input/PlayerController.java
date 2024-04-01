@@ -11,6 +11,9 @@ import com.monstrous.canyonracer.Settings;
 import com.monstrous.canyonracer.World;
 import com.monstrous.canyonracer.terrain.Terrain;
 
+
+// Controller for the racer using keyboard input and/or gamecontroller input
+
 public class PlayerController extends InputAdapter {
 
     public static int forwardKey = Input.Keys.W;
@@ -73,8 +76,9 @@ public class PlayerController extends InputAdapter {
         return true;
     }
 
-    public void update (GameObject racer, World world, Terrain terrain, float deltaTime ) {
+    public void update (GameObject racer, Terrain terrain, float deltaTime ) {
 
+        // sink to the ground when dead
         if(World.healthPercentage <= 0) {
             hoverHeight = 0;
         }
@@ -94,7 +98,7 @@ public class PlayerController extends InputAdapter {
         else if(boostFactor > 0)
             boostFactor -= deltaTime;
 
-        // consume nitro if boosting, or else slowly replenish the nitro
+        // consume nitro if boosting, or if not: slowly replenish the nitro
         if(boostFactor > 0) {
             World.nitroLevel -= boostFactor * deltaTime * Settings.nitroConsumption;
             if(World.nitroLevel <= 0)
@@ -107,9 +111,6 @@ public class PlayerController extends InputAdapter {
 
         acceleration += boostFactor*acceleration;
 
-
-
-        // potential idea: turn rate depends on speed
         if (keys.containsKey(turnLeftKey)&& World.healthPercentage > 0) {
             if (turnAngle < Settings.maxTurn)
                 turnAngle += deltaTime * Settings.turnRate;
@@ -124,7 +125,6 @@ public class PlayerController extends InputAdapter {
         }
         else
             turnAngle -= turnAngle * 2f * deltaTime;      // auto-level
-        // todo smoother reaction to stick movement
 
         Matrix4 transform = racer.getScene().modelInstance.transform;
         transform.getTranslation(playerPos);
@@ -132,17 +132,17 @@ public class PlayerController extends InputAdapter {
         // place racer fixed distance above the terrain, i.e. it follows the terrain
         targetHeight = hoverHeight+terrain.getHeight(playerPos.x, playerPos.z);
 
-        // lerp with deltaTime is not appropriate!
+        // move towards target height with some lag
         playerPos.y = moveTowards(playerPos.y, targetHeight, Settings.heightLag*deltaTime);
 
         // apply rotation to player transform (yaw)
         rotation += turnAngle*deltaTime;
         transform.setToRotation(Vector3.Y, rotation);
+        // roll
         transform.rotate(Vector3.Z, -turnAngle * Settings.bankFactor);                // bank for visual effect
 
         // determine forward vector of the racer from its transform
         forwardDirection.set(Vector3.Z).rot(transform);
-
 
         // apply acceleration to velocity: v' = v + dt.a
         tmpV.set(forwardDirection).scl(deltaTime * acceleration);
@@ -152,10 +152,6 @@ public class PlayerController extends InputAdapter {
         drag.set(velocity).scl(deltaTime*Settings.dragFactor);
         velocity.sub(drag);
 
-        // never go backwards
-//        if(velocity.dot(forwardDirection)< 0)
-//            velocity.set(0,0,0);
-
         // apply velocity to position
         tmpV.set(velocity).scl(deltaTime);
         playerPos.add(tmpV);
@@ -163,14 +159,16 @@ public class PlayerController extends InputAdapter {
     }
 
     // act on collision impact
+    // normal is the surface normal we collided with
     public void collisionImpact( Vector3 normal, GameObject racer ) {
         boostFactor = 0;                    // remove any boost
 
         // reflect the velocity vector across the normal vector of the collider surface: r = d - 2(d.n)n
         float dot = velocity.dot(normal);
         velocity.sub(normal.scl(2f*dot));
-        //rotation = dot;
         turnAngle = dot;
+
+        // instantly throw racer some distance away from the collision
         tmpV.set(velocity).scl(.1f);
         racer.getScene().modelInstance.transform.translate(tmpV);
     }

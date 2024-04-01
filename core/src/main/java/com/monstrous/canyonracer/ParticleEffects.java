@@ -14,7 +14,6 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.monstrous.canyonracer.screens.Main;
 
 
 public class ParticleEffects implements Disposable {
@@ -23,11 +22,9 @@ public class ParticleEffects implements Disposable {
     private ParticleSystem particleSystem;
     private Array<ParticleEffect> activeEffects;
     private Array<ParticleEffect> deleteList;
-
     private ParticleEffect smokeEffect;
     private ParticleEffect exhaustEffect;
 
-    private Matrix4 tmpTransform = new Matrix4();
 
     public ParticleEffects(Camera cam) {
         // create a particle system
@@ -58,13 +55,10 @@ public class ParticleEffects implements Disposable {
     //
     public ParticleEffect addExhaustFumes(Matrix4 transform) {
 
-            // we cannot use the originalEffect, we must make a copy each time we create new particle effect
-//            tmpTransform.set(transform);
-//            tmpTransform.translate(0.0f, -2.5f, -7f);           // offset for tail pipe
-            ParticleEffect effect = exhaustEffect.copy();
-            addEffect(effect, transform);
-            return effect;
-
+        // we cannot use the originalEffect, we must make a copy each time we create new particle effect
+        ParticleEffect effect = exhaustEffect.copy();
+        addEffect(effect, transform);
+        return effect;
     }
 
     // add effect

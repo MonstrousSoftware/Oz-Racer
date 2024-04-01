@@ -1,7 +1,9 @@
 package com.monstrous.canyonracer.terrain;
 
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.Vector2;
+
+// Perlin noise functions
+
 
 public class Noise {
 
@@ -75,7 +77,6 @@ public class Noise {
     public float[][] generatePerlinMap (int width, int height, float xoffset, float yoffset, int gridscale) {
         float[][] noise = new float[height][width];
 
-//        float min = 9999f, max = -9999f;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
 
@@ -83,19 +84,8 @@ public class Noise {
                 float yf = yoffset+(float)y/(float)gridscale;
                 float value = PerlinNoise(xf, yf);
                 noise[y][x] = value;
-//                if(value < min)
-//                    min = value;
-//                if(value > max)
-//                    max = value;
             }
         }
-
-        // normalize
-//        for (int y = 0; y < height; y++) {
-//            for (int x = 0; x < width; x++) {
-//                noise[y][x] = (noise[y][x]-min)/(max - min);
-//            }
-//        }
         return noise;
 
     }
@@ -157,31 +147,5 @@ public class Noise {
         }
         return smoothedNoise;
     }
-
-    public float[][] generateSmoothedPerlinMap (int width, int height,  float xoffset, float yoffset, int gridscale) {
-        float[][] baseNoise = generatePerlinMap(width, height, xoffset, yoffset, gridscale);
-        return smoothNoise(width, height, baseNoise);
-    }
-
-
-
-    // from tests/g3d/voxel/PerlinNoiseGenerator.java
-    public Pixmap generatePixmap (float [][] map, int size) {
-
-        Pixmap pixmap = new Pixmap(size, size, Pixmap.Format.RGBA8888);
-        int idx = 0;
-        for(int y = 0; y < size; y++) {
-            for(int x = 0; x < size; x++) {
-                byte val = (byte) (map[x][y] * 255f);
-
-                pixmap.getPixels().put(idx++, val);
-                pixmap.getPixels().put(idx++, val);
-                pixmap.getPixels().put(idx++, val);
-                pixmap.getPixels().put(idx++, (byte) 255);
-            }
-        }
-        return pixmap;
-    }
-
 
 }

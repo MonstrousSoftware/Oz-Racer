@@ -9,14 +9,14 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 
-// post-processing effect to render an FBO to screen applying shader effects
-// requires that you've rendered the seen to an FBO
+// Post-processing effect to render an FBO to screen applying shader effects
+// Requires that you've rendered the scene to an FBO
 
 public class PostFilter implements Disposable {
 
-    private SpriteBatch batch;
-    private ShaderProgram program;
-    private float[] resolution = { 640, 480 };
+    private final SpriteBatch batch;
+    private final ShaderProgram program;
+    private final float[] resolution = { 640, 480 };
 
     public PostFilter() {
         // full screen post processing shader

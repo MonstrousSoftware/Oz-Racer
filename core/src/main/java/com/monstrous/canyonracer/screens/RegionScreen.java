@@ -12,12 +12,9 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.monstrous.canyonracer.Settings;
 
 
-// todo handle F11 key presses on web by reflecting the correct state of the fullscreen checkbox
-
-
 public class RegionScreen extends MenuScreen {
-    private Controller controller;
-    private Label controllerLabel;
+
+    private final Color backgroundColor = new Color(38f/255f, 127f/255f, 102f/255f, 1.0f);
 
     public RegionScreen(Main game) {
         super(game);
@@ -98,8 +95,6 @@ public class RegionScreen extends MenuScreen {
        });
 
    }
-
-    private Color backgroundColor = new Color(38f/255f, 127f/255f, 102f/255f, 1.0f);
 
     @Override
     public void render(float delta) {

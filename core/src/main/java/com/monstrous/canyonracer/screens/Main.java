@@ -5,13 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.controllers.Controllers;
 import com.monstrous.canyonracer.Assets;
-import com.monstrous.canyonracer.ParticleEffects;
 import com.monstrous.canyonracer.Settings;
 import com.monstrous.canyonracer.input.MyControllerMappings;
-import com.monstrous.canyonracer.screens.GameScreen;
 import de.golfgl.gdx.controllers.mapping.ControllerToInputAdapter;
-
-import static com.badlogic.gdx.Application.ApplicationType.Desktop;
 
 
 public class Main extends Game {
@@ -26,7 +22,7 @@ public class Main extends Game {
 
         Gdx.app.log("Gdx version", com.badlogic.gdx.Version.VERSION);
         Gdx.app.log("OpenGL version", Gdx.gl.glGetString(Gdx.gl.GL_VERSION));
-        Gdx.app.log("Platform", ""+Gdx.app.getType());
+        Gdx.app.log("Platform", String.valueOf(Gdx.app.getType()));
 
         if (Settings.supportControllers) {
             controllerToInputAdapter = new ControllerToInputAdapter(new MyControllerMappings());
@@ -40,8 +36,7 @@ public class Main extends Game {
         if(Settings.release)
             setScreen(new LogoScreen( this ));
         else
-            setScreen( new GameScreen( this ));
-        //setScreen(new SkyBoxConverter());
+            setScreen( new GameScreen( this  ));
     }
 
 

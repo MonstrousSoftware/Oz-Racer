@@ -1,6 +1,5 @@
 package com.monstrous.canyonracer.collision;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
@@ -8,16 +7,17 @@ import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.Array;
 
 
-// Collision detection is done with dedicated methods.
+// This class stores the colliders as 2d polygons.
+// These are the outlines of obstacles at fly height
 
 public class Colliders {
-    private static final float EPSILON = 0.001f;
+    private static final float EPSILON = 0.001f;    // distance where vertices are considered same
 
+    final Array<Polygon> collisionPolygons;         // used only for CollidersView (debug)
+    final SpatialHash spatialHash;                  // spatial hash of Polygons
     private final Vector3 pos = new Vector3();
     private final Array<Vector3> intersections;
-    final Array<Polygon> collisionPolygons;         // used only for CollidersView (debug)
     private final Vector2 vec2 = new Vector2();
-    final SpatialHash spatialHash;
 
     public Colliders() {
         intersections = new Array<>();
@@ -25,6 +25,7 @@ public class Colliders {
         spatialHash = new SpatialHash();
     }
 
+    // is racer in collision?  returns collider position if true
     public boolean inCollision(Vector3 racerPosition, Vector3 outColliderPosition ){
         Array<Polygon> polygons = spatialHash.findPolygons(racerPosition.x, racerPosition.z);
         if(polygons == null)
@@ -36,7 +37,6 @@ public class Colliders {
                 continue;
 
             if(poly.contains(vec2)){
-
                 outColliderPosition.set(poly.getX(), 0, poly.getY());
                 return true;
             }
@@ -44,9 +44,11 @@ public class Colliders {
         return false;
     }
 
-
-    public void addCollider(ModelInstance rock, float h){
-        Mesh mesh = rock.nodes.first().parts.first().meshPart.mesh;
+    // derive polygon outline of model instance intersected with horizonal plane at given height
+    // and add it to colliders list
+    //
+    public void addCollider(ModelInstance obstacle, float height){
+        Mesh mesh = obstacle.nodes.first().parts.first().meshPart.mesh;
 
         int numVertices = mesh.getNumVertices();
         int numIndices = mesh.getNumIndices();
@@ -84,40 +86,34 @@ public class Colliders {
                 v0.set(vertices[stride * i0 + posOffset], vertices[stride * i0 + posOffset + 1], vertices[stride * i0 + posOffset + 2]);
                 v1.set(vertices[stride * i1 + posOffset], vertices[stride * i1 + posOffset + 1], vertices[stride * i1 + posOffset + 2]);
                 // apply the transform of the model instance
-                v0.mul(rock.transform);
-                v1.mul(rock.transform);
+                v0.mul(obstacle.transform);
+                v1.mul(obstacle.transform);
 
-                //Gdx.app.log("vertex:", "v0="+v0.toString()+" v1="+v0.toString());
-
-                float d0 = v0.y - h;
-                float d1 = v1.y - h;
-                if (d0 * d1 < 0) {
-
+                float d0 = v0.y - height;
+                float d1 = v1.y - height;
+                if (d0 * d1 < 0) {  // edge crosses plane
+                    // calculate fraction of the edge from d0 to intersection point
                     float frac = Math.abs(d0)/(Math.abs(d0) + Math.abs(d1));
                     edge.set(v1).sub(v0);
-                    midPoint.set(edge).scl(frac).add(v0);
-
-                    //Gdx.app.log("line crossing plane", "d0:" + d0 + " d1:" + d1+" frac:"+frac+" midpoint:"+midPoint.toString());
-
+                    midPoint.set(edge).scl(frac).add(v0); // derive point of intersection
+                    // store in vertex array for this triangle
                     vindex[crossings++] = addToIntersectPoints( midPoint );
                 }
             }
-            //Gdx.app.log("triangle", "t:" + t + " crossings:" + crossings);
             if(crossings > 0){
-                //Gdx.app.log("triangle", "t:" + t + " crossings:" + crossings + "v"+vindex[0] + " v"+vindex[1]);
+                // assume if the triangle crosses once , then it crossed twice
+                // the two intersection points form an edge of the polygon
                 edges.add( new GridPoint3( vindex[0], vindex[1], 0));
             }
 
         }
 
-//        for(GridPoint3 e : edges ){
-//            Gdx.app.log("edges", "v"+e.x + " - v"+e.y);
-//        }
+        // now order the polygon edges by connecting vertices to form a loop
+        // (or multiple loops) e.g. edge 1-2 connects to 2-3 connects to 3-4 etc.
 
         Array<Vector3> polyNodes = new Array<>();
         int start = 0;
         int curr = start;
-        //Gdx.app.log("start", String.valueOf(curr));
         polyNodes.add( intersections.get(curr) );
         while(true) {
             boolean found = false;
@@ -138,14 +134,10 @@ public class Colliders {
                 }
             }
             if(!found) {
-                //Gdx.app.log("end (error)", "");
                 break;
             }
-            //else
-               // Gdx.app.log("next", String.valueOf(curr));
 
-            if(curr == start) {
-                //Gdx.app.log("loop closed", String.valueOf(curr));
+            if(curr == start) { // loop complete
 
                 if(polyNodes.size >= 3) {
                     float[] vertexData = new float[2 * polyNodes.size];
@@ -155,7 +147,7 @@ public class Colliders {
                         vertexData[i++] = p.z;
                     }
                     Polygon poly = new Polygon(vertexData);
-                    rock.transform.getTranslation(pos);
+                    obstacle.transform.getTranslation(pos);
                     poly.setOrigin(pos.x, pos.z);
                     spatialHash.addPolygon(poly);
                     collisionPolygons.add(poly);
@@ -170,7 +162,6 @@ public class Colliders {
                     }
                 }
                 if(start < 0) {
-//                    Gdx.app.log("all done", "");
                     break;
                 }
                 curr = start;

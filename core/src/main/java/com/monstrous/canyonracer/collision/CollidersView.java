@@ -4,18 +4,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.*;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 
-// provides top-down view of collider polygons for debugging
+// provides top-down view of collider polygons for debugging purposes
 
 public class CollidersView implements Disposable {
-    private static float DEBUG_VIEW_SCALE = 5;
+    private static final float DEBUG_VIEW_SCALE = 5;
 
-    private ShapeRenderer sr;
+    private final ShapeRenderer sr;
     private int cx, cy;
-    private Polygon poly;
+    private final Polygon poly;
 
     public CollidersView() {
         sr = new ShapeRenderer();
@@ -45,7 +44,7 @@ public class CollidersView implements Disposable {
             sr.polygon(poly.getTransformedVertices());
         }
 
-        // racer
+        // little circle indicates racer position
         sr.setColor(Color.YELLOW);
         sr.circle(cx, cy, 5);
         sr.end();

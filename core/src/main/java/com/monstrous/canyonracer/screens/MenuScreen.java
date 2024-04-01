@@ -22,8 +22,6 @@ public class MenuScreen extends StdScreenAdapter {
     protected Viewport viewport;
     protected MyControllerMenuStage stage;      // from gdx-controllers-utils
     protected Skin skin;
-//    private MenuBackground background;
-
 
     public MenuScreen(Main game) {
         this.game = game;
@@ -41,8 +39,6 @@ public class MenuScreen extends StdScreenAdapter {
         input.setCatchKey(Input.Keys.DOWN, true);
         if(Settings.supportControllers)
             game.controllerToInputAdapter.setInputProcessor(stage); // forward controller input to stage
-
-//        background = new MenuBackground();
     }
 
     protected void playSelectNoise() {
@@ -57,7 +53,6 @@ public class MenuScreen extends StdScreenAdapter {
     @Override
     public void render(float delta) {
         super.render(delta);
-//        background.render(delta);
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -71,7 +66,6 @@ public class MenuScreen extends StdScreenAdapter {
         viewport.update(width, height, true);
         stage.getViewport().update(width, height, true);
         rebuild();
-//        background.resize(width, height);
     }
 
 
@@ -85,12 +79,12 @@ public class MenuScreen extends StdScreenAdapter {
     public void dispose() {
         // Destroy screen's assets here.
         stage.dispose();
-//        background.dispose();
     }
 
 
     // This is like stage.setFocusedActor(actor) but works when actor is not hittable.
     // (perhaps not yet while we rebuild the stage?)
+    // This solves the issue that the focused menu item is not highlighted when the menu is first shown.
     //
     public void focusActor(Actor actor) {
         InputEvent event = new InputEvent();

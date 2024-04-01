@@ -1,7 +1,6 @@
 package com.monstrous.canyonracer.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerPowerLevel;
 import com.badlogic.gdx.controllers.Controllers;
@@ -17,9 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.monstrous.canyonracer.Settings;
-
-
-// todo handle F11 key presses on web by reflecting the correct state of the fullscreen checkbox
 
 
 public class OptionsScreen extends MenuScreen {
@@ -210,10 +206,7 @@ public class OptionsScreen extends MenuScreen {
            public void clicked(InputEvent event, float x, float y) {
                super.clicked(event, x, y);
                playSelectNoise();
-//               if(gameScreen != null)
-//                game.setScreen(new PauseMenuScreen( game, gameScreen ));
-//               else
-                game.setScreen(new MainMenuScreen( game ));
+               game.setScreen(new MainMenuScreen( game ));
            }
        });
 

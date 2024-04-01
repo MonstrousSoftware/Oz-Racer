@@ -1,12 +1,8 @@
 package com.monstrous.canyonracer;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.ModelCache;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
@@ -14,25 +10,25 @@ import net.mgsx.gltf.scene3d.scene.Scene;
 
 // Rocks are not categorized as GameObjects
 // They are rendered directly from the model cache
-// Collision detection is done with dedicated methods.
+// Collision detection is done with dedicated methods (see Colliders)
 
 public class Rocks implements Disposable {
-    public static int AREA_LENGTH = 5000;
-    public static int AREA_LENGTH2 = 12000;
-    private static int SEPARATION_DISTANCE = 200;  // 200
-    private static int SEPARATION_DISTANCE2 = 1500;  // 200
+    public static final int AREA_LENGTH = 5000;
+    public static final int AREA_LENGTH2 = 12000;
+    private static final int SEPARATION_DISTANCE = 200;
+    private static final int SEPARATION_DISTANCE2 = 1500;
 
-    private static String[] names = { "Rock", "Rock.001", "Rock.002", "Rock.003", "Rock.004" };
+    private static final String[] names = { "Rock", "Rock.001", "Rock.002", "Rock.003", "Rock.004" }; // must match node names in gltf file
 
-    private Vector3 pos = new Vector3();
-    public ModelCache cache;
+    private final Vector3 pos = new Vector3();
+    public final ModelCache cache;
 
 
     // note: perhaps we should generate along with chunks to have an infinite amount
 
     public Rocks(World world ) {
 
-        MathUtils.random.setSeed(1234);
+        MathUtils.random.setSeed(1234);         // fix the random rock layout to always be identical
 
         // generate a random poisson distribution of instances over a rectangular area, meaning instances are never too close together
         PoissonDistribution poisson = new PoissonDistribution();
@@ -46,7 +42,7 @@ public class Rocks implements Disposable {
         Rectangle area2 = new Rectangle(1, 1, AREA_LENGTH2, AREA_LENGTH2);
         Array<Vector2> points2 = poisson.generatePoissonDistribution(SEPARATION_DISTANCE2, area2);
         for(Vector2 point : points2 ) {
-            if(!area.contains(point)) { // avoid putting more rocks in inner area
+            if(!area.contains(point)) { // but avoid putting more rocks in inner area
                 point.x -= AREA_LENGTH2 / 2f;
                 point.y -= AREA_LENGTH2 / 2f;
                 points.add(point);
@@ -64,7 +60,7 @@ public class Rocks implements Disposable {
         Gdx.app.log("Rocks:", String.valueOf(points.size));
     }
 
-
+    // rocks are place with a random model, Y-rotation and scale
     private ModelInstance addRock( World world, float x, float z ){
         int index = MathUtils.random( names.length-1 );
         float scale = MathUtils.random(0.5f, 5.5f);
@@ -76,7 +72,7 @@ public class Rocks implements Disposable {
         scene.modelInstance.transform.scale(scale, scale, scale);
         scene.modelInstance.transform.rotate(Vector3.Y, rotation);
 
-        world.colliders.addCollider(scene.modelInstance, y+5f);
+        world.colliders.addCollider(scene.modelInstance, y+Settings.flyHeight);
 
         return scene.modelInstance;
     }

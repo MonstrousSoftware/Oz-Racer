@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.Vector4;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.canyonracer.collision.Colliders;
@@ -45,7 +44,7 @@ public class World implements Disposable {
     public LeaderBoard leaderBoard;
     public String playerName = "Bob";
     public int attempt = -1;
-    private Array<Matrix4> corpses;
+    private Array<Matrix4> corpses;         // broken racers from previous runs
 
 
     public World() {
@@ -79,6 +78,7 @@ public class World implements Disposable {
 
     // restart the race
     public void restart() {
+        // did previous run end in a crash? Then add broken racer instance to corpses list
         if (racer == brokenRacer) {
             // make sure broken racer is on the ground, not still hovering
             Matrix4 transform = brokenRacer.getScene().modelInstance.transform;
@@ -90,7 +90,7 @@ public class World implements Disposable {
             racer = intactRacer;
         }
         float y = terrain.getHeight(-3350, 30);
-        playerPosition.set(-3350, y+5f, 30);
+        playerPosition.set(-3350, y+Settings.flyHeight, 30);
         playerController.restart(90f);
         // get player position
         racer.getScene().modelInstance.transform.setTranslation(playerPosition);
@@ -147,8 +147,7 @@ public class World implements Disposable {
             raceTime += deltaTime;
         formatRaceTimeString();
 
-        playerController.update(racer, this, terrain, deltaTime);
-        //enemyController.update(enemy1, terrain, deltaTime);
+        playerController.update(racer,  terrain, deltaTime);
         turbines.update(deltaTime);
 
         // update player position variable
@@ -169,6 +168,7 @@ public class World implements Disposable {
         }
 
 
+        // debug: press L to instantly die
         if(Gdx.input.isKeyJustPressed(Input.Keys.L)){
             brokenRacer.getScene().modelInstance.transform.set(racer.getScene().modelInstance.transform);
             intactRacer.getScene().modelInstance.transform.translate(0, -100, 0);
@@ -192,7 +192,7 @@ public class World implements Disposable {
                     leaderBoard.add(playerName, attempt, false, raceTimeString, (int) (100 * raceTime));
             }
             // collision response:  throw player away from the collider
-            // note: even if player died there is still momentum, so we need to keep collision response
+            // note: even if player died there is still momentum, so we need to keep checking for collisions
             Vector3 normal = colliderPosition.sub(playerPosition);
             normal.y = 0;  // horizontal impulse only
             normal.nor();

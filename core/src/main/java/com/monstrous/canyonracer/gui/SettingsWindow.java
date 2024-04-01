@@ -7,10 +7,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.monstrous.canyonracer.screens.GameScreen;
 import com.monstrous.canyonracer.Settings;
 
+// Debug window for some in-game tweaking, e.g. light level, camera distance, etc.
+// Typically, these modify members of the Settings class.
+
 public class SettingsWindow extends Window {
 
-    private Skin skin;
-    private GameScreen screen;
+    private final Skin skin;
+    private final GameScreen screen;
 
     public SettingsWindow(String title, Skin skin, GameScreen screen) {
         super(title, skin);
@@ -24,15 +27,12 @@ public class SettingsWindow extends Window {
 
         final Slider ALslider = new Slider(0.0f, 5.0f, 0.05f, false, skin);
         ALslider.setValue(Settings.ambientLightLevel);
-        //final Label label2 = new Label(String.valueOf(Settings.ambientLightLevel), skin);
         ALslider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Settings.ambientLightLevel = ALslider.getValue();
                 Gdx.app.log("ambientLightLevel", ""+Settings.ambientLightLevel);
                 screen.gameView.buildEnvironment();
-
-                //label2.setText(String.valueOf(Settings.ambientLightLevel));
             }
         });
         final Label ALlabel = new Label("ambient light", skin);
@@ -157,19 +157,6 @@ public class SettingsWindow extends Window {
         final Label CDlabel = new Label("cam distance", skin);
         add(CDslider); add(CDlabel);        row();
 
-
-
-//        final Slider CSslider = new Slider(0.0f, 100f, 5f, false, skin);
-//        CSslider.setValue(Settings.cameraSlerpFactor);
-//        CSslider.addListener(new ChangeListener() {
-//            @Override
-//            public void changed(ChangeEvent event, Actor actor) {
-//                Settings.cameraSlerpFactor = CSslider.getValue();
-//                Gdx.app.log("camera slerp factor", ""+Settings.cameraSlerpFactor);
-//            }
-//        });
-//        final Label CSlabel = new Label("cam slerp", skin);
-//        add(CSslider); add(CSlabel);        row();
 
         pack();
 

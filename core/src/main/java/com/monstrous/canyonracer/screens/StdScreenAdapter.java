@@ -36,9 +36,10 @@ public class StdScreenAdapter extends ScreenAdapter {
         Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
         Gdx.app.log("To fullscreen", "from " + width + " x " + height);
     }
+
     public void leaveFullScreen() {
         Settings.fullScreen = false;
         Gdx.graphics.setWindowedMode(width, height);
-        Gdx.app.log("To windowed mode", "" + width + " x " + height);
+        Gdx.app.log("To windowed mode", width + " x " + height);
     }
 }

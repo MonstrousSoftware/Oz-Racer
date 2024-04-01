@@ -21,16 +21,15 @@ public class GUI implements Disposable {
     public Stage stage;
     public Skin skin;
     public Skin debugSkin;
-    private GameScreen screen;
+    private final GameScreen screen;
     private SettingsWindow settingsWindow;
     public LeaderBoardTable leaderBoard;
     private Label fps;
     private Label speed;
     private Label time;
-    private Label gameObjects;
     private ProgressBar nitro;
     private ProgressBar health;
-    private Array<Label> messages;
+    private final Array<Label> messages;
     private boolean showingScores;
 
 
@@ -66,23 +65,13 @@ public class GUI implements Disposable {
         stage.addActor(table);
 
         fps = new Label("0", debugSkin);
-//        gameObjects = new Label("0", debugSkin);
-//        message = new Label("", debugSkin);
 
         Table table2 = new Table();
         table2.setFillParent(true);
         table2.add(fps).top().left().expand();
-//        table2.row();
-//        table2.add(new Label("game objects:", skin)).top().left();
-//        table2.add(gameObjects).top().left().expand();
-
-//        table2.add(message).top().left().expand();
-//        table2.row();
         stage.addActor(table2);
 
         showingScores = false;
-
-        //showScores();
     }
 
     public void showDebugMenu(boolean mode){
@@ -97,7 +86,7 @@ public class GUI implements Disposable {
             return;
         showingScores = true;
 
-        leaderBoard = new LeaderBoardTable("Times", Main.assets.skin, screen.world.leaderBoard);
+        leaderBoard = new LeaderBoardTable( Main.assets.skin, screen.world.leaderBoard);
 
         float x = 30;
         float y = stage.getHeight() - (100+leaderBoard.getHeight());
@@ -138,7 +127,7 @@ public class GUI implements Disposable {
 
     public void render( float deltaTime ) {
         updateTimer -= deltaTime;
-        if (updateTimer < 0) {
+        if (updateTimer < 0) {  // don't update each frame, but every so often
             updateTimer = 0.2f;
 
             // debug stuff
@@ -164,7 +153,5 @@ public class GUI implements Disposable {
     @Override
     public void dispose() {
         stage.dispose();
-        //skin.dispose();
-
     }
 }

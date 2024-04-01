@@ -16,7 +16,7 @@ import de.golfgl.gdx.controllers.IControllerActable;
 import de.golfgl.gdx.controllers.IControllerManageFocus;
 import de.golfgl.gdx.controllers.IControllerScrollable;
 
-// Copy with a bug fix for going up and down. (2 lines changed)
+// Copy of the original ControllerMenuStage  of Mr. Stahlfelge with a bug fix for going up and down. (2 lines changed)
 // Issue reported to the original repo.
 
 

@@ -1,19 +1,16 @@
 package com.monstrous.canyonracer;
 
-import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.Renderable;
-import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
-import com.badlogic.gdx.graphics.g3d.utils.DefaultRenderableSorter;
 import com.badlogic.gdx.graphics.g3d.utils.RenderableSorter;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import net.mgsx.gltf.scene3d.scene.SceneRenderableSorter;
 
 import java.util.Comparator;
 
-// replacement for SceneRenderableSorter
+// replacement for SceneRenderableSorter to avoid overflow issue
 // does not support blended renderables
 
 public class MyRenderableSorter  implements RenderableSorter, Comparator<Renderable> {
@@ -31,14 +28,13 @@ public class MyRenderableSorter  implements RenderableSorter, Comparator<Rendera
     }
 
 
-    private Vector3 getTranslation (Matrix4 worldTransform, Vector3 center, Vector3 output) {
+    private void getTranslation (Matrix4 worldTransform, Vector3 center, Vector3 output) {
         if (center.isZero())
             worldTransform.getTranslation(output);
         else if (!worldTransform.hasRotationOrScaling())
             worldTransform.getTranslation(output).add(center);
         else
             output.set(center).mul(worldTransform);
-        return output;
     }
 
 
@@ -93,8 +89,7 @@ public class MyRenderableSorter  implements RenderableSorter, Comparator<Rendera
         final float diff = camera.position.dst2(tmpV1) - camera.position.dst2(tmpV2);
         if( Math.abs(diff) < 0.1f)  // epsilon
             return 0;
-        final int result = diff < 0 ? -1 : 1;
-        return result;
+        return diff < 0 ? -1 : 1;
 //        return b1 ? -result : result;
     }
 
