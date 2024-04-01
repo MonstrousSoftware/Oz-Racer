@@ -1,7 +1,9 @@
 # Oz Racer
-Entry for LibGDX game jame #28
+Entry for LibGDX game jame #28 (Theme: underworld).
+
 Game inspired by Wipeout and Star Wars pod racer.
 
+![screenshot-OzRacer.png](screenshot-OzRacer.png)
 See the review here: https://youtu.be/JIteHZXv8OM?t=2037
 
 Play the game here: https://monstrous-software.itch.io/oz-racer

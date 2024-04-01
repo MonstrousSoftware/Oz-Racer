@@ -46,7 +46,7 @@ public class Settings {
     // Graphics settings - aimed at desktop
     static public boolean   multiSamplingFrameBufferAvailable = true;
     static public boolean   useMultiSamplingFrameBuffer = true;
-    static public boolean   usePostShader = false;
+    static public boolean   usePostShader = true;
 
     static public boolean   particleFX = true;
 
