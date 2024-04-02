@@ -19,7 +19,6 @@ public class Turbines {
     private final Vector3 pos = new Vector3();
     public final ModelCache cache;
 
-    // note: perhaps we should generate along with chunks to have an infinite amount
 
     public Turbines( World world ) {
         blades = new Array<>();
@@ -43,7 +42,7 @@ public class Turbines {
             float z = point.y-AREA_LENGTH/2f;
             if(!rocksArea.contains(x,z)) {
                 cache.add(addTurbine(world, x, z));
-                addTurbineBlades(world, x, z);
+                addTurbineBlades(world, x, z);          // blades don't go in the cache because they need to rotate
             }
         }
         cache.end();

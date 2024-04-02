@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.GLFrameBuffer.FrameBufferBuilder;
+import com.badlogic.gdx.graphics.profiling.GLErrorListener;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
@@ -70,6 +71,7 @@ public class GameView {
         if(doProfiling){
             glProfiler = new GLProfiler(Gdx.graphics);
             glProfiler.enable();
+            //glProfiler.setListener(GLErrorListener.THROWING_LISTENER);
         }
 
         // the default renderable sorter starts overflowing with distances > 1500
@@ -164,8 +166,6 @@ public class GameView {
         }
 
     }
-
-
 
 
     public void render(float deltaTime) {
