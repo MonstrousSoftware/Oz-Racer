@@ -262,7 +262,14 @@ public class GameView {
         fbo.dispose();
     }
 
-    public void buildEnvironment() {
+    // can be called from gui
+    public void adjustLighting() {
+        light.intensity = Settings.shadowLightLevel;
+        sceneManager.setAmbientLight(Settings.ambientLightLevel);
+        sceneManager.environment.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, Settings.shadowBias));
+    }
+
+    private void buildEnvironment() {
 
         sceneManager.environment.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, Settings.shadowBias));
 
