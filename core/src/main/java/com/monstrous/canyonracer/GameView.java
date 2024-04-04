@@ -29,12 +29,14 @@ import net.mgsx.gltf.scene3d.shaders.PBRShaderProvider;
 import net.mgsx.gltf.scene3d.utils.EnvironmentUtil;
 import net.mgsx.gltf.scene3d.utils.IBLBuilder;
 
+import static com.badlogic.gdx.Gdx.gl;
+
 
 // This does the game rendering.
 // It owns the SceneManager and retrieves game objects and scenes from World.
 
 public class GameView {
-    private static final int SHADOW_MAP_SIZE = 4096;
+    private static final int SHADOW_MAP_SIZE = 8192;
 
     private World world;
     public SceneManager sceneManager;
@@ -182,13 +184,13 @@ public class GameView {
         // animate camera
         cameraController.update(racerTransform, deltaTime);
 
-        // relocate shadow light
-        light.setCenter(world.playerPosition); // keep shadow light on player so that we have shadows
-
         refresh();  // fill scene array
+
         if(Settings.cascadedShadows) {
-            csm.setCascades(sceneManager.camera, light, 0, 20f);
+            csm.setCascades(sceneManager.camera, light, 0, 10f);
         }
+        else
+            light.setCenter(world.playerPosition); // keep shadow light on player so that we have shadows
 
         sceneManager.update(deltaTime);
         particleEffects.update(deltaTime);
@@ -218,7 +220,7 @@ public class GameView {
     }
 
     private void renderWorldBasic(){
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         sceneManager.render();
         particleEffects.render(camera);
     }
@@ -226,7 +228,7 @@ public class GameView {
     private void renderWorldFBO(){
         sceneManager.renderShadows();
         fbo.begin();
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         sceneManager.renderColors();
         particleEffects.render(camera);
         fbo.end();
@@ -236,7 +238,7 @@ public class GameView {
     private void renderWorldFBOAA(){
         sceneManager.renderShadows();
         fboMS.begin();
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         sceneManager.renderColors();
         particleEffects.render(camera);
         fboMS.end();
