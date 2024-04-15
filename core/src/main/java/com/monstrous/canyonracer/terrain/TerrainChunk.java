@@ -51,14 +51,8 @@ public class TerrainChunk implements Disposable {
 
         Noise noise = new Noise();
 
-        // note: add 1000 to x and to y to avoid negative offsets for Perlin map, as these cause discontinuities
-        heightMap = noise.generatePerlinMap( MAP_SIZE+1, MAP_SIZE+1, (1000+xoffset)*((float)(MAP_SIZE))/GRID_SCALE,
-            (1000+yoffset)*((float)(MAP_SIZE))/GRID_SCALE, (int)GRID_SCALE);
 
-        for (int y = 0; y <= MAP_SIZE; y++)
-            for (int x = 0; x <= MAP_SIZE; x++)
-                heightMap[y][x] *= AMPLITUDE;
-
+        heightMap = noise.generatePerlinMap(xoffset*MAP_SIZE, yoffset*MAP_SIZE, MAP_SIZE, MAP_SIZE,  GRID_SCALE, AMPLITUDE);
 
         if(terrainTexture == null) {
             terrainTexture = Main.assets.terrainTexture; //new Texture(Gdx.files.internal("textures/ground/smooth+sand+dunes-512x512.jpg"), true);

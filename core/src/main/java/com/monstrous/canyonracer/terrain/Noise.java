@@ -1,5 +1,6 @@
 package com.monstrous.canyonracer.terrain;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 // Perlin noise functions
@@ -56,8 +57,8 @@ public class Noise {
 
 
     public float PerlinNoise(float x, float y) {
-        int ix = (int)x;
-        int iy = (int)y;
+        int ix = MathUtils.floor(x);
+        int iy = MathUtils.floor(y);
 
 
         float f1 = dotDistanceGradient(ix, iy, x, y);
@@ -74,16 +75,16 @@ public class Noise {
 
 
 
-    public float[][] generatePerlinMap (int width, int height, float xoffset, float yoffset, int gridscale) {
-        float[][] noise = new float[height][width];
+    public float[][] generatePerlinMap (int xoffset, int yoffset, int width, int height,  float gridscale, float amplitude) {
+        float[][] noise = new float[height+1][width+1]; // add one extra to make seamless meshes
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (int y = 0; y <= height; y++) {
+            for (int x = 0; x <= width; x++) {
 
-                float xf = xoffset+(float)x/(float)gridscale;
-                float yf = yoffset+(float)y/(float)gridscale;
+                float xf = (xoffset+x)/gridscale;
+                float yf = (yoffset+y)/gridscale;
                 float value = PerlinNoise(xf, yf);
-                noise[y][x] = value;
+                noise[y][x] = value * amplitude;
             }
         }
         return noise;
