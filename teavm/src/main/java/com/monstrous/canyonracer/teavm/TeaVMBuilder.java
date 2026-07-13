@@ -19,6 +19,7 @@ public class TeaVMBuilder {
 
         // Register any extra classpath assets here:
         // teaBuildConfiguration.additionalAssetsClasspathFiles.add("com/monstrous/canyonracer/asset.extension");
+        teaBuildConfiguration.additionalAssetsClasspathFiles.add("net/mgsx/gltf/shaders");
 
         // Register any classes or packages that require reflection here:
         // TeaReflectionSupplier.addReflectionClass("com.monstrous.canyonracer.reflect");

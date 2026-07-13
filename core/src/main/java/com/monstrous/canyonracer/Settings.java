@@ -13,7 +13,7 @@ public class Settings {
     static public float     shadowLightLevel = 5.0f;
     static public float     shadowBias = 0.00005f;
     static public boolean   showLightBox = false;
-    static public boolean   cascadedShadows = (Gdx.app.getType() == Desktop);
+    static public boolean   cascadedShadows = true;
 
     // Camera
     static public boolean    cameraInverted = release;
